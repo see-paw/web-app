@@ -57,7 +57,7 @@
     "prettier": "^3.6.2",
     "react-lazy-load-image-component": "^1.6.3",
     "typescript": "~5.9.3",
-    "typescript-eslint": "^8.46.3",
+    "typescript-eslint": "^8.46.4",
     "vite": "^7.2.2",
     "vite-tsconfig-paths": "^5.1.4",
     "why-did-you-render": "^1.0.1"
