@@ -1,6 +1,6 @@
 ﻿import {type LoaderFunctionArgs, redirect} from "react-router-dom";
 import axios from "axios";
-import {animalsApi} from "../../api/animals.ts";
+import {animalsApi} from "@/api/animals";
 
 export async function animalsLoader({ request }: LoaderFunctionArgs)  {
     const url = new URL(request.url);

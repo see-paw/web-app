@@ -1,0 +1,212 @@
+:root {
+  /* ===== COLOR PALETTE ===== */
+  
+  /* Primary - Rosa SeePaw */
+  --color-primary-50: #fff5f7;
+  --color-primary-100: #ffe3e8;
+  --color-primary-200: #ffc7d2;
+  --color-primary-300: #ff9fb0;
+  --color-primary-400: #ff7a94;
+  --color-primary-500: #ff5a7a;
+  --color-primary-600: #ed3a5f;
+  --color-primary-700: #c72849;
+  --color-primary-800: #a52340;
+  --color-primary-900: #8b203d;
+  
+  /* Secondary - Amarelo/Bege SeePaw */
+  --color-secondary-50: #fffbf0;
+  --color-secondary-100: #fff4d6;
+  --color-secondary-200: #ffe6ad;
+  --color-secondary-300: #ffd47a;
+  --color-secondary-400: #ffc14d;
+  --color-secondary-500: #f5a524;
+  --color-secondary-600: #e08616;
+  --color-secondary-700: #ba6816;
+  --color-secondary-800: #97501a;
+  --color-secondary-900: #7b4218;
+  
+  /* Accent - Verde Menta SeePaw */
+  --color-accent-50: #f0fdf9;
+  --color-accent-100: #ccfbee;
+  --color-accent-200: #9af5df;
+  --color-accent-300: #60e9cc;
+  --color-accent-400: #2dd4b3;
+  --color-accent-500: #14b89a;
+  --color-accent-600: #0d947d;
+  --color-accent-700: #107666;
+  --color-accent-800: #125d52;
+  --color-accent-900: #134d44;
+  
+  /* Neutral - Cinzas */
+  --color-neutral-50: #fafafa;
+  --color-neutral-100: #f5f5f5;
+  --color-neutral-200: #e5e5e5;
+  --color-neutral-300: #d4d4d4;
+  --color-neutral-400: #a3a3a3;
+  --color-neutral-500: #737373;
+  --color-neutral-600: #525252;
+  --color-neutral-700: #404040;
+  --color-neutral-800: #262626;
+  --color-neutral-900: #171717;
+  
+  /* Semantic Colors */
+  --color-success-50: #f0fdf4;
+  --color-success-500: #22c55e;
+  --color-success-700: #15803d;
+  
+  --color-warning-50: #fffbeb;
+  --color-warning-500: #f59e0b;
+  --color-warning-700: #b45309;
+  
+  --color-error-50: #fef2f2;
+  --color-error-500: #ef4444;
+  --color-error-700: #b91c1c;
+  
+  --color-info-50: #eff6ff;
+  --color-info-500: #3b82f6;
+  --color-info-700: #1d4ed8;
+  
+  /* Background Colors */
+  --color-background-primary: #ffffff;
+  --color-background-secondary: #fafafa;
+  --color-background-tertiary: #f5f5f5;
+  --color-background-overlay: rgba(0, 0, 0, 0.5);
+  
+  /* Text Colors */
+  --color-text-primary: #171717;
+  --color-text-secondary: #525252;
+  --color-text-tertiary: #a3a3a3;
+  --color-text-inverse: #ffffff;
+  --color-text-link: #ed3a5f;
+  --color-text-link-hover: #c72849;
+  
+  /* Border Colors */
+  --color-border-primary: #e5e5e5;
+  --color-border-secondary: #d4d4d4;
+  --color-border-focus: #ff5a7a;
+  
+  /* ===== TYPOGRAPHY ===== */
+  
+  /* Font Families */
+  --font-family-primary: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  --font-family-mono: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+  
+  /* Font Sizes */
+  --font-size-xs: 0.75rem;      /* 12px */
+  --font-size-sm: 0.875rem;     /* 14px */
+  --font-size-base: 1rem;       /* 16px */
+  --font-size-lg: 1.125rem;     /* 18px */
+  --font-size-xl: 1.25rem;      /* 20px */
+  --font-size-2xl: 1.5rem;      /* 24px */
+  --font-size-3xl: 1.875rem;    /* 30px */
+  --font-size-4xl: 2.25rem;     /* 36px */
+  --font-size-5xl: 3rem;        /* 48px */
+  
+  /* Font Weights */
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+  
+  /* Line Heights */
+  --line-height-tight: 1.25;
+  --line-height-snug: 1.375;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.625;
+  --line-height-loose: 2;
+  
+  /* Letter Spacing */
+  --letter-spacing-tight: -0.025em;
+  --letter-spacing-normal: 0;
+  --letter-spacing-wide: 0.025em;
+  --letter-spacing-wider: 0.05em;
+  
+  /* ===== SPACING ===== */
+  
+  --spacing-0: 0;
+  --spacing-1: 0.25rem;   /* 4px */
+  --spacing-2: 0.5rem;    /* 8px */
+  --spacing-3: 0.75rem;   /* 12px */
+  --spacing-4: 1rem;      /* 16px */
+  --spacing-5: 1.25rem;   /* 20px */
+  --spacing-6: 1.5rem;    /* 24px */
+  --spacing-7: 1.75rem;   /* 28px */
+  --spacing-8: 2rem;      /* 32px */
+  --spacing-10: 2.5rem;   /* 40px */
+  --spacing-12: 3rem;     /* 48px */
+  --spacing-16: 4rem;     /* 64px */
+  --spacing-20: 5rem;     /* 80px */
+  --spacing-24: 6rem;     /* 96px */
+  
+  /* ===== BORDER RADIUS ===== */
+  
+  --radius-none: 0;
+  --radius-sm: 0.25rem;   /* 4px */
+  --radius-base: 0.5rem;  /* 8px */
+  --radius-md: 0.75rem;   /* 12px */
+  --radius-lg: 1rem;      /* 16px */
+  --radius-xl: 1.5rem;    /* 24px */
+  --radius-2xl: 2rem;     /* 32px */
+  --radius-full: 9999px;
+  
+  /* ===== SHADOWS ===== */
+  
+  --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+  --shadow-base: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  --shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.05);
+  
+  /* ===== Z-INDEX ===== */
+  
+  --z-index-dropdown: 1000;
+  --z-index-sticky: 1020;
+  --z-index-fixed: 1030;
+  --z-index-modal-backdrop: 1040;
+  --z-index-modal: 1050;
+  --z-index-popover: 1060;
+  --z-index-tooltip: 1070;
+  
+  /* ===== TRANSITIONS ===== */
+  
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
+  
+  /* ===== BREAKPOINTS (for reference in JS) ===== */
+  
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1536px;
+  
+  /* ===== CONTAINER ===== */
+  
+  --container-max-width: 1280px;
+  --container-padding: var(--spacing-4);
+  
+  /* ===== COMPONENTS SPECIFIC ===== */
+  
+  /* Buttons */
+  --button-height-sm: 2rem;      /* 32px */
+  --button-height-base: 2.5rem;  /* 40px */
+  --button-height-lg: 3rem;      /* 48px */
+  
+  /* Inputs */
+  --input-height-sm: 2rem;       /* 32px */
+  --input-height-base: 2.5rem;   /* 40px */
+  --input-height-lg: 3rem;       /* 48px */
+  
+  /* Cards */
+  --card-padding: var(--spacing-6);
+  --card-radius: var(--radius-lg);
+  --card-shadow: var(--shadow-sm);
+  
+  /* Navbar */
+  --navbar-height: 4rem;         /* 64px */
+}

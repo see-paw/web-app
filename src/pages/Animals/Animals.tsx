@@ -1,19 +1,12 @@
 ﻿import {useLoaderData} from "react-router-dom";
-import type {Animal} from "../../types/animal.ts";
+import type {Animal} from "@/types/animal";
+import AnimalList from "@/components/features/AnimalList";
 
 function Animals() {
     const animals = useLoaderData<Animal[]>();
 
     return (
-        <div>
-            <h1>Animals</h1>
-            <ul>
-                {animals.length > 0 && animals.map(animal =>
-                <li key={animal.id}>
-                    {animal.name}
-                </li>)}
-            </ul>
-        </div>
+            <AnimalList animals={animals} />
     );
 }
 
