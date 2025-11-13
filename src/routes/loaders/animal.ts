@@ -1,5 +1,6 @@
 ﻿import {type LoaderFunctionArgs, redirect} from "react-router-dom";
 import axios from "axios";
+import {queryClient} from "@/lib/queryClient";
 import {animalsApi} from "@/api/animals";
 
 export async function animalsLoader({ request }: LoaderFunctionArgs)  {
@@ -12,7 +13,10 @@ export async function animalsLoader({ request }: LoaderFunctionArgs)  {
     }
 
     try {
-        return await animalsApi.getAnimals(page);
+        return queryClient.fetchQuery({
+            queryKey: ["animals", page],
+            queryFn: ({signal}) => animalsApi.getAnimals({pageNumber: page, signal})
+        })
     } catch (err) {
         const status = axios.isAxiosError(err) ? err.response?.status ?? 500 : 500;
 
