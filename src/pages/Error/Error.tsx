@@ -5,32 +5,42 @@ import type {JSX} from "react";
 function Error() {
     const error = useRouteError();
 
-    let content : JSX.Element = <p>Unknown Error</p>;
+    let content : JSX.Element = <p>Ocorreu um erro inesperado</p>;
 
     if (isRouteErrorResponse(error)) {
-        switch (error.status) {
-            case 400:
-                content = <p>Pedido inválido</p>;
-                break;
-            case 401:
-                content = <p>Não autorizado</p>;
-                break;
-            case 403:
-                content = <p>Acesso proibido</p>;
-                break;
-            case 404:
-                content = <p>Página não encontrada</p>;
-                break;
-            case 500:
-                content = <p>Erro interno do servidor</p>;
-                break;
-            default:
-                content = (
-                    <p>
-                        Erro inesperado ({error.status}) — {error.statusText || "Sem descrição"}
-                    </p>
-                );
-                break;
+        let customMessage: string | null = null;
+
+        if (error.data && typeof error.data === "object" && "message" in error.data) {
+            customMessage = error.data.message;
+        }
+
+        if (customMessage) {
+            content = <p>{customMessage}</p>;
+        } else {
+            switch (error.status) {
+                case 400:
+                    content = <p>Pedido inválido</p>;
+                    break;
+                case 401:
+                    content = <p>Não autorizado</p>;
+                    break;
+                case 403:
+                    content = <p>Acesso proibido</p>;
+                    break;
+                case 404:
+                    content = <p>Página não encontrada</p>;
+                    break;
+                case 500:
+                    content = <p>Erro interno do servidor</p>;
+                    break;
+                default:
+                    content = (
+                        <p>
+                            Erro inesperado ({error.status}) — {error.statusText || "Sem descrição"}
+                        </p>
+                    );
+                    break;
+            }
         }
     } else if (error instanceof Error) {
         const typedError = error as Error;

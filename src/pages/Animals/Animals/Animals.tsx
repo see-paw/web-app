@@ -11,7 +11,7 @@ function Animals() {
     const [searchParams] = useSearchParams();
     const page = searchParams.get("page") ?? "1";
 
-    const { data: pagedAnimals } = useQuery<PagedList<Animal>>({
+    const { data: pagedAnimals, isError, error } = useQuery<PagedList<Animal>>({
         queryKey: ["animals", page],
         queryFn: ({ signal }) => animalsApi.getAnimals({
             pageNumber: page,
@@ -21,7 +21,11 @@ function Animals() {
     });
 
     if (!pagedAnimals) {
-        return (<div>Loading...</div>);
+        return null;
+    }
+
+    if (isError) {
+        return <p>{error.message}</p>;
     }
 
     return (

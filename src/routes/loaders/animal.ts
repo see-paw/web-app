@@ -13,7 +13,7 @@ export async function animalsLoader({ request }: LoaderFunctionArgs)  {
     }
 
     try {
-        return queryClient.fetchQuery({
+        return await queryClient.fetchQuery({
             queryKey: ["animals", page],
             queryFn: ({signal}) => animalsApi.getAnimals({pageNumber: page, signal})
         })
@@ -22,6 +22,7 @@ export async function animalsLoader({ request }: LoaderFunctionArgs)  {
 
         throw new Response(JSON.stringify({ message: "Não foi possível carregar os animais." }), {
             status: status,
+            statusText: "Loader Error",
             headers: { "Content-Type": "application/json" },
         });
     }
