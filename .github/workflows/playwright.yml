@@ -141,16 +141,32 @@ jobs:
           echo $! > backend_pid.txt
           echo "Backend iniciado (PID: $(cat backend_pid.txt))"
 
-      - name: Aguardar backend estar pronto
+      - name: Aguardar backend estar pronto com dados
         run: |
           echo "Aguardando backend em https://localhost:${{ env.BACKEND_PORT }}..."
-          max_attempts=30
+          max_attempts=60
           attempt=0
           
           while [ $attempt -lt $max_attempts ]; do
-            if curl -k -s https://localhost:${{ env.BACKEND_PORT }}/health > /dev/null 2>&1; then
-              echo "Backend esta pronto!"
-              exit 0
+            health_response=$(curl -k -s https://localhost:${{ env.BACKEND_PORT }}/health || echo "")
+          
+            if [ -n "$health_response" ]; then
+              has_data=$(echo "$health_response" | jq -r '.hasData // false')
+          
+              if [ "$has_data" = "true" ]; then
+                echo "✅ Backend pronto com dados!"
+          
+                # Verificar contagem de animais
+                animals_response=$(curl -k -s "https://localhost:${{ env.BACKEND_PORT }}/api/animals?page=1&pageSize=1" || echo "{}")
+                total=$(echo "$animals_response" | jq -r '.totalCount // 0')
+                echo "📊 Base de dados tem $total animais"
+          
+                if [ "$total" -gt 0 ]; then
+                  exit 0
+                fi
+              else
+                echo "⏳ Backend iniciou mas seed ainda não completou..."
+              fi
             fi
           
             attempt=$((attempt + 1))
@@ -158,9 +174,9 @@ jobs:
             sleep 2
           done
           
-          echo "Backend nao respondeu apos $max_attempts tentativas"
-          echo "Ultimas 50 linhas do log:"
-          tail -n 50 backend/backend.log || true
+          echo "❌ Backend não ficou pronto em 120s"
+          echo "Últimas 100 linhas do log:"
+          tail -n 100 backend/backend.log || true
           exit 1
 
       - name: Criar config temporario do Vite para preview
