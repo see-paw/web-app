@@ -73,6 +73,7 @@ jobs:
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/backend.sln', '**/packages.lock.json') }}
           restore-keys: |
             ${{ runner.os }}-nuget-
+          save-always: true
 
       - name: Cache Playwright browsers
         uses: actions/cache@v4
@@ -82,6 +83,7 @@ jobs:
           key: ${{ runner.os }}-playwright-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-playwright-
+          save-always: true
 
       - name: Restaurar dependencias do backend
         working-directory: backend
@@ -148,29 +150,19 @@ jobs:
           attempt=0
           
           while [ $attempt -lt $max_attempts ]; do
-            health_response=$(curl -k -s https://localhost:${{ env.BACKEND_PORT }}/health || echo "")
+            animals_response=$(curl -k -s "https://localhost:${{ env.BACKEND_PORT }}/api/animals?page=1" 2>/dev/null || echo "{}")
+            total=$(echo "$animals_response" | jq -r '.totalCount // 0' 2>/dev/null || echo "0")
           
-            if [ -n "$health_response" ]; then
-              has_data=$(echo "$health_response" | jq -r '.hasData // false')
+            if [ "$total" -gt 0 ]; then
+              echo "✅ Backend pronto com $total animais!"
+              exit 0
+            fi
           
-              if [ "$has_data" = "true" ]; then
-                echo "✅ Backend pronto com dados!"
-          
-                # Verificar contagem de animais
-                animals_response=$(curl -k -s "https://localhost:${{ env.BACKEND_PORT }}/api/animals?page=1&pageSize=1" || echo "{}")
-                total=$(echo "$animals_response" | jq -r '.totalCount // 0')
-                echo "📊 Base de dados tem $total animais"
-          
-                if [ "$total" -gt 0 ]; then
-                  exit 0
-                fi
-              else
-                echo "⏳ Backend iniciou mas seed ainda não completou..."
-              fi
+            if [ $((attempt % 10)) -eq 0 ]; then
+              echo "⏳ Tentativa $attempt/$max_attempts - seed ainda em progresso..."
             fi
           
             attempt=$((attempt + 1))
-            echo "Tentativa $attempt/$max_attempts - aguardando..."
             sleep 2
           done
           
