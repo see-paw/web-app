@@ -20,7 +20,7 @@ test.describe('Animals page – page 1 loads correctly', () => {
     });
 
     test('Verify Url ends with ?page=1', async ({page}) => {
-        await expect(page).toHaveURL(/\/animals\?paghe=1/);
+        await expect(page).toHaveURL(/\/animals\?page=1/);
     });
 
     test('At least one card is shown', async ({page}) => {
