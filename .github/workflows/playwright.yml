@@ -97,6 +97,11 @@ jobs:
         working-directory: frontend
         run: npm ci
 
+      - name: Definir VITE_API_URL para o CI
+        working-directory: frontend
+        run: |
+          echo "VITE_API_URL=https://localhost:${{ env.BACKEND_PORT }}/api" > .env.production
+
       - name: Limpar artefactos TypeScript antigos
         working-directory: frontend
         run: |
