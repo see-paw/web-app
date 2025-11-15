@@ -33,6 +33,8 @@ export default defineConfig({
         }
     },
 
+    outputDir: 'test-results',
+
   /* Configure projects for major browsers */
   projects: [
     {

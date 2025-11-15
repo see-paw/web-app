@@ -244,7 +244,7 @@ jobs:
         if: always()
         with:
           name: playwright-report
-          path: frontend/playwright-report/
+          path: frontend/test-results/
           retention-days: 7
 
       - name: Upload traces e screenshots
@@ -252,7 +252,7 @@ jobs:
         if: always()
         with:
           name: playwright-traces
-          path: frontend/.playwright-artifacts/
+          path: frontend/test-results/
           retention-days: 7
 
       - name: Upload logs do backend (se falhar)
