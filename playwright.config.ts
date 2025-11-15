@@ -26,7 +26,7 @@ export default defineConfig({
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
     use: {
         baseURL: process.env.CI ? 'http://localhost:3000' : 'https://localhost:3000',
-        trace: 'on-first-retry',
+        trace: process.env.CI ? 'on' : "on-first-retry",
         headless: !!process.env.CI,
         launchOptions: {
             slowMo: process.env.CI ? 0 : 1000
