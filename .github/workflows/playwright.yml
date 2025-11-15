@@ -226,11 +226,12 @@ jobs:
           tail -n 50 frontend/frontend.log || true
           exit 1
 
-      - name: Configurar Playwright para HTTP
+      - name: Configurar Playwright para HTTP e headless
         working-directory: frontend
         run: |
-          echo "Configurando Playwright baseURL para HTTP..."
+          echo "Configurando Playwright para CI..."
           sed -i "s|baseURL: 'https://localhost:3000'|baseURL: 'http://localhost:3000'|g" playwright.config.ts
+          sed -i 's|headless: false|headless: true|g' playwright.config.ts
           echo "Configuracao atualizada"
 
       - name: Executar testes E2E com Playwright
