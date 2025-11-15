@@ -31,3 +31,12 @@ certs
 /blob-report/
 /playwright/.cache/
 /playwright/.auth/
+
+# TypeScript declaration files (gerados pelo build)
+src/**/*.d.ts
+!src/vite-env.d.ts
+!src/css-modules.d.ts
+
+# Build outputs
+dist/
+*.tsbuildinfo

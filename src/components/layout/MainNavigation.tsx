@@ -4,7 +4,6 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowRightFromBracket, faBell, faHeart, faPaw, faUser} from "@fortawesome/free-solid-svg-icons";
 import {v4 as uuidv4} from 'uuid';
 
-
 const navItems = [
     {
         id: uuidv4(),

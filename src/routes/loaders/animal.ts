@@ -1,5 +1,6 @@
 ﻿import {type LoaderFunctionArgs, redirect} from "react-router-dom";
 import axios from "axios";
+import {queryClient} from "@/lib/queryClient";
 import {animalsApi} from "@/api/animals";
 
 export async function animalsLoader({ request }: LoaderFunctionArgs)  {
@@ -12,12 +13,16 @@ export async function animalsLoader({ request }: LoaderFunctionArgs)  {
     }
 
     try {
-        return await animalsApi.getAnimals(page);
+        return await queryClient.fetchQuery({
+            queryKey: ["animals", page],
+            queryFn: ({signal}) => animalsApi.getAnimals({pageNumber: page, signal})
+        })
     } catch (err) {
         const status = axios.isAxiosError(err) ? err.response?.status ?? 500 : 500;
 
         throw new Response(JSON.stringify({ message: "Não foi possível carregar os animais." }), {
             status: status,
+            statusText: "Loader Error",
             headers: { "Content-Type": "application/json" },
         });
     }

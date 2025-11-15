@@ -1,9 +1,11 @@
-﻿import type {Animal} from "../types/animal.ts";
+﻿import type {Animal} from "@/types/animal";
 import {api} from "./api.ts";
+import type {PagedList} from "@/types/pagedList";
 
 export const animalsApi = {
-    getAnimals: async function (pageNumber?: string) : Promise<Animal[]> {
-        const { data } = await api.get<Animal[]>("/animals", {
+    getAnimals: async function ({ pageNumber, signal }: {pageNumber?: string, signal: AbortSignal}) : Promise<PagedList<Animal>> {
+        const { data } = await api.get<PagedList<Animal>>("/animals", {
+            signal: signal,
             params: pageNumber ? { pageNumber: pageNumber } : {},
         })
 

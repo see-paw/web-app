@@ -1,0 +1,22 @@
+.container {
+  width: 100%;
+  padding: var(--spacing-6) 0;
+  background-image: url('../../../assets/background1.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.content {
+  flex: 1;
+}
+
+@media (max-width: 640px) {
+  .container {
+    padding: var(--spacing-4) 0;
+  }
+}
