@@ -104,7 +104,7 @@ jobs:
         working-directory: frontend
         run: |
           echo "Compilando frontend..."
-          npx vite build --config vite.config.preview.js
+          npm run build
           echo "Build concluido"
           ls -lah dist/
 
