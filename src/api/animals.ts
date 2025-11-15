@@ -10,6 +10,13 @@ export const animalsApi = {
         })
 
         return data;
+    },
+
+    getAnimalDetails: async function ({ id, signal }: { id: string,  signal: AbortSignal }):Promise<Animal> {
+        const { data } = await api.get<Animal>(`/animals/${id}`, {
+            signal: signal,
+        })
+        return data;
     }
     //..... resto dos endpoints
 }
