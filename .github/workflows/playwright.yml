@@ -46,6 +46,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: see-paw/backend
+          ref: main
           path: backend
           token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -117,6 +118,14 @@ jobs:
       # ============================================
       # 7️⃣ BUILD FRONTEND PARA PRODUÇÃO
       # ============================================
+      - name: Limpar artefactos de build anteriores
+        working-directory: frontend
+        run: |
+          echo "🧹 A limpar ficheiros gerados anteriormente..."
+          find src -name "*.d.ts" -type f ! -name "vite-env.d.ts" ! -name "css-modules.d.ts" -delete
+          rm -rf dist/ .tsbuildinfo 2>/dev/null || true
+          echo "✅ Limpeza concluída"
+
       - name: Build frontend para produção
         working-directory: frontend
         run: |
@@ -184,13 +193,13 @@ jobs:
           exit 1
 
       # ============================================
-      # 🔟 SERVIR BUILD DE PRODUÇÃO
+      # 🔟 SERVIR BUILD DE PRODUÇÃO COM HTTPS
       # ============================================
-      - name: Servir build de produção
+      - name: Servir build de produção com HTTPS
         working-directory: frontend
         run: |
-          echo "🚀 A servir build de produção na porta ${{ env.FRONTEND_PORT }}..."
-          npx vite preview --port ${{ env.FRONTEND_PORT }} > frontend.log 2>&1 &
+          echo "🚀 A servir build de produção com HTTPS na porta ${{ env.FRONTEND_PORT }}..."
+          npx vite preview --port ${{ env.FRONTEND_PORT }} --https --host > frontend.log 2>&1 &
           echo $! > frontend_pid.txt
           echo "✅ Frontend servido (PID: $(cat frontend_pid.txt))"
 
@@ -223,6 +232,7 @@ jobs:
         working-directory: frontend
         env:
           CI: true
+          NODE_TLS_REJECT_UNAUTHORIZED: 0
         run: |
           echo "┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓"
           echo "   🎭 TESTES E2E - PLAYWRIGHT"
