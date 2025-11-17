@@ -9,8 +9,8 @@ interface AnimalListProps {
 function AnimalList({ animals }: AnimalListProps) {
     if (!animals || animals.length === 0) {
         return (
-            <section aria-labelledby="animals-title">
-                <p className={styles.empty}>
+            <section aria-labelledby="animals-title" data-testid="animal-list-empty">
+                <p className={styles.empty} data-testid="no-results-message">
                     Nenhum animal encontrado
                 </p>
             </section>
@@ -18,8 +18,8 @@ function AnimalList({ animals }: AnimalListProps) {
     }
 
     return (
-        <section aria-labelledby="animals-title">
-            <div className={styles.grid}>
+        <section aria-labelledby="animals-title" data-testid="animal-list">
+            <div className={styles.grid} data-testid="animals-grid">
                 {animals.map(animal => (
                     <AnimalCard key={animal.id} animal={animal} />
                 ))}

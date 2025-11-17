@@ -21,23 +21,32 @@ function AnimalCard({ animal }: AnimalCardProps): JSX.Element {
     };
 
     return (
-        <article className={styles.card}>
-            <div className={styles.imageContainer}>
+        <article className={styles.card} data-testid="animal-card">
+            <div className={styles.imageContainer} data-testid="animal-image-container">
                 <Link to={animal.id} aria-label={`Ver detalhes de ${animal.name}`}>
-                    <img 
-                        src={imageUrl} 
+                    <img
+                        src={imageUrl}
                         alt={imageDescription}
                         onError={handleImageError}
                         loading="lazy"
+                        data-testid="animal-image"
                     />
                 </Link>
             </div>
             <div className={styles.content}>
-                <Link to={animal.id} className={styles.name} >
+                <Link
+                    to={animal.id}
+                    className={styles.name}
+                    data-testid="animal-name-link"
+                >
                     {animal.name}
                 </Link>
-                <p className={styles.breed}>{animal.breed?.name ?? "Raça desconhecida"}</p>
-                <p className={styles.age}>{animal.age} ano{animal.age === 1 ? "" : "s"}</p>
+                <p className={styles.breed} data-testid="animal-breed">
+                    {animal.breed?.name ?? "Raça desconhecida"}
+                </p>
+                <p className={styles.age} data-testid="animal-age">
+                    {animal.age} ano{animal.age === 1 ? "" : "s"}
+                </p>
             </div>
         </article>
     );
