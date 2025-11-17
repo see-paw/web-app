@@ -24,12 +24,15 @@ test.describe('Animals page – page 1 loads correctly', () => {
     });
 
     test('At least one card is shown', async ({page}) => {
+        await page.waitForSelector('article[class*="_card_"]', { state: 'visible', timeout: 10000 });
         const cards = await page.locator('article[class*="_card_"]').all();
         expect(cards.length).toBeGreaterThan(0);
     });
 
     test('Cards are loaded with an image, name, breed and age', async ({ page }) => {
         const cards = page.locator('article[class*="_card_"]');
+        await cards.first().waitFor({ state: 'visible', timeout: 10000 });
+
         const count = await cards.count();
 
         for (let i = 0; i < count; i++) {

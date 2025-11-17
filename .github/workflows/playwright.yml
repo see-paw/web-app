@@ -9,7 +9,7 @@ on:
 env:
   DOTNET_VERSION: "8.0.x"
   NODE_VERSION: "lts/*"
-  BACKEND_PORT: 5001
+  BACKEND_PORT: 5000
   FRONTEND_PORT: 3000
 
 jobs:
@@ -58,14 +58,6 @@ jobs:
           cache: 'npm'
           cache-dependency-path: frontend/package-lock.json
 
-      - name: Gerar certificados SSL self-signed
-        working-directory: frontend
-        run: |
-          echo "Gerando certificados SSL..."
-          mkdir -p certs
-          openssl req -x509 -newkey rsa:4096 -keyout certs/WebAPI.key -out certs/WebAPI.crt -days 365 -nodes -subj "/CN=localhost"
-          echo "Certificados gerados com sucesso"
-
       - name: Cache NuGet packages
         uses: actions/cache@v4
         with:
@@ -94,6 +86,11 @@ jobs:
       - name: Instalar dependencias do frontend
         working-directory: frontend
         run: npm ci
+
+      - name: Definir VITE_API_URL para o CI
+        working-directory: frontend
+        run: |
+          echo "VITE_API_URL=http://localhost:${{ env.BACKEND_PORT }}/api" > .env.production
 
       - name: Limpar artefactos TypeScript antigos
         working-directory: frontend
@@ -127,7 +124,7 @@ jobs:
         working-directory: backend
         env:
           ASPNETCORE_ENVIRONMENT: Testing
-          ASPNETCORE_URLS: https://localhost:${{ env.BACKEND_PORT }}
+          ASPNETCORE_URLS: http://localhost:${{ env.BACKEND_PORT }}
           ConnectionStrings__DefaultConnection: ${{ secrets.DB_CONNECTION_STRING }}
           CloudinarySettings__CloudName: ${{ secrets.CLOUDINARY_CLOUD_NAME }}
           CloudinarySettings__ApiKey: ${{ secrets.CLOUDINARY_API_KEY }}
@@ -141,26 +138,32 @@ jobs:
           echo $! > backend_pid.txt
           echo "Backend iniciado (PID: $(cat backend_pid.txt))"
 
-      - name: Aguardar backend estar pronto
+      - name: Aguardar backend estar pronto com dados
         run: |
-          echo "Aguardando backend em https://localhost:${{ env.BACKEND_PORT }}..."
-          max_attempts=30
+          echo "Aguardando backend em http://localhost:${{ env.BACKEND_PORT }}..."
+          max_attempts=60
           attempt=0
           
           while [ $attempt -lt $max_attempts ]; do
-            if curl -k -s https://localhost:${{ env.BACKEND_PORT }}/health > /dev/null 2>&1; then
-              echo "Backend esta pronto!"
+            animals_response=$(curl -k -s "http://localhost:${{ env.BACKEND_PORT }}/api/animals?page=1" 2>/dev/null || echo "{}")
+            total=$(echo "$animals_response" | jq -r '.totalCount // 0' 2>/dev/null || echo "0")
+          
+            if [ "$total" -gt 0 ]; then
+              echo "✅ Backend pronto com $total animais!"
               exit 0
             fi
           
+            if [ $((attempt % 10)) -eq 0 ]; then
+              echo "⏳ Tentativa $attempt/$max_attempts - seed ainda em progresso..."
+            fi
+          
             attempt=$((attempt + 1))
-            echo "Tentativa $attempt/$max_attempts - aguardando..."
             sleep 2
           done
           
-          echo "Backend nao respondeu apos $max_attempts tentativas"
-          echo "Ultimas 50 linhas do log:"
-          tail -n 50 backend/backend.log || true
+          echo "❌ Backend não ficou pronto em 120s"
+          echo "Últimas 100 linhas do log:"
+          tail -n 100 backend/backend.log || true
           exit 1
 
       - name: Criar config temporario do Vite para preview
@@ -226,14 +229,6 @@ jobs:
           tail -n 50 frontend/frontend.log || true
           exit 1
 
-      - name: Configurar Playwright para HTTP e headless
-        working-directory: frontend
-        run: |
-          echo "Configurando Playwright para CI..."
-          sed -i "s|baseURL: 'https://localhost:3000'|baseURL: 'http://localhost:3000'|g" playwright.config.ts
-          sed -i 's|headless: false|headless: true|g' playwright.config.ts
-          echo "Configuracao atualizada"
-
       - name: Executar testes E2E com Playwright
         working-directory: frontend
         env:
@@ -249,7 +244,7 @@ jobs:
         if: always()
         with:
           name: playwright-report
-          path: frontend/playwright-report/
+          path: frontend/test-results/
           retention-days: 7
 
       - name: Upload traces e screenshots
