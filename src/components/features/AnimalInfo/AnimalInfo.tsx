@@ -1,11 +1,35 @@
 import type {Animal} from "@/types/animal";
 import styles from "./AnimalInfo.module.css";
+import {useTranslation} from 'react-i18next';
+
+
+function getAgeDisplay(birthDate: string, age: number): string {
+    if (age > 0) {
+        return `${age} ${age === 1 ? 'ano' : 'anos'}`;
+    }
+
+    // Calcular meses
+    const birth = new Date(birthDate);
+    const today = new Date();
+
+    const months = (today.getFullYear() - birth.getFullYear()) * 12
+        + today.getMonth() - birth.getMonth();
+
+    if (months <= 0) {
+        return "Recém-nascido";
+    }
+
+    return `${months} ${months === 1 ? 'mês' : 'meses'}`;
+}
+
 
 interface AnimalInfoProps {
     animal: Animal;
 }
 
-export default function AnimalInfo({ animal }: AnimalInfoProps) {
+export default function AnimalInfo({animal}: AnimalInfoProps) {
+    const {t} = useTranslation();
+
     return (
         <div className={styles.container}>
 
@@ -19,7 +43,7 @@ export default function AnimalInfo({ animal }: AnimalInfoProps) {
 
                 <div className={styles.attribute}>
                     <span className={styles.label}>Espécie</span>
-                    <span className={styles.value}>{animal.species}</span>
+                    <span className={styles.value}>{t(animal.species)}</span>
                 </div>
 
                 <div className={styles.attribute}>
@@ -29,12 +53,12 @@ export default function AnimalInfo({ animal }: AnimalInfoProps) {
 
                 <div className={styles.attribute}>
                     <span className={styles.label}>Sexo</span>
-                    <span className={styles.value}>{animal.sex}</span>
+                    <span className={styles.value}>{t(animal.sex)}</span>
                 </div>
 
                 <div className={styles.attribute}>
                     <span className={styles.label}>Tamanho</span>
-                    <span className={styles.value}>{animal.size}</span>
+                    <span className={styles.value}>{t(animal.size)}</span>
                 </div>
 
                 <div className={styles.attribute}>
@@ -44,7 +68,9 @@ export default function AnimalInfo({ animal }: AnimalInfoProps) {
 
                 <div className={styles.attribute}>
                     <span className={styles.label}>Idade</span>
-                    <span className={styles.value}>{animal.age} anos</span>
+                    <span className={styles.value}>
+                        {getAgeDisplay(animal.birthDate, animal.age)}
+                    </span>
                 </div>
 
                 <div className={styles.attribute}>
