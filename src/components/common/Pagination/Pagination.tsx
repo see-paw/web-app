@@ -15,8 +15,12 @@ function Pagination({ currentPage, totalPages }: PaginationProps): JSX.Element {
     const pageNumbers = getPageNumbers();
 
     return (
-        <nav className={styles.paginationNav} aria-label="Paginação">
-            <ul className={styles.paginationList}>
+        <nav
+            className={styles.paginationNav}
+            aria-label="Paginação"
+            data-testid="pagination"
+        >
+            <ul className={styles.paginationList} data-testid="pagination-list">
                 <li>
                     <button
                         type="button"
@@ -24,6 +28,7 @@ function Pagination({ currentPage, totalPages }: PaginationProps): JSX.Element {
                         disabled={currentPage === 1}
                         className={`${styles.paginationButton} ${styles.navButton}`}
                         aria-label="Página anterior"
+                        data-testid="pagination-previous"
                     >
                         <FontAwesomeIcon icon={faChevronLeft} />
                     </button>
@@ -40,6 +45,8 @@ function Pagination({ currentPage, totalPages }: PaginationProps): JSX.Element {
                             }`}
                             aria-label={`Página ${pageNum}`}
                             aria-current={pageNum === currentPage ? "page" : undefined}
+                            data-testid={`pagination-page-${pageNum}`}
+                            data-active={pageNum === currentPage}
                         >
                             <FontAwesomeIcon icon={faPaw} />
                         </button>
@@ -53,6 +60,7 @@ function Pagination({ currentPage, totalPages }: PaginationProps): JSX.Element {
                         disabled={currentPage === totalPages}
                         className={`${styles.paginationButton} ${styles.navButton}`}
                         aria-label="Próxima página"
+                        data-testid="pagination-next"
                     >
                         <FontAwesomeIcon icon={faChevronRight} />
                     </button>
