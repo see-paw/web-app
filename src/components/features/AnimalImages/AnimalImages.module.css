@@ -30,7 +30,7 @@
 /* Grid de Thumbnails */
 .thumbGrid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr 1fr;
     gap: var(--spacing-3);
 }
 
@@ -61,16 +61,15 @@
 /* Botão "Ver mais imagens" */
 .thumbnailMore {
     position: relative;
-    aspect-ratio: 1 / 1;
+    aspect-ratio: auto;
+    height: 100%;
+    grid-column: span 2;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg,
-    var(--color-primary-500),
-    var(--color-primary-600)
-    );
+    background: rgba(255, 255, 255, 0.95);
+    border: 2px dashed var(--color-primary-300);
     border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-sm);
     cursor: pointer;
     transition: all var(--transition-fast);
     overflow: hidden;
@@ -90,23 +89,29 @@
 }
 
 .thumbnailMore:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-md);
+    background: var(--color-primary-50);
+    border-color: var(--color-primary-500);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
 }
 
 .moreLabel {
     font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-semibold);
-    color: var(--color-text-inverse);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-primary-600);
     text-align: center;
     padding: var(--spacing-2);
-    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-1);
 }
 
-/* Quando há apenas 1 thumbnail */
-.thumbGrid:has(.thumbnailWrapper:only-of-type) {
-    grid-template-columns: 1fr;
+.moreLabel::before {
+    content: '📷';
+    font-size: var(--font-size-2xl);
 }
+
 
 @media (max-width: 768px) {
     .mainImageWrapper {
