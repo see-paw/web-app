@@ -6,3 +6,6 @@ profile:
   name: qodana.recommended
 exclude:
   - name: Eslint
+  - name: Syntax errors and unresolved references in JSDoc
+  - name: Unresolved variable or type 'JSX'
+  - name: Unresolved variable or type 'Element'
