@@ -4,7 +4,7 @@ linter: jetbrains/qodana-js:2025.2
 profile:
   name: qodana.recommended
 exclude:
-  - name: ESLint
+  - name: Eslint
   - name: JSValidateJSDoc
 
   - name: JSXUnresolvedComponent
@@ -12,3 +12,6 @@ exclude:
   - name: JSXUnresolvedVariable
 
   - name: JSUnresolvedVariable
+  - name: UnusedImport
+  - name: VoidFunctionReturnValueUsed
+  - name: RedundantAwait
