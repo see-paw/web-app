@@ -15,3 +15,6 @@ exclude:
   - name: UnusedImport
   - name: VoidFunctionReturnValueUsed
   - name: RedundantAwait
+  - name: All
+    paths:
+      - e2e
