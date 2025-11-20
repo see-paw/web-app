@@ -4,26 +4,10 @@ linter: jetbrains/qodana-js:2025.2
 profile:
   name: qodana.recommended
 exclude:
-  - name: Ignore JSDoc inspection
-    id: JSValidateJSDoc
+  - name: JSValidateJSDoc
 
-  - name: Ignore JSX unresolved component
-    id: JSXUnresolvedComponent
+  - name: JSXUnresolvedComponent
+  - name: JSXUnresolvedElement
+  - name: JSXUnresolvedVariable
 
-  - name: Ignore JSX unresolved element
-    id: JSXUnresolvedElement
-
-  - name: Ignore JSX unresolved variable
-    id: JSXUnresolvedVariable
-
-  - name: Ignore unresolved Element
-    id: JSUnresolvedVariable
-
-  - name: Ignore unused import
-    id: UnusedImport
-
-  - name: Ignore void return used
-    id: VoidFunctionReturnValueUsed
-
-  - name: Ignore redundant await
-    id: RedundantAwait
+  - name: JSUnresolvedVariable
