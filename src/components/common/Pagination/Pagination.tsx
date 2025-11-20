@@ -42,7 +42,7 @@ interface PaginationProps {
  * <Pagination currentPage={1} totalPages={5} />
  * 
  * @example
- * // With query parameters from React Router
+ * // With query parameters from React  Router
  * const [searchParams] = useSearchParams();
  * const page = searchParams.get("page") ?? "1";
  * <Pagination currentPage={Number(page)} totalPages={10} />
