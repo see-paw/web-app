@@ -18,7 +18,7 @@ exclude:
   - name: UnusedImport
   - name: VoidFunctionReturnValueUsed
   - name: RedundantAwait
-  - name: All
+  - name: Eslint
     paths:
       - e2e/pages
       - e2e/components
