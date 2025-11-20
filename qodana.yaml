@@ -1,12 +1,24 @@
 version: "1.0"
 
 linter: jetbrains/qodana-js:2025.2
+
+# Excluir completamente o diretório e2e da análise
+projectJDK: null
+
+# Definir scope de análise
+scope:
+  exclude:
+    - name: e2e
+    - name: node_modules
+
 profile:
   name: empty
+
 include:
   - name: Eslint
     paths:
-      - .
+      - src
+
 exclude:
   - name: JSValidateJSDoc
 
@@ -18,6 +30,3 @@ exclude:
   - name: UnusedImport
   - name: VoidFunctionReturnValueUsed
   - name: RedundantAwait
-  - name: Eslint
-    paths:
-      - e2e
