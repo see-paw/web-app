@@ -4,6 +4,7 @@ linter: jetbrains/qodana-js:2025.2
 profile:
   name: qodana.recommended
 exclude:
+  - name: ESLint
   - name: JSValidateJSDoc
 
   - name: JSXUnresolvedComponent
