@@ -19,7 +19,6 @@ interface UsePaginationProps {
  * @param {number} props.currentPage - Current active page number
  * @param {number} props.totalPages - Total number of pages available
  * @returns {Object} Pagination utilities
- * @returns {Object} return.getPageNumbers
  */
 export default function usePagination({ currentPage, totalPages }: UsePaginationProps) {
     const [searchParams, setSearchParams] = useSearchParams();

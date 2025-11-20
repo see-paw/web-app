@@ -20,4 +20,7 @@ exclude:
   - name: RedundantAwait
   - name: All
     paths:
-      - e2e/
+      - e2e/pages
+      - e2e/components
+      - e2e/core
+      - e2e
