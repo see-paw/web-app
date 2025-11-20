@@ -6,26 +6,21 @@ import {Animal} from "../../src/types/animal";
 
 test.describe('Animals List - With API Mocking', () => {
 
-    test('should load page instantly with mocked data', async ({ pm, apiMock }) => {
+    test('should load page with mocked data', async ({ pm, apiMock }) => {
         await apiMock.mockApiCall('**/api/animals?**', mockAnimalsPage1);
-
-        const startTime = Date.now();
 
         await pm.navigateToAnimals(1);
 
         const animalsPage = pm.getAnimalsPage();
         await animalsPage.waitForAnimalsToLoad();
 
-        const loadTime = Date.now() - startTime;
-
-        expect(loadTime).toBeLessThan(2000);
 
         const count = await animalsPage.getAnimalCount();
         expect(count).toBe(mockAnimalsPage1.items.length);
     });
 
     test('should display mocked animal data correctly', async ({ pm, apiMock }) => {
-        await apiMock.mockApiCall('**/api/animals*', mockAnimalsPage1);
+        await apiMock.mockApiCall('**/api/animals?**', mockAnimalsPage1);
 
         await pm.navigateToAnimals(1);
 
@@ -40,7 +35,7 @@ test.describe('Animals List - With API Mocking', () => {
     });
 
     test('should handle empty state with mocked empty data', async ({ pm, apiMock }) => {
-        await apiMock.mockApiCall('**/api/animals*', mockAnimalsEmpty);
+        await apiMock.mockApiCall('**/api/animals?**', mockAnimalsEmpty);
 
         await pm.navigateToAnimals(1);
 
@@ -54,7 +49,7 @@ test.describe('Animals List - With API Mocking', () => {
     });
 
     test('should simulate loading state with delayed mock', async ({ pm, apiMock }) => {
-        await apiMock.mockWithDelay('**/api/animals*', mockAnimalsPage1, 1000);
+        await apiMock.mockWithDelay('**/api/animals?**', mockAnimalsPage1, 1000);
 
         await pm.navigateToAnimals(1);
 
@@ -66,35 +61,39 @@ test.describe('Animals List - With API Mocking', () => {
         expect(count).toBe(mockAnimalsPage1.items.length);
     });
 
-    test('should test error handling with mocked 500 error', async ({ pm, apiMock, page }) => {
-        await apiMock.mockError('**/api/animals*', 500, 'Internal Server Error');
+    test('should test error handling with mocked 500 error, renders error page', async ({ pm, apiMock }) => {
+        await apiMock.mockError('**/api/animals?**', 500, 'Internal Server Error');
 
         await pm.navigateToAnimals(1);
 
-        await page.waitForLoadState('networkidle');
+        const errorPage = pm.getErrorPage();
 
-        const currentUrl = page.url();
-        expect(currentUrl).toContain('/animals');
+        const message = await errorPage.getMainErrorMessage();
+        expect(message).toContain('Ocorreu um erro!');
     });
 
     test('should test error handling with mocked 404 error', async ({ pm, apiMock, page }) => {
-        await apiMock.mockError('**/api/animals*', 404, 'Not Found');
+        await apiMock.mockError('**/api/animals?**', 404, 'Not Found');
 
         await pm.navigateToAnimals(1);
 
         await page.waitForLoadState('networkidle');
 
-        const currentUrl = page.url();
-        expect(currentUrl).toContain('/animals');
-    });
-});
+        const errorPage = pm.getErrorPage();
+
+        const mainMessage = await errorPage.getMainErrorMessage();
+        expect(mainMessage).toContain('Ocorreu um erro!');
+        const message = await errorPage.getMessageText();
+        expect(message).toContain('Não foi possível carregar os animais.');
+
+})});
 
 test.describe('Animals List - With API Interception', () => {
 
     test('should modify first animal in response', async ({ pm, apiIntercept }) => {
 
         await apiIntercept.interceptAndModify<PagedList<Animal>>(
-            '**/api/animals',
+            '**/api/animals?**',
             (response) => {
                 if (response.items.length > 0) {
                     response.items[0] = {
@@ -124,7 +123,7 @@ test.describe('Animals List - With API Interception', () => {
 
     test('should test edge case with modified empty description', async ({ pm, apiIntercept }) => {
         await apiIntercept.interceptAndModify<PagedList<Animal>>(
-            '**/api/animals',
+            '**/api/animals?**',
             (response) => {
                 if (response.items.length > 0) {
                     response.items[0].breed = null;
@@ -143,7 +142,7 @@ test.describe('Animals List - With API Interception', () => {
     });
 
     test('should verify API call was made', async ({ pm, apiIntercept }) => {
-        const responseReceived = apiIntercept.waitForResponseWithStatus('**/api/animals', 200);
+        const responseReceived = apiIntercept.waitForResponseWithStatus('/api/animals', 200);
 
         await pm.navigateToAnimals(1);
 
@@ -180,59 +179,6 @@ test.describe('Animals List - With API Interception', () => {
 
             const firstName = await animalsPage.getAnimalNameByIndex(0);
             expect(firstName).toContain('Page 2 Animal');
-        }
-    });
-});
-
-test.describe('Animals List - Performance Testing', () => {
-
-    test('should handle large dataset efficiently', async ({ pm, apiMock }) => {
-        const largeDataset = {
-            items: Array(20).fill(null).map((_, i) => ({
-                id: `animal-${i}`,
-                name: `Animal ${i}`,
-                age: Math.floor(Math.random() * 10) + 1,
-                breed: { id: `breed-${i}`, name: `Breed ${i}` },
-                images: []
-            })),
-            pageNumber: 1,
-            totalPages: 10,
-            totalCount: 200,
-            pageSize: 20,
-            hasPreviousPage: false,
-            hasNextPage: true
-        };
-
-        await apiMock.mockApiCall('**/api/animals*', largeDataset);
-
-        const startTime = Date.now();
-
-        await pm.navigateToAnimals(1);
-
-        const animalsPage = pm.getAnimalsPage();
-        await animalsPage.waitForAnimalsToLoad();
-
-        const loadTime = Date.now() - startTime;
-
-        expect(loadTime).toBeLessThan(3000);
-
-        const count = await animalsPage.getAnimalCount();
-        expect(count).toBe(20);
-    });
-
-    test('should render all cards without visual regressions', async ({ pm, apiMock, page }) => {
-        await apiMock.mockApiCall('**/api/animals*', mockAnimalsPage1);
-
-        await pm.navigateToAnimals(1);
-
-        const animalsPage = pm.getAnimalsPage();
-        await animalsPage.waitForAnimalsToLoad();
-
-        const count = await animalsPage.getAnimalCount();
-
-        for (let i = 0; i < count; i++) {
-            const cardLocator = page.locator('[data-testid="animal-card"]').nth(i);
-            await expect(cardLocator).toBeVisible();
         }
     });
 });

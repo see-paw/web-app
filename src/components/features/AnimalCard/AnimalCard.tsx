@@ -5,10 +5,54 @@ import {useState} from "react";
 import fallback from "@/assets/fallback_image.png"
 import styles from "./AnimalCard.module.css";
 
+/**
+ * Props for the AnimalCard component.
+ * 
+ * @interface AnimalCardProps
+ * @property {Animal} animal - The animal data to display
+ */
 export interface AnimalCardProps {
     animal: Animal,
 }
 
+/**
+ * AnimalCard component that displays a summary card for an animal.
+ * 
+ * @component
+ * @param {AnimalCardProps} props - The component props
+ * @param {Animal} props.animal - The animal object containing all relevant data
+ * @returns {JSX.Element} A card element with animal information
+ * 
+ * @description
+ * This component displays:
+ * - Animal's principal image (or fallback if unavailable/error)
+ * - Animal's name (as a clickable link)
+ * - Animal's breed name (or "Raça desconhecida" if null)
+ * - Animal's age with proper singular/plural handling
+ * 
+ * Features:
+ * - Error handling for image loading failures
+ * - Lazy loading for images to improve performance
+ * - Fallback image when principal image is missing or fails to load
+ * - Accessibility with ARIA labels
+ * - Link to detailed animal page
+ * - Responsive design with CSS modules
+ * 
+ * @example
+ * <AnimalCard animal={{
+ *   id: "123",
+ *   name: "Luna",
+ *   age: 2,
+ *   breed: { name: "Golden Retriever" },
+ *   images: [{ url: "...", description: "...", isPrincipal: true }]
+ * }} />
+ * 
+ * @example
+ * // In a list context
+ * {animals.map(animal => (
+ *   <AnimalCard key={animal.id} animal={animal} />
+ * ))}
+ */
 function AnimalCard({ animal }: AnimalCardProps): JSX.Element {
     const mainImage = animal.images.find(image => image.isPrincipal === true);
     const [imageError, setImageError] = useState(false);
