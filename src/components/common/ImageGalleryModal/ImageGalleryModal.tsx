@@ -1,4 +1,4 @@
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import type { Image } from "@/types/image";
 import styles from "./ImageGalleryModal.module.css";
 
@@ -15,6 +15,29 @@ export default function ImageGalleryModal({
                                           }: ImageGalleryModalProps) {
     const [currentIndex, setCurrentIndex] = useState(initialIndex);
 
+    // Prevenir scroll do body quando modal está aberto
+    useEffect(() => {
+        const originalOverflow = document.body.style.overflow;
+        document.body.style.overflow = 'hidden';
+
+        return () => {
+            document.body.style.overflow = originalOverflow;
+        };
+    }, []);
+
+    // Fechar com ESC
+    useEffect(() => {
+        const handleEscape = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') {
+                onClose();
+            }
+        };
+
+        document.addEventListener('keydown', handleEscape);
+        return () => document.removeEventListener('keydown', handleEscape);
+    }, [onClose]);
+
+
     const currentImage = images[currentIndex];
 
     const goToPrevious = () => {
@@ -26,34 +49,55 @@ export default function ImageGalleryModal({
     };
 
     return (
-        <div className={styles.overlay} onClick={onClose}>
-            <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
-                {/* Botão Fechar */}
-                <button className={styles.closeButton} onClick={onClose}>
+        <div className={styles.overlay} onClick={onClose} data-testid="modal-overlay">
+            <div
+                className={styles.modal}
+                onClick={(e) => e.stopPropagation()}
+                data-testid="modal-content"
+                role="dialog"
+                aria-modal="true"
+                aria-label="Galeria de imagens"
+            >
+                <button
+                    className={styles.closeButton}
+                    onClick={onClose}
+                    data-testid="modal-close-button"
+                    aria-label="Fechar galeria"
+                >
                     ✕
                 </button>
 
-                {/* Imagem Atual */}
                 <div className={styles.imageWrapper}>
                     <img
                         src={currentImage.url}
                         alt={currentImage.description || `Imagem ${currentIndex + 1}`}
                         className={styles.image}
+                        data-testid="modal-image"
                     />
                 </div>
 
-                {/* Contador de imagens */}
-                <div className={styles.counter}>
+                <div className={styles.counter} data-testid="modal-counter">
                     {currentIndex + 1} / {images.length}
                 </div>
 
-                {/* Botões de Navegação */}
                 {images.length > 1 && (
                     <>
-                        <button className={styles.navButton} style={{ left: 'var(--spacing-4)' }} onClick={goToPrevious}>
+                        <button
+                            className={styles.navButton}
+                            style={{ left: 'var(--spacing-4)' }}
+                            onClick={goToPrevious}
+                            data-testid="modal-prev-button"
+                            aria-label="Imagem anterior"
+                        >
                             ‹
                         </button>
-                        <button className={styles.navButton} style={{ right: 'var(--spacing-4)' }} onClick={goToNext}>
+                        <button
+                            className={styles.navButton}
+                            style={{ right: 'var(--spacing-4)' }}
+                            onClick={goToNext}
+                            data-testid="modal-next-button"
+                            aria-label="Próxima imagem"
+                        >
                             ›
                         </button>
                     </>

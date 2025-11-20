@@ -2,6 +2,7 @@ import type { Image } from "@/types/image";
 import styles from "./AnimalImages.module.css";
 import {useState} from "react";
 import ImageGalleryModal from "@/components/common/ImageGalleryModal/ImageGalleryModal";
+import Portal from "@/components/common/Portal/Portal";
 
 interface AnimalImagesProps {
     images: Image[];
@@ -13,6 +14,8 @@ export default function AnimalImages({images}:AnimalImagesProps) {
 
     const mainImage = images.find(img=> img.isPrincipal) ?? images[0];
     const otherImages = images.filter(img=> img.id !== mainImage.id);
+
+    const orderedImages = [mainImage, ...otherImages];
 
     const visibleThumbs = otherImages.slice(0,2);
     const remainingCount = otherImages.length-2;
@@ -26,25 +29,32 @@ export default function AnimalImages({images}:AnimalImagesProps) {
         setIsModalOpen(false);
     };
 
+    const getRealImageIndex = (imageId: string): number => {
+        return orderedImages.findIndex(img => img.id === imageId);
+    };
+
     return (
         <div className={styles.container}>
             {/* Imagem Principal */}
-            <div className={styles.mainImageWrapper}>
+            <div className={styles.mainImageWrapper} data-testid="main-image-wrapper" onClick={() => openModal(getRealImageIndex(mainImage.id))}
+                 style={{ cursor: 'pointer' }}>
                 <img
                     src={mainImage.url}
                     alt={mainImage.description || "imagem principal"}
                     className={styles.mainImage}
+                    data-testid="main-image"
                 />
             </div>
 
             {/* Thumbnails */}
             {otherImages.length > 0 && (
-                <div className={styles.thumbGrid}>
-                    {visibleThumbs.map((img, index) => (
+                <div className={styles.thumbGrid} data-testid="thumbnail-grid">
+                    {visibleThumbs.map((img) => (
                         <div
                             key={img.id}
                             className={styles.thumbnailWrapper}
-                            onClick={() => openModal(index + 1)}
+                            onClick={() => openModal(getRealImageIndex(img.id))}
+                            data-testid="thumbnail"
                         >
                             <img src={img.url} alt={img.description || img.id} />
                         </div>
@@ -54,7 +64,8 @@ export default function AnimalImages({images}:AnimalImagesProps) {
                     {remainingCount > 0 && (
                         <div
                             className={styles.thumbnailMore}
-                            onClick={() => openModal(0)}
+                            onClick={() => openModal(getRealImageIndex(mainImage.id))}
+                            data-testid="view-more-images"
                         >
                             <span className={styles.moreLabel}>
                                 Ver +{remainingCount} imagens
@@ -65,11 +76,13 @@ export default function AnimalImages({images}:AnimalImagesProps) {
             )}
             {/* Modal de Galeria */}
             {isModalOpen && (
-                <ImageGalleryModal
-                    images={images}
-                    initialIndex={initialImageIndex}
-                    onClose={closeModal}
-                />
+                <Portal>
+                    <ImageGalleryModal
+                        images={orderedImages}
+                        initialIndex={initialImageIndex}
+                        onClose={closeModal}
+                    />
+                </Portal>
             )}
         </div>
     );

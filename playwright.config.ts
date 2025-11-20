@@ -25,6 +25,7 @@ export default defineConfig({
   reporter: 'html',
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
     use: {
+        ignoreHTTPSErrors: true,
         baseURL: process.env.CI ? 'http://localhost:3000' : 'https://localhost:3000',
         trace: process.env.CI ? 'on' : "on-first-retry",
         headless: !!process.env.CI,

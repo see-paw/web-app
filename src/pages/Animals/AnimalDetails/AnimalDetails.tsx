@@ -10,7 +10,7 @@ function AnimalDetails() {
     const {animalId} = useParams();
 
 
-    const { data: animal, isError, error } = useQuery({
+    const { data: animal, isLoading, isError, error } = useQuery({
         queryKey:["animal", animalId],
         queryFn:({signal}) => animalsApi.getAnimalDetails({
             id:animalId!, //este valor não é undefined quando a queryFn é chamada
@@ -20,10 +20,17 @@ function AnimalDetails() {
         staleTime:5000
     });
 
-    if (!animal) return null;
 
     if (isError) {
-        return <p>{error.message}</p>;
+        return <p data-testid="error-message">{error.message}</p>;
+    }
+
+    if (isLoading) {
+        return <p data-testid="loading-message">A carregar...</p>;
+    }
+
+    if (!animal) {
+        return null;
     }
 
     return (

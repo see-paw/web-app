@@ -34,56 +34,56 @@ export default function AnimalInfo({animal}: AnimalInfoProps) {
         <div className={styles.container}>
 
             {/* Descrição */}
-            <div className={styles.description}>
+            <div className={styles.description} data-testid="animal-description">
                 <p>{animal.description}</p>
             </div>
 
             {/* Atributos */}
-            <div className={styles.attributesGrid}>
+            <div className={styles.attributesGrid} data-testid="attributes-grid">
 
-                <div className={styles.attribute}>
+                <div className={styles.attribute} data-testid="attribute-species">
                     <span className={styles.label}>Espécie</span>
-                    <span className={styles.value}>{t(animal.species)}</span>
+                    <span className={styles.value} data-testid="attribute-value">{t(animal.species)}</span>
                 </div>
 
-                <div className={styles.attribute}>
+                <div className={styles.attribute} data-testid="attribute-breed">
                     <span className={styles.label}>Raça</span>
-                    <span className={styles.value}>{animal.breed.name}</span>
+                    <span className={styles.value} data-testid="attribute-value">{animal.breed.name}</span>
                 </div>
 
-                <div className={styles.attribute}>
+                <div className={styles.attribute} data-testid="attribute-sex">
                     <span className={styles.label}>Sexo</span>
-                    <span className={styles.value}>{t(animal.sex)}</span>
+                    <span className={styles.value} data-testid="attribute-value">{t(animal.sex)}</span>
                 </div>
 
-                <div className={styles.attribute}>
+                <div className={styles.attribute} data-testid="attribute-size">
                     <span className={styles.label}>Tamanho</span>
-                    <span className={styles.value}>{t(animal.size)}</span>
+                    <span className={styles.value} data-testid="attribute-value">{t(animal.size)}</span>
                 </div>
 
-                <div className={styles.attribute}>
+                <div className={styles.attribute} data-testid="attribute-colour">
                     <span className={styles.label}>Cor</span>
-                    <span className={styles.value}>{animal.colour}</span>
+                    <span className={styles.value} data-testid="attribute-value">{animal.colour}</span>
                 </div>
 
-                <div className={styles.attribute}>
+                <div className={styles.attribute} data-testid="attribute-age">
                     <span className={styles.label}>Idade</span>
-                    <span className={styles.value}>
+                    <span className={styles.value} data-testid="attribute-value">
                         {getAgeDisplay(animal.birthDate, animal.age)}
                     </span>
                 </div>
 
-                <div className={styles.attribute}>
+                <div className={styles.attribute} data-testid="attribute-sterilized">
                     <span className={styles.label}>Esterilizado</span>
-                    <span className={styles.value}>
+                    <span className={styles.value} data-testid="attribute-value">
                         {animal.sterilized ? "Sim" : "Não"}
                     </span>
                 </div>
 
                 {animal.features && (
-                    <div className={styles.attribute}>
+                    <div className={styles.attribute} data-testid="attribute-features">
                         <span className={styles.label}>Características</span>
-                        <span className={styles.value}>{animal.features}</span>
+                        <span className={styles.value} data-testid="attribute-value">{animal.features}</span>
                     </div>
                 )}
             </div>

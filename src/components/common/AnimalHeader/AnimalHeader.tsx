@@ -6,13 +6,13 @@ interface AnimalHeaderProps {
 
 export default function AnimalHeader({ name, sex }: AnimalHeaderProps) {
 
-    const article = sex.toLowerCase() === "fêmea" ? "a" : "o";
+    const article = sex.toLowerCase() === "female" ? "a" : "o";
 
     return (
         <div className={styles.header}>
-            <h1>
+            <h1 data-testid="animal-header-title">
                 Olá, eu sou {article}{" "}
-                <span className={styles.name}>{name}</span>! ❤️
+                <span className={styles.name} data-testid="animal-name">{name}</span>! ❤️
             </h1>
         </div>
     );

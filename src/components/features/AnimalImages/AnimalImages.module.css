@@ -13,7 +13,6 @@
     border-radius: var(--radius-2xl);
     box-shadow: var(--shadow-lg);
     background: rgba(255, 255, 255, 0.98);
-    backdrop-filter: blur(10px);
 }
 
 .mainImage {
@@ -43,7 +42,6 @@
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-sm);
     background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(8px);
     transition: all var(--transition-fast);
 }
 
