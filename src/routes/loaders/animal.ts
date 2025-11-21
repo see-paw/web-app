@@ -6,7 +6,7 @@ import {animalsApi} from "@/api/animals";
 /**
  * React Router loader for the animals page
  * Fetches paginated animal data and ensures page query param exists
- * 
+ *
  * @param {LoaderFunctionArgs} args - Loader arguments from React Router
  * @param {Request} args.request - The incoming request object
  * @returns {Promise<PagedList<Animal>>} Paginated list of animals
@@ -37,3 +37,5 @@ export async function animalsLoader({ request }: LoaderFunctionArgs)  {
         });
     }
 }
+
+
