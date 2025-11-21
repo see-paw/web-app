@@ -1,16 +1,16 @@
-﻿export interface AuthResponse {
+﻿export const UserRole = {
+    User: "User",
+    AdminCAA: "AdminCAA"
+}
+
+export type UserRole =
+    typeof UserRole[keyof typeof UserRole];
+
+export interface AuthResponse {
     tokenType: string
     accessToken: string
     expiresIn: number
     refreshToken: string
-}
-
-export interface UserId {
-    userId: string
-}
-
-export interface UserRole {
-    role: string
 }
 
 export interface UserProfile {
@@ -24,8 +24,13 @@ export interface UserProfile {
 
 export interface User {
     userId: string,
-    role: string
+    role: UserRole
     profile: UserProfile
+}
+
+export interface AuthUser {
+    user: User,
+    tokens: AuthTokens
 }
 
 export interface AuthTokens {

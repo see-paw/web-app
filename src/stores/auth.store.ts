@@ -1,16 +1,26 @@
-﻿import {createStore} from "zustand/vanilla";
-import type {AuthResponse, User} from "@/types/user";
+﻿import type {AuthTokens, User} from "@/types/user";
+import {persist} from "zustand/middleware/persist";
+import {create} from "zustand/react";
 
-type AuthState = {
+interface AuthState {
     user: User | null
-    tokens: AuthResponse | null
-    login: (data: { user: User; tokens: AuthResponse }) => void
+    tokens: AuthTokens | null
+    isAuthenticated: () => boolean
+    setUser: (user: User) => void
+    setTokens: (tokens: AuthTokens) => void
     logout: () => void
 }
 
-export const useAuthStore = createStore<AuthState>((set) =>({
-    user: null,
-    tokens: null,
-    login: ({ user, tokens }) => set({ user, tokens }),
-    logout: () => set({ user: null, tokens: null }),
-}))
+export const useAuthStore = create<AuthState>()(
+    persist(
+        (set, get) => ({
+            user: null,
+            tokens: null,
+            isAuthenticated: () => !!get().tokens,
+            setUser: (user) =>  set({user}),
+            setTokens: (tokens) => set({tokens}),
+            logout: () => set({ user: null, tokens: null }),
+        }),
+        { name: "seepaw-auth" }
+    )
+)
