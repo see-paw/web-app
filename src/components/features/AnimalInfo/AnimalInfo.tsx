@@ -2,13 +2,30 @@ import type {Animal} from "@/types/animal";
 import styles from "./AnimalInfo.module.css";
 import {useTranslation} from 'react-i18next';
 
-
+/**
+ * Computes a human-friendly age label for an animal.
+ *
+ * - If age ≥ 1 year → returns "X ano(s)"
+ * - Otherwise → calculates age in months
+ * - If less than 1 month → returns "Recém-nascido"
+ *
+ * @function getAgeDisplay
+ * @param {string} birthDate - ISO birth date string of the animal
+ * @param {number} age - Age in years (if available from backend)
+ * @returns {string} A formatted age label
+ *
+ * @example
+ * getAgeDisplay("2024-01-12", 2) → "2 anos"
+ *
+ * @example
+ * getAgeDisplay("2024-09-01", 0) → "3 meses"
+ */
 function getAgeDisplay(birthDate: string, age: number): string {
     if (age > 0) {
         return `${age} ${age === 1 ? 'ano' : 'anos'}`;
     }
 
-    // Calcular meses
+    // Calculate months based on date difference
     const birth = new Date(birthDate);
     const today = new Date();
 
@@ -23,22 +40,61 @@ function getAgeDisplay(birthDate: string, age: number): string {
 }
 
 
+/**
+ * Props for the AnimalInfo component.
+ *
+ * @interface AnimalInfoProps
+ * @property {Animal} animal - The full Animal object containing all descriptive attributes
+ */
 interface AnimalInfoProps {
     animal: Animal;
 }
 
+
+/**
+ * AnimalInfo component that displays all descriptive and categorical
+ * information about an animal, including:
+ * - Description
+ * - Species, breed, sex, size, colour
+ * - Age (auto-formatted into years or months)
+ * - Sterilization status
+ * - Optional extra features
+ *
+ * @component
+ * @param {AnimalInfoProps} props - Component props
+ * @returns {JSX.Element} A panel with the formatted animal information
+ *
+ * @description
+ * This component is used in the Animal Details Page, providing a complete
+ * overview of an animal's characteristics. It includes translation support
+ * via `react-i18next`, allowing dynamic localization of:
+ * - Species
+ * - Sex
+ * - Size
+ *
+ * Features:
+ * - Age calculation in years or months
+ * - Conditional rendering for optional features
+ * - Semantic structure using a labelled attribute grid
+ * - Fully testable using data-testid attributes for every attribute
+ *
+ * @example
+ * ```tsx
+ * <AnimalInfo animal={selectedAnimal} />
+ * ```
+ */
 export default function AnimalInfo({animal}: AnimalInfoProps) {
     const {t} = useTranslation();
 
     return (
         <div className={styles.container}>
 
-            {/* Descrição */}
+            {/* Description Section  */}
             <div className={styles.description} data-testid="animal-description">
                 <p>{animal.description}</p>
             </div>
 
-            {/* Atributos */}
+            {/* Attribute Grid */}
             <div className={styles.attributesGrid} data-testid="attributes-grid">
 
                 <div className={styles.attribute} data-testid="attribute-species">
