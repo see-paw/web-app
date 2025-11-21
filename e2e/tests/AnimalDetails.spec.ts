@@ -218,8 +218,8 @@ test.describe('Animal Details Page', () => {
 
     test.use({ ignoreHTTPSErrors: true });
     test('should not display navigation buttons in modal when only one image', async ({ page, pm, apiMock }) => {
-        await apiMock.mockApiCall('**/api/animals/**', mockAnimalMaria);
-        await page.goto(`/animals/${mockAnimalMaria.id}`);
+        await apiMock.mockApiCall('**/api/animals/**', mockAnimalJessica);
+        await page.goto(`/animals/${mockAnimalJessica.id}`);
 
         const animalDetailsPage = pm.getAnimalDetailsPage();
         await animalDetailsPage.waitForPageToLoad();
