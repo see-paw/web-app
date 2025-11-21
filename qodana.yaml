@@ -2,12 +2,6 @@ version: "1.0"
 
 linter: jetbrains/qodana-js:2025.2
 
-# Definir scope de análise
-scope:
-  exclude:
-    - name: e2e
-    - name: node_modules
-
 profile:
   name: empty
 
@@ -27,3 +21,6 @@ exclude:
   - name: UnusedImport
   - name: VoidFunctionReturnValueUsed
   - name: RedundantAwait
+  - name: Eslint
+    paths:
+      - e2e
