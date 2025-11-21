@@ -31,7 +31,8 @@ export default defineConfig({
         headless: !!process.env.CI,
         launchOptions: {
             slowMo: process.env.CI ? 0 : 1000
-        }
+        },
+        ignoreHTTPSErrors: true,
     },
 
     outputDir: 'test-results',

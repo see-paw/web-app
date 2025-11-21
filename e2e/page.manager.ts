@@ -1,19 +1,22 @@
 ﻿import {AnimalsPage} from "./pages/animals.page";
 import {Page} from "@playwright/test";
 import PaginationComponent from "./components/PaginationComponent";
+import {ErrorPage} from "./pages/error.page";
 import {AnimalDetailsPage} from "./pages/animalDetails.page";
 import {AnimalHeaderComponent} from "./components/AnimalHeader.component";
 import {ImageGalleryModalComponent} from "./components/ImageGalleryModal.component";
 
 export class PageManager {
-    private animalsPage: AnimalsPage;
-    private paginationComponent: PaginationComponent;
-    private animalDetailsPage: AnimalDetailsPage;
-    private imageGalleryModalComponent: ImageGalleryModalComponent;
-    private animalHeaderComponent: AnimalHeaderComponent;
+    private readonly animalsPage: AnimalsPage;
+    private readonly errorPage: ErrorPage;
+    private readonly paginationComponent: PaginationComponent;
+    private readonly animalDetailsPage: AnimalDetailsPage;
+    private readonly imageGalleryModalComponent: ImageGalleryModalComponent;
+    private readonly animalHeaderComponent: AnimalHeaderComponent;
 
     constructor(private page: Page) {
         this.animalsPage = new AnimalsPage(page);
+        this.errorPage = new ErrorPage(page);
         this.paginationComponent = new PaginationComponent(page);
         this.animalDetailsPage = new AnimalDetailsPage(page);
         this.imageGalleryModalComponent = new ImageGalleryModalComponent(page);
@@ -30,6 +33,10 @@ export class PageManager {
 
     getPaginationComponent(): PaginationComponent {
         return this.paginationComponent;
+    }
+
+    getErrorPage() : ErrorPage {
+        return this.errorPage;
     }
 
     getImageGalleryModalComponent(): ImageGalleryModalComponent {

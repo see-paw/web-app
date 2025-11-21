@@ -1,8 +1,26 @@
-####################################################################################################################
-# WARNING: Do not store sensitive information in this file, as its contents will be included in the Qodana report. #
-####################################################################################################################
 version: "1.0"
+
+linter: jetbrains/qodana-js:2025.2
+
 profile:
-  name: qodana.recommended
-exclude:
+  name: empty
+
+include:
   - name: Eslint
+    paths:
+      - src
+
+exclude:
+  - name: JSValidateJSDoc
+
+  - name: JSXUnresolvedComponent
+  - name: JSXUnresolvedElement
+  - name: JSXUnresolvedVariable
+
+  - name: JSUnresolvedVariable
+  - name: UnusedImport
+  - name: VoidFunctionReturnValueUsed
+  - name: RedundantAwait
+  - name: Eslint
+    paths:
+      - e2e

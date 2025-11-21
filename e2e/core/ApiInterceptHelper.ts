@@ -7,15 +7,21 @@ export class ApiInterceptHelper {
         urlPattern: string,
         modifier: (response: T) => T
     ): Promise<void> {
-        await this.page.route(urlPattern, async (route: Route) => {
-            const response = await route.fetch();
-            const responseBody = await response.json();
-            const modifiedBody = modifier(responseBody);
+        await this.page.route(urlPattern, async (route: Route, request) => {
+            
+            const rawResponse = await this.page.request.fetch(request.url(), {
+                headers: request.headers(),
+                method: request.method(),
+                data: request.postData()
+            });
+
+            const body = await rawResponse.json();
+            const modified = modifier(body);
 
             await route.fulfill({
-                status: response.status(),
-                headers: response.headers(),
-                body: JSON.stringify(modifiedBody)
+                status: rawResponse.status(),
+                headers: rawResponse.headers(),
+                body: JSON.stringify(modified)
             });
         });
     }

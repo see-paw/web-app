@@ -4,7 +4,9 @@ import { createPortal } from 'react-dom';
 interface PortalProps {
     children: ReactNode;
     /**
-     * ID do elemento onde o portal será montado
+     * The ID of the DOM element where the portal content will be mounted.
+     * If the container does not exist, it will be created dynamically.
+     *
      * @default 'portal-root'
      */
     containerId?: string;
@@ -13,11 +15,24 @@ interface PortalProps {
 /**
  * Portal Component
  *
- * Renderiza children fora da hierarquia DOM do componente pai,
- * diretamente no body ou em um container específico.
+ * This component renders its children into a DOM node that exists
+ * outside the parent component hierarchy. It uses ReactDOM.createPortal
+ * to "teleport" elements to a target container, usually placed at the
+ * end of the <body>.
  *
- * Útil para modais, tooltips, dropdowns e overlays que precisam
- * escapar do stacking context dos componentes pai.
+ * Portals are commonly used for:
+ *  - Modals and dialogs
+ *  - Tooltips and popovers
+ *  - Dropdowns
+ *  - Overlays
+ *
+ * They ensure proper rendering above all stacking contexts and avoid
+ * issues with overflow:hidden or z-index limitations within the app.
+ *
+ * This component:
+ *  - Ensures SSR safety (no DOM access until mounted)
+ *  - Creates the portal container dynamically if it doesn’t exist
+ *  - Cleans up empty containers when unmounted
  *
  * @example
  * ```tsx
@@ -27,19 +42,23 @@ interface PortalProps {
  * ```
  */
 export default function Portal({ children, containerId = 'portal-root' }: PortalProps) {
+    // Tracks whether the component is mounted (important for SSR safety)
     const [mounted, setMounted] = useState(false);
+    // Reference to the portal container DOM element
     const [container, setContainer] = useState<HTMLElement | null>(null);
 
     useEffect(() => {
+        // Mark component as mounted — prevents SSR mismatches
         setMounted(true);
 
-        // Tenta encontrar o container existente
+        // Try to find an existing portal container
         let portalContainer = document.getElementById(containerId);
 
-        // Se não existir, cria um
+        // Create container if it does not exist
         if (!portalContainer) {
             portalContainer = document.createElement('div');
             portalContainer.id = containerId;
+            // Ensure the portal always renders above all UI layers
             portalContainer.style.position = 'relative';
             portalContainer.style.zIndex = '9999';
             document.body.appendChild(portalContainer);
@@ -49,18 +68,25 @@ export default function Portal({ children, containerId = 'portal-root' }: Portal
 
         return () => {
             setMounted(false);
-
-            // Cleanup: remove o container se estiver vazio
+            // Cleanup:
+            // If the container exists and has no children,
+            // remove it to avoid leftover empty divs in <body>.
             if (portalContainer && portalContainer.childNodes.length === 0) {
                 portalContainer.remove();
             }
         };
     }, [containerId]);
 
-    // Não renderiza no servidor (SSR safety)
+    /**
+     * Prevent rendering on server or before the portal container exists.
+     * This avoids:
+     *  - SSR DOM access errors
+     *  - Hydration mismatches
+     */
     if (!mounted || !container) {
         return null;
     }
 
+    // Render children into the portal container
     return createPortal(children, container);
 }

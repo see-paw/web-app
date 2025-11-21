@@ -7,6 +7,29 @@ import Pagination from "@/components/common/Pagination/Pagination";
 import { useSearchParams } from "react-router-dom";
 import styles from "./Animals.module.css";
 
+/**
+ * Animals page component that displays a paginated list of animals.
+ * 
+ * @component
+ * @returns {JSX.Element|null} The rendered animals page with pagination or null if data is not loaded
+ * 
+ * @description
+ * This component:
+ * - Fetches paginated animal data using TanStack Query
+ * - Reads the current page from URL search parameters (defaults to "1")
+ * - Displays animals in a grid layout using AnimalList component
+ * - Provides pagination controls to navigate between pages
+ * - Handles error states by displaying error messages
+ * 
+ * @example
+ * // Route definition
+ * <Route path="/animals" element={<Animals />} />
+ * 
+ * @example
+ * // URL examples
+ * // /animals - Shows first page
+ * // /animals?page=2 - Shows second page
+ */
 function Animals() {
     const [searchParams] = useSearchParams();
     const page = searchParams.get("page") ?? "1";

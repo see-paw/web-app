@@ -1,13 +1,34 @@
-﻿import {useSearchParams} from "react-router-dom";
+import {useSearchParams} from "react-router-dom";
 
+/**
+ * Props for the usePagination hook
+ * 
+ * @interface UsePaginationProps
+ * @property {number} currentPage - Current active page number
+ * @property {number} totalPages - Total number of pages available
+ */
 interface UsePaginationProps {
     currentPage: number,
     totalPages: number
 }
 
+/**
+ * Hook for managing pagination state and navigation
+ * 
+ * @param {UsePaginationProps} props - Hook configuration
+ * @param {number} props.currentPage - Current active page number
+ * @param {number} props.totalPages - Total number of pages available
+ * @returns {Object} Pagination utilities
+ */
 export default function usePagination({ currentPage, totalPages }: UsePaginationProps) {
     const [searchParams, setSearchParams] = useSearchParams();
 
+    /**
+     * Updates the URL search params with new page number
+     * 
+     * @param {number} page - Page number to navigate to
+     * @returns {void}
+     */
     function handlePageChange(page: number) {
         if (page < 1 || page > totalPages) return;
 
@@ -16,6 +37,12 @@ export default function usePagination({ currentPage, totalPages }: UsePagination
         setSearchParams(newSearchParams);
     }
 
+    /**
+     * Calculates which page numbers to display in pagination
+     * Shows up to 5 pages with current page centered when possible
+     * 
+     * @returns {number[]} Array of page numbers to display
+     */
     const getPageNumbers = (): (number)[] => {
         const pages: (number)[] = [];
 
@@ -44,8 +71,26 @@ export default function usePagination({ currentPage, totalPages }: UsePagination
         return pages;
     };
 
+    /**
+     * Navigates to the next page
+     * 
+     * @returns {void}
+     */
     const goNext = () => handlePageChange(currentPage + 1);
+
+    /**
+     * Navigates to the previous page
+     * 
+     * @returns {void}
+     */
     const goPrevious = () => handlePageChange(currentPage - 1);
+
+    /**
+     * Navigates to a specific page
+     * 
+     * @param {number} page - Target page number
+     * @returns {void}
+     */
     const goToPage = (page: number)  => handlePageChange(page);
 
     return {getPageNumbers, goNext, goPrevious, goToPage};
