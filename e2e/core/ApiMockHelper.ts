@@ -43,4 +43,16 @@ export class ApiMockHelper {
             });
         });
     }
+
+    async mockAllApiRequests() {
+        await this.page.route('**/api/**', async route => {
+            console.log('[MOCK API]', route.request().url());
+            return route.fulfill({
+                status: 200,
+                contentType: 'application/json',
+                body: JSON.stringify({})
+            });
+        });
+    }
+
 }
