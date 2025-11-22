@@ -7,9 +7,9 @@ export class AnimalsPage extends BasePage { // todos os pages devem extender o b
         super(page);
     }
 
-    async waitForAnimalsToLoad() {
+    async waitForAnimalsToLoad(timeout = 5000) {
         const firstCard = this.page.locator('[data-testid="animal-card"]').first();
-        await this.waitForElementToBeVisible(firstCard);
+        await this.waitForElementToBeVisible(firstCard, timeout);
     }
 
     async getAnimalCount(): Promise<number> {

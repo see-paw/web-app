@@ -1,10 +1,20 @@
 import type {ReactNode} from 'react';
-import {Link, NavLink} from 'react-router-dom';
+import {Link, NavLink, useNavigate} from 'react-router-dom';
 import styles from './Navbar.module.css';
+import {queryClient} from "@/lib/queryClient";
+import {useAuthStore} from "@/stores/auth.store";
+
+export interface NavItem {
+    id: string;
+    icon: ReactNode;
+    to: string;
+    text?: string;
+    isLogout?: boolean;
+}
 
 /**
  * Props for the Navbar component.
- * 
+ *
  * @interface NavbarProps
  * @property {Object} [logo] - Optional logo configuration
  * @property {string} logo.img - Path to the logo image
@@ -17,66 +27,39 @@ import styles from './Navbar.module.css';
  */
 export interface NavbarProps {
     logo?: { img: string; alt: string };
-    items?: {
-        id: string;
-        icon: ReactNode;
-        to: string;
-        text?: string;
-    }[];
+    items?: NavItem[];
 }
 
 /**
  * Navbar component that renders a navigation bar with logo and navigation items.
- * 
+ *
  * @component
  * @param {NavbarProps} props - The component props
  * @param {Object} [props.logo] - Optional logo configuration with image path and alt text
  * @param {Array} [props.items] - Optional array of navigation items with icons and routes
  * @returns {JSX.Element} A navigation bar element
- * 
- * @description
- * This component provides a flexible navigation bar that can include:
- * - An optional logo (clickable link to home page)
- * - Optional navigation items with:
- *   - Icons (required)
- *   - Route paths (required)
- *   - Optional text labels
- *   - Active state highlighting via NavLink
- * 
- * Features:
- * - Active route highlighting with CSS classes
- * - React Router integration with NavLink for active states
- * - Responsive design with CSS modules
- * - Flexible configuration - logo and items are optional
- * - Semantic HTML with nav element
- * 
- * @example
- * // Basic usage with logo and items
- * <Navbar 
- *   logo={{ img: "/logo.png", alt: "Company Logo" }}
- *   items={[
- *     { id: "1", icon: <HomeIcon />, to: "/", text: "Home" },
- *     { id: "2", icon: <ProfileIcon />, to: "/profile" }
- *   ]}
- * />
- * 
- * @example
- * // Logo only
- * <Navbar logo={{ img: "/logo.png", alt: "Logo" }} />
- * 
- * @example
- * // Items only (no logo)
- * <Navbar items={[
- *   { id: "1", icon: <Icon />, to: "/page" }
- * ]} />
  */
-export const Navbar = ({ logo, items }: NavbarProps) => {
+export const Navbar = ({logo, items}: NavbarProps) => {
+    const navigate = useNavigate();
+    const logout = useAuthStore(s => s.logout);
+
+    /**
+     * Handles the logout process for the current user.*
+     * @function
+     * @returns {void}
+     */
+    function handleLogout() {
+        logout();
+        queryClient.clear();
+        navigate("/");
+    }
+
     return (
         <nav className={styles.navbar}>
             {logo && (
                 <div className={styles.logoContainer}>
                     <Link to="/">
-                        <img className={styles.logo} src={logo.img} alt={logo.alt} />
+                        <img className={styles.logo} src={logo.img} alt={logo.alt}/>
                     </Link>
                 </div>
             )}
@@ -85,15 +68,26 @@ export const Navbar = ({ logo, items }: NavbarProps) => {
                 <ul className={styles.navItems}>
                     {items.map((item) => (
                         <li key={item.id} className={styles.navItem}>
-                            <NavLink 
-                                to={item.to} 
-                                className={({isActive}) => 
-                                    isActive ? `${styles.navLink} ${styles.navLinkActive}` : styles.navLink
-                                }
-                            >
-                                <span className={styles.navIcon}>{item.icon}</span>
-                                {item.text && <span className={styles.navText}>{item.text}</span>}
-                            </NavLink>
+                            {item.isLogout ? (
+                                <button
+                                    type="button"
+                                    className={styles.navLink}
+                                    onClick={handleLogout}
+                                >
+                                    <span className={styles.navIcon}>{item.icon}</span>
+                                    {item.text && <span className={styles.navText}>{item.text}</span>}
+                                </button>
+                            ) : (
+                                <NavLink
+                                    to={item.to}
+                                    className={({isActive}) =>
+                                        isActive ? `${styles.navLink} ${styles.navLinkActive}` : styles.navLink
+                                    }
+                                >
+                                    <span className={styles.navIcon}>{item.icon}</span>
+                                    {item.text && <span className={styles.navText}>{item.text}</span>}
+                                </NavLink>
+                            )}
                         </li>
                     ))}
                 </ul>

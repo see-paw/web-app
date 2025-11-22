@@ -1,4 +1,5 @@
 import axios from "axios";
+import {useAuthStore} from "@/stores/auth.store";
 
 const baseURL = import.meta.env.VITE_API_URL;
 
@@ -16,6 +17,20 @@ export const api = axios.create({
         'Content-Type': 'application/json',
     },
 })
+
+api.interceptors.request.use((config) => {
+    const accessToken = useAuthStore.getState().tokens?.accessToken;
+
+    if (accessToken) {
+        if (config.headers?.set) {
+            config.headers.set("Authorization", `Bearer ${accessToken}`);
+        } else {
+            config.headers["Authorization"] = `Bearer ${accessToken}`;
+        }
+    }
+
+    return config;
+});
 
 /**
  * Validates that the API base URL is configured
