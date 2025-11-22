@@ -1,29 +1,19 @@
 ﻿import {api} from "@/api/api";
-import type {AuthResponse, UserProfile} from "@/types/user";
-
-export interface LoginCredentials {
-    email: string;
-    password: string;
-}
+import type {LoginResponse, UserData, UserProfile} from "@/types/user";
+import type {LoginCredentials} from "@/pages/Auth/Login/Login";
 
 const authApi = {
 
-    login: async function (loginCredentials: LoginCredentials, signal: AbortSignal): Promise<AuthResponse> {
-        const { data: authResponse } = await api.post<AuthResponse>("/login", loginCredentials, { signal })
+    login: async function (loginCredentials: LoginCredentials): Promise<LoginResponse> {
+        const { data: authResponse } = await api.post<LoginResponse>("/login", loginCredentials)
 
         return authResponse;
     },
 
-    getUserId: async function (signal: AbortSignal): Promise<string> {
-        const { data: userId } = await api.get<string>("/users/id", { signal })
+    getCurrentUserData: async function (signal: AbortSignal): Promise<UserData> {
+        const { data: userData } = await api.get<UserData>("/users/me", { signal })
 
-        return userId;
-    },
-
-    getUserRole: async function (signal: AbortSignal): Promise<string> {
-        const { data: role } = await api.get<string>("/users/role", { signal })
-
-        return role;
+        return userData;
     },
 
     getUserProfile: async function (signal: AbortSignal): Promise<UserProfile> {

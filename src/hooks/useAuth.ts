@@ -1,16 +1,15 @@
 ﻿import {useAuthStore} from "@/stores/auth.store";
-import authApi, {type LoginCredentials} from "@/api/auth";
+import authApi from "@/api/auth";
 import type {User} from "@/types/user";
 import axios from "axios";
-import {ApiErrorType} from "@/types/apierrors";
+import {type ApiError, ApiErrorType} from "@/types/apierrors";
 import {parseApiError} from "@/utils/parseApiError";
 import {handleLoginError} from "@/utils/handleLoginError";
+import type {LoginCredentials} from "@/pages/Auth/Login/Login";
 
 export interface LoginResult {
     success: boolean;
-    error: string | null;
-    errorType: ApiErrorType | null;
-    details?: Record<string, string[]>;
+    error: ApiError | null;
 }
 
 export function useAuth() {
@@ -18,25 +17,47 @@ export function useAuth() {
     const setTokens = useAuthStore((s) => s.setTokens);
     const logout = useAuthStore((s) => s.logout);
 
-    const login = async (loginCredentials: LoginCredentials, signal: AbortSignal): Promise<LoginResult> => {
+    const login = async (loginCredentials: LoginCredentials): Promise<LoginResult> => {
         try {
-            const authResponse = await authApi.login(loginCredentials, signal);
+            const authResponse = await authApi.login(loginCredentials);
             setTokens(authResponse);
 
             const internalController = new AbortController();
 
-            const userId = await authApi.getUserId(internalController.signal);
-            const role = await authApi.getUserRole(internalController.signal);
-            const profile = await authApi.getUserProfile(internalController.signal);
+            const userData = await authApi.getCurrentUserData(internalController.signal);
 
-            const user: User = { userId, role, profile };
+            const isStillAuthenticated = useAuthStore.getState().tokens !== null;
+            if (!isStillAuthenticated) {
+                return {
+                    success: false,
+                    error: {
+                        message: "Login cancelado",
+                        type: ApiErrorType.CANCELLED,
+                        details: undefined
+                    }
+                };
+            }
+
+            const user: User = {
+                userId: userData.userId,
+                role: userData.role,
+                email: userData.email,
+                shelterId: userData.shelterId,
+                profile: {
+                    name: userData.name,
+                    birthDate: userData.birthDate,
+                    street: userData.street,
+                    city: userData.city,
+                    postalCode: userData.postalCode,
+                    phoneNumber: userData.phoneNumber,
+                }
+            };
+
             setUser(user);
 
             return {
                 success: true,
                 error: null,
-                errorType: null,
-                details: undefined
             };
         } catch (err) {
             logout();
@@ -44,20 +65,20 @@ export function useAuth() {
             if (axios.isCancel(err)) {
                 return {
                     success: false,
-                    error: "Login cancelado",
-                    errorType: ApiErrorType.CANCELLED,
-                    details: undefined
+                    error: {
+                        message: "Login Cancelado",
+                        type: ApiErrorType.CANCELLED,
+                        details: undefined
+                    }
                 };
             }
 
             const apiError = parseApiError(err);
-            const userMessage = handleLoginError(apiError);
+            apiError.message = handleLoginError(apiError);
 
             return {
                 success: false,
-                error: userMessage,
-                errorType: apiError.type,
-                details: apiError.details
+                error: apiError,
             };
         }
     };

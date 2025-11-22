@@ -6,7 +6,7 @@
 export type UserRole =
     typeof UserRole[keyof typeof UserRole];
 
-export interface AuthResponse {
+export interface LoginResponse {
     tokenType: string
     accessToken: string
     expiresIn: number
@@ -22,15 +22,26 @@ export interface UserProfile {
     phoneNumber: string
 }
 
-export interface User {
-    userId: string,
+export interface UserData {
+    userId: string
+    email: string
+    name: string
     role: UserRole
-    profile: UserProfile
+    shelterId: string | null
+    birthDate: string
+    street: string
+    city: string
+    postalCode: string
+    phoneNumber: string
 }
 
-export interface AuthUser {
-    user: User,
-    tokens: AuthTokens
+
+export interface User {
+    userId: string,
+    role: UserRole,
+    email: string,
+    shelterId: string | null,
+    profile: UserProfile
 }
 
 export interface AuthTokens {
