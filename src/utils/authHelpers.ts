@@ -1,6 +1,12 @@
-﻿import { redirect } from "react-router-dom";
+import { redirect } from "react-router-dom";
 import { useAuthStore } from "@/stores/auth.store";
 
+/**
+ * Ensures user is authenticated and throws redirect if not
+ * 
+ * @returns {Promise<Object>} Object containing tokens and user
+ * @throws {Response} Redirect to login page if not authenticated
+ */
 export async function assertAuthenticated() {
     await ensureAuthHydrated();
 
@@ -13,6 +19,13 @@ export async function assertAuthenticated() {
     return { tokens, user };
 }
 
+/**
+ * Ensures user has one of the allowed roles
+ * 
+ * @param {string[]} allowedRoles - Array of roles that are permitted
+ * @returns {Promise<Object>} Object containing the user
+ * @throws {Response} Redirect to unauthorized page if user lacks required role
+ */
 export async function assertAuthorized(allowedRoles: string[]) {
     const { user } = await assertAuthenticated();
 
@@ -23,10 +36,22 @@ export async function assertAuthorized(allowedRoles: string[]) {
     return { user };
 }
 
+/**
+ * Ensures user has a specific role
+ * 
+ * @param {string} role - Required role
+ * @returns {Promise<Object>} Object containing the user
+ * @throws {Response} Redirect if user doesn't have the required role
+ */
 export async function assertRole(role: string) {
     return await assertAuthorized([role]);
 }
 
+/**
+ * Ensures Zustand store is hydrated from localStorage before accessing state
+ * 
+ * @returns {Promise<void>}
+ */
 export async function ensureAuthHydrated() {
     const store = useAuthStore;
 
@@ -35,6 +60,12 @@ export async function ensureAuthHydrated() {
     }
 }
 
+/**
+ * Type guard to check if store has persist middleware
+ * 
+ * @param {unknown} store - Store to check
+ * @returns {boolean} True if store has persist.rehydrate method
+ */
 function hasPersist(
     store: unknown
 ): store is {

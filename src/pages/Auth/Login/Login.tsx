@@ -1,4 +1,4 @@
-﻿import LabeledInput from "@/components/common/LabeledInput/LabeledInput";
+import LabeledInput from "@/components/common/LabeledInput/LabeledInput";
 import seepaw from "@/assets/seepaw.png"
 import {type SubmitHandler, useForm} from "react-hook-form";
 import {z} from "zod";
@@ -16,8 +16,16 @@ const loginSchema = z.object({
     password: z.string().min(8, "A password deve ter pelo menos 8 caracteres")
 })
 
+/**
+ * Login credentials schema type
+ */
 export type LoginCredentials = z.infer<typeof loginSchema>;
 
+/**
+ * Login page component that handles user authentication
+ * 
+ * @returns {JSX.Element} Login form with email and password fields
+ */
 function Login() {
     const {register, handleSubmit, setError, formState: {errors}} = useForm<LoginCredentials>({resolver: zodResolver(loginSchema)});
     const {login} = useAuth();

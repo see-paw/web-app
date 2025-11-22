@@ -1,5 +1,18 @@
-﻿import * as React from "react";
+import * as React from "react";
 
+/**
+ * Props for the LabeledInput component
+ * 
+ * @typedef {Object} LabeledInputProps
+ * @property {string} label - Label text displayed above the input
+ * @property {string} [type='text'] - HTML input type
+ * @property {string} name - Input name attribute
+ * @property {string} [placeholder=''] - Input placeholder text
+ * @property {boolean} [required=false] - Whether the input is required
+ * @property {string} [className=''] - CSS class for the container div
+ * @property {string} [labelClassName=''] - CSS class for the label element
+ * @property {string} [inputClassName=''] - CSS class for the input element
+ */
 type LabeledInputProps = {
     label: string;
     type?: string;
@@ -11,6 +24,12 @@ type LabeledInputProps = {
     inputClassName?: string;
 } & React.InputHTMLAttributes<HTMLInputElement>;
 
+/**
+ * Labeled input component that renders an input with an associated label
+ * 
+ * @param {LabeledInputProps} props - Component props
+ * @returns {JSX.Element} Labeled input element
+ */
 function LabeledInput({
     label,
     type = 'text',

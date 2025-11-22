@@ -1,6 +1,12 @@
-﻿import axios from "axios";
+import axios from "axios";
 import {type ApiError, ApiErrorType} from "@/types/apierrors";
 
+/**
+ * Parses axios errors into standardized ApiError format
+ * 
+ * @param {unknown} error - Error object from axios request
+ * @returns {ApiError} Standardized API error with type, message, and optional details
+ */
 export function parseApiError(error: unknown): ApiError {
     if (axios.isCancel(error)) {
         return {

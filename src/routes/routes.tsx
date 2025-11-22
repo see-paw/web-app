@@ -1,4 +1,4 @@
-﻿import {createBrowserRouter} from "react-router-dom";
+import {createBrowserRouter} from "react-router-dom";
 import Error from "../pages/Error/Error.tsx";
 import Home from "../pages/Home/Home.tsx";
 import Animals from "../pages/Animals/Animals/Animals.tsx";
@@ -9,6 +9,10 @@ import {animalDetailsLoader} from "@/routes/loaders/animalDetails";
 import Login from "@/pages/Auth/Login/Login";
 import {loginLoader} from "@/routes/loaders/login";
 
+/**
+ * Application router configuration using React Router v7
+ * Defines all routes, nested layouts, loaders, and error boundaries
+ */
 const router = createBrowserRouter([
     { path: '/',
         element: <MainLayout/>,

@@ -31,15 +31,13 @@ interface PortalProps {
  *
  * This component:
  *  - Ensures SSR safety (no DOM access until mounted)
- *  - Creates the portal container dynamically if it doesn’t exist
+ *  - Creates the portal container dynamically if it doesn't exist
  *  - Cleans up empty containers when unmounted
  *
- * @example
- * ```tsx
- * <Portal>
- *   <Modal onClose={handleClose}>...</Modal>
- * </Portal>
- * ```
+ * @param {PortalProps} props - Component props
+ * @param {ReactNode} props.children - Content to render in the portal
+ * @param {string} [props.containerId='portal-root'] - ID of the portal container element
+ * @returns {JSX.Element | null} Portal content or null if not mounted
  */
 export default function Portal({ children, containerId = 'portal-root' }: PortalProps) {
     // Tracks whether the component is mounted (important for SSR safety)

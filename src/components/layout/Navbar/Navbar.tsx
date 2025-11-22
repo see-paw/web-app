@@ -43,6 +43,11 @@ export const Navbar = ({logo, items}: NavbarProps) => {
     const navigate = useNavigate();
     const logout = useAuthStore(s => s.logout);
 
+    /**
+     * Handles the logout process for the current user.*
+     * @function
+     * @returns {void}
+     */
     function handleLogout() {
         logout();
         queryClient.clear();

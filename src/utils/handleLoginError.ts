@@ -1,5 +1,11 @@
-﻿import {type ApiError, ApiErrorType} from "@/types/apierrors";
+import {type ApiError, ApiErrorType} from "@/types/apierrors";
 
+/**
+ * Converts API errors into user-friendly Portuguese login error messages
+ * 
+ * @param {ApiError} error - API error object
+ * @returns {string} Localized error message for display
+ */
 export function handleLoginError(error: ApiError): string {
     switch (error.type) {
         case ApiErrorType.UNAUTHORIZED:

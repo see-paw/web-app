@@ -1,4 +1,7 @@
-﻿export const ApiErrorType = {
+/**
+ * API error type constants
+ */
+export const ApiErrorType = {
     VALIDATION: "VALIDATION",
     UNAUTHORIZED: "UNAUTHORIZED",
     FORBIDDEN: "FORBIDDEN",
@@ -10,9 +13,21 @@
     UNKNOWN: "UNKNOWN",
 } as const;
 
+/**
+ * API error type union
+ */
 export type ApiErrorType =
     typeof ApiErrorType[keyof typeof ApiErrorType];
 
+/**
+ * Standardized API error structure
+ * 
+ * @typedef {Object} ApiError
+ * @property {ApiErrorType} type - Error type classification
+ * @property {string} message - User-friendly error message
+ * @property {number} [statusCode] - HTTP status code if applicable
+ * @property {Record<string, string[]>} [details] - Validation error details by field
+ */
 export interface ApiError {
     type: ApiErrorType;
     message: string;

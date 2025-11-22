@@ -23,30 +23,9 @@ interface AnimalImagesProps {
  * - A "View more images" button when additional images exist
  * - A full-screen modal gallery (via Portal)
  *
- * @component
  * @param {AnimalImagesProps} props - Component props
+ * @param {Image[]} props.images - Array of images to display
  * @returns {JSX.Element} The image gallery UI for an animal
- *
- * @description
- * This component provides a complete image-viewing experience for the user.
- * It handles:
- * - Selection of the principal image (via `isPrincipal`, fallback to index 0)
- * - Sorting: principal image first, followed by all remaining images
- * - Thumbnail display (maximum of 2)
- * - A modal image gallery opened via Portal
- * - Calculation of the correct modal index when clicking thumbnails
- *
- * Features:
- * - Click-to-open modal on main image and thumbnails
- * - Circular navigation inside the modal (handled by ImageGalleryModal)
- * - Dynamic “View +X images” button when more than two thumbnails exist
- * - Styled layout using CSS Modules
- * - Fully testable via data-testid attributes
- *
- * @example
- * ```tsx
- * <AnimalImages images={animal.images} />
- * ```
  */
 export default function AnimalImages({images}:AnimalImagesProps) {
     /** Tracks whether the modal is currently open */
@@ -77,20 +56,30 @@ export default function AnimalImages({images}:AnimalImagesProps) {
     const remainingCount = otherImages.length-2;
 
     /**
-     * Opens the modal at the correct index.
+     * Opens the modal at the correct index
+     * 
+     * @param {number} index - Index of the image to display initially
+     * @returns {void}
      */
     const openModal = (index: number) => {
         setInitialImageIndex(index);
         setIsModalOpen(true);
     };
 
-    /** Closes the modal */
+    /**
+     * Closes the modal
+     * 
+     * @returns {void}
+     */
     const closeModal = () => {
         setIsModalOpen(false);
     };
 
     /**
-     * Converts an image ID into its index inside `orderedImages`.
+     * Converts an image ID into its index inside orderedImages
+     * 
+     * @param {string} imageId - Image ID to find
+     * @returns {number} Index of the image in orderedImages array
      */
     const getRealImageIndex = (imageId: string): number => {
         return orderedImages.findIndex(img => img.id === imageId);

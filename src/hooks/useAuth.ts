@@ -1,4 +1,4 @@
-﻿import {useAuthStore} from "@/stores/auth.store";
+import {useAuthStore} from "@/stores/auth.store";
 import authApi from "@/api/auth";
 import type {User} from "@/types/user";
 import axios from "axios";
@@ -7,16 +7,34 @@ import {parseApiError} from "@/utils/parseApiError";
 import {handleLoginError} from "@/utils/handleLoginError";
 import type {LoginCredentials} from "@/pages/Auth/Login/Login";
 
+/**
+ * Login operation result
+ * 
+ * @typedef {Object} LoginResult
+ * @property {boolean} success - Whether the login was successful
+ * @property {ApiError | null} error - Error details if login failed
+ */
 export interface LoginResult {
     success: boolean;
     error: ApiError | null;
 }
 
+/**
+ * Custom hook for authentication operations
+ * 
+ * @returns {Object} Object containing login function
+ */
 export function useAuth() {
     const setUser = useAuthStore((s) => s.setUser);
     const setTokens = useAuthStore((s) => s.setTokens);
     const logout = useAuthStore((s) => s.logout);
 
+    /**
+     * Authenticates a user and stores their data
+     * 
+     * @param {LoginCredentials} loginCredentials - User credentials
+     * @returns {Promise<LoginResult>} Result containing success status and potential errors
+     */
     const login = async (loginCredentials: LoginCredentials): Promise<LoginResult> => {
         try {
             const authResponse = await authApi.login(loginCredentials);
