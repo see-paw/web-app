@@ -14,7 +14,6 @@ test.describe('Animals List - With API Mocking', () => {
         const animalsPage = pm.getAnimalsPage();
         await animalsPage.waitForAnimalsToLoad();
 
-
         const count = await animalsPage.getAnimalCount();
         expect(count).toBe(mockAnimalsPage1.items.length);
     });
@@ -72,12 +71,10 @@ test.describe('Animals List - With API Mocking', () => {
         expect(message).toContain('Ocorreu um erro!');
     });
 
-    test('should test error handling with mocked 404 error', async ({ pm, apiMock, page }) => {
+    test('should test error handling with mocked 404 error', async ({ pm, apiMock }) => {
         await apiMock.mockError('**/api/animals?**', 404, 'Not Found');
 
         await pm.navigateToAnimals(1);
-
-        await page.waitForLoadState('networkidle');
 
         const errorPage = pm.getErrorPage();
 

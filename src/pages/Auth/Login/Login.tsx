@@ -60,7 +60,7 @@ function Login() {
                     <img src={seepaw} alt="Seepaw" className={styles.logo} />
                 </div>
                 {errors.root && <div className={styles.errorMessage}>{errors.root.message}</div>}
-                <form onSubmit={handleSubmit(onSubmit)} className={styles.loginForm}>
+                <form onSubmit={handleSubmit(onSubmit)} className={styles.loginForm} noValidate>
                     <LabeledInput
                         label="Email:"
                         type="email"

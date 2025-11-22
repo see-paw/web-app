@@ -7,6 +7,7 @@ import {animalsLoader as animalsLoader} from "./loaders/animal.ts";
 import MainLayout from "../components/layout/MainLayout.tsx";
 import {animalDetailsLoader} from "@/routes/loaders/animalDetails";
 import Login from "@/pages/Auth/Login/Login";
+import {loginLoader} from "@/routes/loaders/login";
 
 const router = createBrowserRouter([
     { path: '/',
@@ -16,7 +17,7 @@ const router = createBrowserRouter([
             {index: true, element: <Home/>},
             {path: "animals", element: <Animals/>, loader: animalsLoader},
             {path: "animals/:animalId", element: <AnimalDetails/>, loader: animalDetailsLoader},
-            {path: "login", element: <Login/>},
+            {path: "login", element: <Login/>, loader: loginLoader},
         ]},
 ])
 

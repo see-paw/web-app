@@ -1,7 +1,9 @@
 ﻿import { redirect } from "react-router-dom";
 import { useAuthStore } from "@/stores/auth.store";
 
-export function assertAuthenticated() {
+export async function assertAuthenticated() {
+    await ensureAuthHydrated();
+
     const { tokens, user } = useAuthStore.getState();
 
     if (!tokens?.accessToken || !user) {
@@ -11,8 +13,8 @@ export function assertAuthenticated() {
     return { tokens, user };
 }
 
-export function assertAuthorized(allowedRoles: string[]) {
-    const { user } = assertAuthenticated();
+export async function assertAuthorized(allowedRoles: string[]) {
+    const { user } = await assertAuthenticated();
 
     if (!allowedRoles.includes(user.role)) {
         throw redirect(`/unauthorized?error=forbidden&role=${user.role}`);
@@ -21,6 +23,28 @@ export function assertAuthorized(allowedRoles: string[]) {
     return { user };
 }
 
-export function assertRole(role: string) {
-    return assertAuthorized([role]);
+export async function assertRole(role: string) {
+    return await assertAuthorized([role]);
+}
+
+export async function ensureAuthHydrated() {
+    const store = useAuthStore;
+
+    if (hasPersist(store)) {
+        await store.persist.rehydrate();
+    }
+}
+
+function hasPersist(
+    store: unknown
+): store is {
+    persist: {
+        rehydrate: () => Promise<void> | void;
+    };
+} {
+    return (
+        typeof store === "function" &&
+        typeof Object(store).persist === "object" &&
+        typeof Object(store).persist?.rehydrate === "function"
+    );
 }
