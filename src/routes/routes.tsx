@@ -1,4 +1,4 @@
-﻿import {createBrowserRouter} from "react-router-dom";
+import {createBrowserRouter} from "react-router-dom";
 import Error from "../pages/Error/Error.tsx";
 import Home from "../pages/Home/Home.tsx";
 import Animals from "../pages/Animals/Animals/Animals.tsx";
@@ -9,7 +9,13 @@ import {animalDetailsLoader} from "@/routes/loaders/animalDetails";
 import ShelterAnimals from "@/pages/ShelterAnimals/ShelterAnimals";
 import {shelterAnimalsLoader} from "@/routes/loaders/shelterAnimals";
 
+import Login from "@/pages/Auth/Login/Login";
+import {loginLoader} from "@/routes/loaders/login";
 
+/**
+ * Application router configuration using React Router v7
+ * Defines all routes, nested layouts, loaders, and error boundaries
+ */
 const router = createBrowserRouter([
     { path: '/',
         element: <MainLayout/>,
@@ -17,7 +23,8 @@ const router = createBrowserRouter([
         children: [
             {index: true, element: <Home/>},
             {path: "animals", element: <Animals/>, loader: animalsLoader},
-            {path: "animals/:animalId", element: <AnimalDetails/>, loader: animalDetailsLoader}
+            {path: "animals/:animalId", element: <AnimalDetails/>, loader: animalDetailsLoader},
+            {path: "login", element: <Login/>, loader: loginLoader},
         ]},
     {
         path: '/admin',

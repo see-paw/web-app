@@ -16,7 +16,6 @@ export const animalsApi = {
      * @param {string} [params.pageNumber] - Page number to fetch
      * @param {AbortSignal} params.signal - Abort signal for cancelling the request
      * @returns {Promise<PagedList<Animal>>} Paginated list of animals
-     * @throws {Error} When the API request fails
      */
     getAnimals: async function ({ pageNumber, signal }: {pageNumber?: string, signal: AbortSignal}) : Promise<PagedList<Animal>> {
         const { data } = await api.get<PagedList<Animal>>("/animals", {

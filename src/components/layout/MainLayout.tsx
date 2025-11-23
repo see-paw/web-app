@@ -8,37 +8,6 @@ import styles from './MainLayout.module.css';
  *
  * @component
  * @returns {JSX.Element} The main layout with navigation and outlet for child routes
- *
- * @description
- * This component serves as the root layout for the application, providing:
- * - Main navigation bar at the top (MainNavigation component)
- * - Main content area that renders child routes via React Router's Outlet
- *
- * Features:
- * - Consistent layout across all pages
- * - Integration with React Router for nested routing
- * - Semantic HTML structure with main element
- *
- * @example
- * // Route configuration
- * <Route element={<MainLayout />}>
- *   <Route path="/" element={<Home />} />
- *   <Route path="/animals" element={<Animals />} />
- *   <Route path="/animals/:animalId" element={<AnimalDetail />} />
- * </Route>
- *
- * @example
- * // In router setup
- * const router = createBrowserRouter([
- *   {
- *     element: <MainLayout />,
- *     errorElement: <Error />,
- *     children: [
- *       { path: "/", element: <Home /> },
- *       { path: "/animals", element: <Animals /> }
- *     ]
- *   }
- * ]);
  */
 function MainLayout() {
     return (
