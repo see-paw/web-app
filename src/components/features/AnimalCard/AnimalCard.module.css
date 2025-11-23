@@ -66,6 +66,53 @@
   margin: 0;
 }
 
+
+/* Status Badge Styles */
+.statusBadge {
+    position: absolute;
+    top: var(--spacing-3);
+    right: var(--spacing-3);
+    padding: var(--spacing-2) var(--spacing-3);
+    border-radius: var(--radius-full);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    backdrop-filter: blur(8px);
+    box-shadow: var(--shadow-sm);
+    transition: transform var(--transition-fast);
+    z-index: 10;
+}
+
+.card:hover .statusBadge {
+    transform: scale(1.05);
+}
+
+.statusAvailable {
+    background-color: rgba(20, 184, 154, 0.9);
+    color: var(--color-text-inverse);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.statusPartiallyFostered {
+    background-color: rgba(245, 165, 36, 0.9);
+    color: var(--color-text-inverse);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.statusFullyFostered {
+    background-color: rgba(255, 122, 148, 0.9);
+    color: var(--color-text-inverse);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.statusAdopted {
+    background-color: rgba(115, 115, 115, 0.9);
+    color: var(--color-text-inverse);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+
 @media (max-width: 768px) {
   .content {
     padding: var(--spacing-3);
@@ -82,4 +129,11 @@
   .age {
     font-size: var(--font-size-xs);
   }
+
+    .statusBadge {
+        top: var(--spacing-2);
+        right: var(--spacing-2);
+        padding: var(--spacing-1) var(--spacing-2);
+        font-size: 0.625rem;
+    }
 }

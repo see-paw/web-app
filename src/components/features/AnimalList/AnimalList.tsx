@@ -10,6 +10,7 @@ import styles from "./AnimalList.module.css";
  */
 interface AnimalListProps {
     animals?: Animal[];
+    showStatus?: boolean;
 }
 
 /**
@@ -48,7 +49,7 @@ interface AnimalListProps {
  * // With undefined animals (also shows empty state)
  * <AnimalList />
  */
-function AnimalList({ animals }: AnimalListProps) {
+function AnimalList({ animals, showStatus = false}: AnimalListProps) {
     if (!animals || animals.length === 0) {
         return (
             <section aria-labelledby="animals-title" data-testid="animal-list-empty">
@@ -63,7 +64,7 @@ function AnimalList({ animals }: AnimalListProps) {
         <section aria-labelledby="animals-title" data-testid="animal-list">
             <div className={styles.grid} data-testid="animals-grid">
                 {animals.map(animal => (
-                    <AnimalCard key={animal.id} animal={animal} />
+                    <AnimalCard key={animal.id} animal={animal} showStatus={showStatus} />
                 ))}
             </div>
         </section>
