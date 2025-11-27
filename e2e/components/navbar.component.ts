@@ -5,6 +5,7 @@ export class NavbarComponent extends BasePage {
     readonly navbar: Locator;
     readonly homeLink: Locator;
     readonly animalsLink: Locator;
+    readonly addAnimalLink: Locator;
     readonly favoritesLink: Locator;
     readonly notificationsLink: Locator;
     readonly profileLink: Locator;
@@ -17,6 +18,7 @@ export class NavbarComponent extends BasePage {
         this.navbar = page.locator('nav').first();
         this.homeLink = this.navbar.locator('a[href="/"]');
         this.animalsLink = this.navbar.locator('a[href="/animals"]');
+        this.addAnimalLink = this.navbar.locator('a[href="/animals/new"]');
         this.favoritesLink = this.navbar.locator('a[href="/favorites"]');
         this.notificationsLink = this.navbar.locator('a[href="/notifications"]');
         this.profileLink = this.navbar.locator('a[href="/user/profile"]');
@@ -40,6 +42,9 @@ export class NavbarComponent extends BasePage {
         await this.animalsLink.click();
     }
 
+    async goToAddAnimal() {
+        await this.addAnimalLink.click();
+    }
     async goToFavorites() {
         await this.favoritesLink.click();
     }
@@ -68,6 +73,10 @@ export class NavbarComponent extends BasePage {
         return await this.isElementVisible(this.animalsLink);
     }
 
+    async isAddAnimalLinkVisible(): Promise<boolean> {
+        return await this.isElementVisible(this.addAnimalLink);
+    }
+
     async isFavoritesLinkVisible(): Promise<boolean> {
         return await this.isElementVisible(this.favoritesLink);
     }
@@ -90,6 +99,10 @@ export class NavbarComponent extends BasePage {
 
     async getActiveLink(): Promise<Locator> {
         return this.navbar.locator('a[class*="Active"]');
+    }
+
+    async isAddAnimalLinkActive(): Promise<boolean> {
+        return await this.isLinkActive('/animals/new');
     }
 
     async isLinkActive(href: string): Promise<boolean> {

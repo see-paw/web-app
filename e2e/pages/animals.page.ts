@@ -66,7 +66,8 @@ export class AnimalsPage extends BasePage { // todos os pages devem extender o b
     }
 
     async isLoadingSpinnerVisible(): Promise<boolean> {
-        return await this.isElementVisible(this.page.locator('[data-testid="loading-spinner"]'));
+        const loadingText = this.page.locator('text=/a carregar animais/i');
+        return await this.isElementVisible(loadingText);
     }
 
     async isLoadingSpinnerHidden(): Promise<boolean> {

@@ -140,6 +140,7 @@ test.describe('Login Page', () => {
         });
     });
 
+
     test.describe('Failed Login', () => {
 
         test('should show error message for wrong credentials', async ({ pm, apiMock, page }) => {
@@ -272,7 +273,7 @@ test.describe('Login Page', () => {
 
             await loginPage.fillAndSubmitLogin(validCredentials.email, validCredentials.password);
 
-            await page.waitForURL('**/animals?**');
+            await page.waitForURL('**/animals**');
             await apiMock.clearMocks();
             const navbar = await pm.getNavbarComponent()
             await navbar.clickLogout()
@@ -348,7 +349,7 @@ test.describe('Login Page', () => {
 
             await loginPage.waitForToast('Bem vindo à SeePaw!!');
 
-            await page.waitForURL('**/animals?**');
+            await page.waitForURL('**/animals**');
 
             expect(page.url()).toContain('/animals');
         });
@@ -387,7 +388,7 @@ test.describe('Login Page', () => {
 
             await loginPage.fillAndSubmitLogin(validCredentials.email, validCredentials.password);
 
-            await page.waitForURL('**/animals?**');
+            await page.waitForURL('**/animals**');
             expect(page.url()).toContain('/animals');
         });
     });

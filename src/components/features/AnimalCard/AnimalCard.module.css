@@ -66,6 +66,18 @@
   margin: 0;
 }
 
+.badgeWrapper {
+    position: absolute;
+    top: var(--spacing-3);
+    right: var(--spacing-3);
+    z-index: 10;
+    transition: transform var(--transition-fast);
+}
+
+.card:hover .badgeWrapper {
+    transform: scale(1.05);
+}
+
 @media (max-width: 768px) {
   .content {
     padding: var(--spacing-3);
@@ -81,5 +93,10 @@
 
   .age {
     font-size: var(--font-size-xs);
+  }
+
+  .badgeWrapper {
+      top: var(--spacing-2);
+      right: var(--spacing-2);
   }
 }

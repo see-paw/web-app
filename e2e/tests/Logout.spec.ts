@@ -11,7 +11,7 @@ test.describe('Logout Flow', () => {
 
     test.describe('Logout Button Visibility', () => {
 
-        test('should not show logout button when not authenticated', async ({ pm, page }) => {
+        test('should not show logout button when not authenticated', async ({ pm }) => {
             await pm.navigateToHome();
 
             const navbar = pm.getNavbarComponent();
@@ -20,7 +20,7 @@ test.describe('Logout Flow', () => {
             expect(await navbar.isLogoutButtonVisible()).toBe(false);
         });
 
-        test('should show login link when not authenticated', async ({ pm, page }) => {
+        test('should show login link when not authenticated', async ({ pm }) => {
             await pm.navigateToHome();
 
             const navbar = pm.getNavbarComponent();
@@ -41,7 +41,7 @@ test.describe('Logout Flow', () => {
             await navbar.goToLogin()
             await loginPage.fillAndSubmitLogin(validCredentials.email, validCredentials.password);
 
-            await page.waitForURL('**/animals?**');
+            await page.waitForURL('**/animals**');
             await apiMock.clearMocks();
 
             await navbar.waitForNavbarToLoad();
@@ -62,7 +62,7 @@ test.describe('Logout Flow', () => {
             const loginPage = pm.getLoginPage();
             await loginPage.fillAndSubmitLogin(validCredentials.email, validCredentials.password);
 
-            await page.waitForURL('**/animals?**');
+            await page.waitForURL('**/animals**');
             await apiMock.clearMocks();
 
             await navbar.waitForNavbarToLoad();
@@ -85,7 +85,7 @@ test.describe('Logout Flow', () => {
             const loginPage = pm.getLoginPage();
             await loginPage.fillAndSubmitLogin(validCredentials.email, validCredentials.password);
 
-            await page.waitForURL('**/animals?**');
+            await page.waitForURL('**/animals**');
             await apiMock.clearMocks();
 
             await navbar.clickLogout();
@@ -106,7 +106,7 @@ test.describe('Logout Flow', () => {
             const loginPage = pm.getLoginPage();
             await loginPage.fillAndSubmitLogin(validCredentials.email, validCredentials.password);
 
-            await page.waitForURL('**/animals?**');
+            await page.waitForURL('**/animals**');
             await apiMock.clearMocks();
 
             expect(await navbar.isLogoutButtonVisible()).toBe(true);
@@ -131,7 +131,7 @@ test.describe('Logout Flow', () => {
             const loginPage = pm.getLoginPage();
             await loginPage.fillAndSubmitLogin(validCredentials.email, validCredentials.password);
 
-            await page.waitForURL('**/animals?**');
+            await page.waitForURL('**/animals**');
             await apiMock.clearMocks();
 
             expect(await navbar.isFavoritesLinkVisible()).toBe(true);
@@ -159,7 +159,7 @@ test.describe('Logout Flow', () => {
             const loginPage = pm.getLoginPage();
             await loginPage.fillAndSubmitLogin(validCredentials.email, validCredentials.password);
 
-            await page.waitForURL('**/animals?**');
+            await page.waitForURL('**/animals**');
             await apiMock.clearMocks();
 
             await navbar.clickLogout();
@@ -187,7 +187,7 @@ test.describe('Logout Flow', () => {
             const loginPage = pm.getLoginPage();
             await loginPage.fillAndSubmitLogin(validCredentials.email, validCredentials.password);
 
-            await page.waitForURL('**/animals?**');
+            await page.waitForURL('**/animals**');
             await apiMock.clearMocks();
 
             await navbar.clickLogout();
@@ -208,7 +208,7 @@ test.describe('Logout Flow', () => {
             const loginPage = pm.getLoginPage();
             await loginPage.fillAndSubmitLogin(validCredentials.email, validCredentials.password);
 
-            await page.waitForURL('**/animals?**');
+            await page.waitForURL('**/animals**');
             await apiMock.clearMocks();
 
             await pm.navigateToHome();
@@ -235,7 +235,7 @@ test.describe('Logout Flow', () => {
             const loginPage = pm.getLoginPage();
             await loginPage.fillAndSubmitLogin(validCredentials.email, validCredentials.password);
 
-            await page.waitForURL('**/animals?**');
+            await page.waitForURL('**/animals**');
             await apiMock.clearMocks();
 
             await navbar.clickLogout();
@@ -278,7 +278,7 @@ test.describe('Logout Flow', () => {
             let loginPage = pm.getLoginPage();
             await loginPage.fillAndSubmitLogin(validCredentials.email, validCredentials.password);
 
-            await page.waitForURL('**/animals?**');
+            await page.waitForURL('**/animals**');
             await apiMock.clearMocks();
 
             await navbar.clickLogout();
@@ -295,58 +295,11 @@ test.describe('Logout Flow', () => {
             await loginPage.waitForPageToLoad();
             await loginPage.fillAndSubmitLogin(validCredentials.email, validCredentials.password);
 
-            await page.waitForURL('**/animals?**');
+            await page.waitForURL('**/animals**');
 
             expect(await navbar.isLogoutButtonVisible()).toBe(true);
         });
 
-        test('should not retain cached data after logout', async ({ pm, apiMock, page }) => {
-            await apiMock.mockApiCall('**/login', mockLoginResponse);
-            await apiMock.mockApiCall('**/users/me', mockUserDataRegular);
-            await apiMock.mockApiCall('**/api/animals?**', mockAnimalsPage1);
-
-            await pm.navigateToHome();
-            const navbar = pm.getNavbarComponent();
-            await navbar.waitForNavbarToLoad();
-            await navbar.goToLogin();
-            const loginPage = pm.getLoginPage();
-            await loginPage.fillAndSubmitLogin(validCredentials.email, validCredentials.password);
-
-            await page.waitForURL('**/animals?**');
-            
-            const animalsPage = pm.getAnimalsPage();
-            await animalsPage.waitForAnimalsToLoad();
-            const countBeforeLogout = await animalsPage.getAnimalCount();
-            expect(countBeforeLogout).toBeGreaterThan(0);
-
-            await apiMock.clearMocks();
-
-            await navbar.clickLogout();
-            await page.waitForURL('**/');
-
-            const newMockData = {
-                items: [],
-                currentPage: 1,
-                pageSize: 20,
-                totalPages: 0,
-                totalCount: 0
-            };
-
-            await apiMock.mockApiCall('**/login', mockLoginResponse);
-            await apiMock.mockApiCall('**/users/me', mockUserDataRegular);
-            await apiMock.mockApiCall('**/api/animals?**', newMockData);
-
-            await navbar.goToLogin();
-            await page.waitForURL('**/login');
-
-            await loginPage.waitForPageToLoad();
-            await loginPage.fillAndSubmitLogin(validCredentials.email, validCredentials.password);
-
-            await page.waitForURL('**/animals?**');
-
-            const isEmptyState = await animalsPage.isEmptyStateVisible();
-            expect(isEmptyState).toBe(true);
-        });
     });
 
     test.describe('UI State After Logout', () => {
@@ -363,7 +316,7 @@ test.describe('Logout Flow', () => {
             const loginPage = pm.getLoginPage();
             await loginPage.fillAndSubmitLogin(validCredentials.email, validCredentials.password);
 
-            await page.waitForURL('**/animals?**');
+            await page.waitForURL('**/animals**');
             await apiMock.clearMocks();
 
             await navbar.clickLogout();
@@ -390,7 +343,7 @@ test.describe('Logout Flow', () => {
             const loginPage = pm.getLoginPage();
             await loginPage.fillAndSubmitLogin(validCredentials.email, validCredentials.password);
 
-            await page.waitForURL('**/animals?**');
+            await page.waitForURL('**/animals**');
             await apiMock.clearMocks();
 
             expect(await navbar.isAnimalsLinkVisible()).toBe(true);

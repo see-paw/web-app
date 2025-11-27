@@ -10,6 +10,8 @@ export interface NavItem {
     to: string;
     text?: string;
     isLogout?: boolean;
+    isLargeIcon?: boolean;
+    end?: boolean;
 }
 
 /**
@@ -74,17 +76,18 @@ export const Navbar = ({logo, items}: NavbarProps) => {
                                     className={styles.navLink}
                                     onClick={handleLogout}
                                 >
-                                    <span className={styles.navIcon}>{item.icon}</span>
+                                    <span className={item.isLargeIcon ? styles.navIconLarge : styles.navIcon}>{item.icon}</span>
                                     {item.text && <span className={styles.navText}>{item.text}</span>}
                                 </button>
                             ) : (
                                 <NavLink
                                     to={item.to}
+                                    end={item.end}
                                     className={({isActive}) =>
                                         isActive ? `${styles.navLink} ${styles.navLinkActive}` : styles.navLink
                                     }
                                 >
-                                    <span className={styles.navIcon}>{item.icon}</span>
+                                    <span className={item.isLargeIcon ? styles.navIconLarge : styles.navIcon}>{item.icon}</span>
                                     {item.text && <span className={styles.navText}>{item.text}</span>}
                                 </NavLink>
                             )}
