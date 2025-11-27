@@ -68,3 +68,4 @@ export const test = base.extend<CustomFixtures>({
     }
 });
 
+export { expect } from '@playwright/test';
