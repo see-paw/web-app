@@ -109,4 +109,6 @@ export class LoginPage extends BasePage {
         await this.emailInput.clear();
         await this.passwordInput.clear();
     }
+
+
 }

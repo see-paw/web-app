@@ -45,7 +45,7 @@ test.describe('Navbar Component', () => {
             expect(await navbar.isHomeLinkVisible()).toBe(true);
         });
 
-        test('should display animals link', async ({ pm, page }) => {
+        test('should display animals link', async ({ pm }) => {
             await pm.navigateToHome();
 
             const navbar = pm.getNavbarComponent();
@@ -89,7 +89,7 @@ test.describe('Navbar Component', () => {
 
             await navbar.goToAnimals();
 
-            await page.waitForURL('**/animals?**');
+            await page.waitForURL('**/animals**');
             expect(page.url()).toContain('/animals');
         });
 
@@ -103,7 +103,7 @@ test.describe('Navbar Component', () => {
 
             await navbar.clickLinkByHref('/animals');
 
-            await page.waitForURL('**/animals?**');
+            await page.waitForURL('**/animals**');
             expect(page.url()).toContain('/animals');
         });
     });
@@ -135,7 +135,7 @@ test.describe('Navbar Component', () => {
             expect(await navbar.isLinkActive('/login')).toBe(true);
 
             await navbar.goToAnimals();
-            await page.waitForURL('**/animals?**');
+            await page.waitForURL('**/animals**');
             await page.waitForTimeout(500);
 
             expect(await navbar.isLinkActive('/animals')).toBe(true);
@@ -187,7 +187,7 @@ test.describe('Navbar Component', () => {
             await navbar.waitForNavbarToLoad();
 
             await navbar.goToAnimals();
-            await page.waitForURL('**/animals?**');
+            await page.waitForURL('**/animals**');
             expect(page.url()).toContain('/animals');
 
             await navbar.goToHome();
@@ -206,7 +206,7 @@ test.describe('Navbar Component', () => {
             expect(await navbar.isNavbarVisible()).toBe(true);
 
             await navbar.goToAnimals();
-            await page.waitForURL('**/animals?**');
+            await page.waitForURL('**/animals**');
 
             expect(await navbar.isNavbarVisible()).toBe(true);
 

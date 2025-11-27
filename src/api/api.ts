@@ -64,17 +64,14 @@ api.interceptors.response.use(
     (error) => {
         // Handle 401 Unauthorized errors (expired/invalid token)
         if (error.response?.status === 401) {
-            // Get logout function from auth store
-            const { logout } = useAuthStore.getState();
+            const isLoginPage = window.location.pathname === '/login';
 
-            // Clear authentication state
-            logout();
-
-            // Clear TanStack Query cache
-            queryClient.clear();
-
-            // Redirect to login page
-            window.location.href = "/login";
+            if (!isLoginPage) {
+                const { logout } = useAuthStore.getState();
+                logout();
+                queryClient.clear();
+                window.location.href = "/login";
+            }
         }
 
         // Re-throw error for local handling if needed
