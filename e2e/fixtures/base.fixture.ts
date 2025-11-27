@@ -2,7 +2,7 @@
 import {PageManager} from "../page.manager";
 import {ApiMockHelper} from "../core/ApiMockHelper";
 import {ApiInterceptHelper} from "../core/ApiInterceptHelper";
-import { TEST_ADMIN_CAA} from "../test-data/auth/mockAuthData";
+import { TEST_ADMIN_CAA} from "../test-data/Auth/mockAuthData";
 import {performRealLogin, setAuthInLocalStorage} from "../core/AuthHelper";
 
 type CustomFixtures = {
