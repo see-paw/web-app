@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from "react";
+import {useState, type FormEvent} from "react";
 import styles from "./AnimalFilters.module.css";
 
 /**
@@ -36,7 +36,7 @@ interface AnimalFiltersProps {
  * @description
  * This component provides:
  * - Text input for animal name search
- * - Select dropdown for species (Dog, Cat, Other)
+ * - Select dropdown for species (Dog, Cat)
  * - Number input for age
  * - Select dropdown for size (Small, Medium, Large)
  * - Select dropdown for sex (Male, Female)
@@ -128,7 +128,6 @@ function AnimalFilters({
                             <option value="">Todas</option>
                             <option value="Dog">Cão</option>
                             <option value="Cat">Gato</option>
-                            <option value="Other">Outro</option>
                         </select>
                     </div>
 

@@ -44,6 +44,16 @@
     align-items: center;
 }
 
+.navIconLarge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+    transform: scale(1.5);
+}
+
 .navLink {
     display: flex;
     align-items: center;

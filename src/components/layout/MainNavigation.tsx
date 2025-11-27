@@ -1,12 +1,14 @@
 import {Navbar} from "@/components";
 import seepaw from "/src/assets/seepaw.png"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faArrowRightFromBracket, faBell, faHeart, faPaw, faUser} from "@fortawesome/free-solid-svg-icons";
+import {faArrowRightFromBracket, faBell, faCirclePlus, faHeart, faPaw, faUser} from "@fortawesome/free-solid-svg-icons";
 import {v4 as uuidv4} from 'uuid';
 import {useAuthStore} from "@/stores/auth.store";
 import {UserRole} from "@/types/user";
 import {useIsAuth} from "@/hooks/useIsAuth";
 import type {NavItem} from "@/components/layout/Navbar/Navbar";
+
+
 
 /**
  * MainNavigation component that renders the main navigation bar with SeePaw branding.
@@ -16,7 +18,8 @@ import type {NavItem} from "@/components/layout/Navbar/Navbar";
  */
 function MainNavigation() {
     const isAuth = useIsAuth();
-    const role = useAuthStore((authStore) => authStore.user?.role);
+    const user = useAuthStore((authStore) => authStore.user);
+    const role = user?.role;
 
     const navItems : NavItem[] = [
         isAuth && role === UserRole.User && {
@@ -33,6 +36,13 @@ function MainNavigation() {
             id: uuidv4(),
             icon: <FontAwesomeIcon icon={faPaw}/>,
             to: '/animals',
+            end: true,
+        },
+        isAuth && role === UserRole.AdminCAA && {
+            id: uuidv4(),
+            icon:  <FontAwesomeIcon icon={faCirclePlus}/>,
+            to: '/animals/new',
+            isLargeIcon: true,
         },
         isAuth && {
             id: uuidv4(),

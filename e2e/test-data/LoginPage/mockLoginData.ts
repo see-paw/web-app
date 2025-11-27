@@ -17,7 +17,8 @@ export const mockUserDataRegular: UserData = {
     city: "Porto",
     postalCode: "4000-001",
     phoneNumber: "912345678",
-    shelterId: null
+    shelterId: null,
+    shelterName: null
 };
 
 export const mockUserDataAdminCAA: UserData = {
@@ -30,7 +31,8 @@ export const mockUserDataAdminCAA: UserData = {
     city: "Lisboa",
     postalCode: "1000-001",
     phoneNumber: "918765432",
-    shelterId: "11111111-1111-1111-1111-111111111111"
+    shelterId: "11111111-1111-1111-1111-111111111111",
+    shelterName: "Test Shelter"
 };
 
 

@@ -14,8 +14,8 @@ export async function loginLoader() {
 
     const { user } = useAuthStore.getState();
     if (user) {
-        throw redirect("/animals");
-    }
+           throw redirect("/animals");
+   }
 
     return null;
 }

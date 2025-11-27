@@ -7,6 +7,7 @@ import {AnimalHeaderComponent} from "./components/AnimalHeader.component";
 import {ImageGalleryModalComponent} from "./components/ImageGalleryModal.component";
 import {LoginPage} from "./pages/login.page";
 import {NavbarComponent} from "./components/navbar.component";
+import {CreateAnimalPage} from "./pages/createAnimal.page";
 
 export class PageManager {
     private readonly animalsPage: AnimalsPage;
@@ -17,6 +18,7 @@ export class PageManager {
     private readonly animalHeaderComponent: AnimalHeaderComponent;
     private readonly loginPage: LoginPage;
     private readonly navbarComponent: NavbarComponent;
+    private readonly createAnimalPage: CreateAnimalPage;
 
     constructor(private page: Page) {
         this.animalsPage = new AnimalsPage(page);
@@ -27,6 +29,7 @@ export class PageManager {
         this.animalHeaderComponent = new AnimalHeaderComponent(page);
         this.loginPage = new LoginPage(page);
         this.navbarComponent = new NavbarComponent(page);
+        this.createAnimalPage = new CreateAnimalPage(page);
     }
 
     getAnimalsPage(): AnimalsPage {
@@ -61,12 +64,20 @@ export class PageManager {
         return this.navbarComponent;
     }
 
+    getCreateAnimalPage(): CreateAnimalPage {
+        return this.createAnimalPage;
+    }
+
     async navigateToAnimals(page: number = 1) {
         await this.page.goto(`/animals?page=${page}`);
     }
 
     async navigateToAnimalDetails(animalId: string): Promise<void> {
         await this.page.goto(`/animals/${animalId}`);
+    }
+
+    async navigateToCreateAnimal(): Promise<void> {
+        await this.page.goto('/animals/new');
     }
 
     async navigateToHome() {

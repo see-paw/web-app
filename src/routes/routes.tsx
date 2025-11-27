@@ -6,11 +6,10 @@ import AnimalDetails from "../pages/Animals/AnimalDetails/AnimalDetails.tsx";
 import {animalsLoader as animalsLoader} from "./loaders/animal.ts";
 import MainLayout from "../components/layout/MainLayout.tsx";
 import {animalDetailsLoader} from "@/routes/loaders/animalDetails";
-import ShelterAnimals from "@/pages/ShelterAnimals/ShelterAnimals";
-import {shelterAnimalsLoader} from "@/routes/loaders/shelterAnimals";
-
 import Login from "@/pages/Auth/Login/Login";
 import {loginLoader} from "@/routes/loaders/login";
+import CreateAnimal from "@/pages/Animals/CreateAnimal/CreateAnimal";
+import {createAnimalLoader} from "@/routes/loaders/createAnimal";
 
 /**
  * Application router configuration using React Router v7
@@ -23,20 +22,10 @@ const router = createBrowserRouter([
         children: [
             {index: true, element: <Home/>},
             {path: "animals", element: <Animals/>, loader: animalsLoader},
+            {path: "animals/new", element: <CreateAnimal/>, loader: createAnimalLoader},
             {path: "animals/:animalId", element: <AnimalDetails/>, loader: animalDetailsLoader},
             {path: "login", element: <Login/>, loader: loginLoader},
-        ]},
-    {
-        path: '/admin',
-        element: <MainLayout/>,
-        children: [
-            {
-                path: 'animals',
-                element: <ShelterAnimals/>,
-                loader: shelterAnimalsLoader
-            }
-        ]
-    }
+        ]}
 ])
 
 export default router;

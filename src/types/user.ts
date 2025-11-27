@@ -57,6 +57,7 @@ export interface UserProfile {
  * @property {string} name - User's full name
  * @property {UserRole} role - User's role (User or AdminCAA)
  * @property {string | null} shelterId - Associated shelter ID (null for regular users)
+ * @property {string | null} shelterName - Associated shelter Name (null for regular users)
  * @property {string} birthDate - Birth date (ISO format)
  * @property {string} street - Street address
  * @property {string} city - City name
@@ -69,6 +70,7 @@ export interface UserData {
     name: string
     role: UserRole
     shelterId: string | null
+    shelterName: string | null
     birthDate: string
     street: string
     city: string
@@ -91,6 +93,7 @@ export interface User {
     role: UserRole,
     email: string,
     shelterId: string | null,
+    shelterName: string | null,
     profile: UserProfile
 }
 

@@ -4,6 +4,7 @@ import {Link} from "react-router-dom";
 import {useState} from "react";
 import fallback from "@/assets/fallback_image.png"
 import styles from "./AnimalCard.module.css";
+import AnimalStatusBadge, {type AnimalState} from "@/components/features/AnimalStatusBadge/AnimalStatusBadge";
 
 /**
  * Props for the AnimalCard component.
@@ -65,25 +66,6 @@ function AnimalCard({animal, showStatus = false}: AnimalCardProps): JSX.Element 
         setImageError(true);
     };
 
-    /**
-     * Gets the status display information
-     * Returns label and CSS class for the status badge
-     */
-    const getStatusInfo = () => {
-        if (!animal.animalState) return null;
-
-        const statusMap = {
-            'Available': {label: 'Disponível', className: styles.statusAvailable},
-            'PartiallyFostered': {label: 'Parcialmente Apadrinhado', className: styles.statusPartiallyFostered},
-            'FullyFostered': {label: 'Totalmente Apadrinhado', className: styles.statusFullyFostered},
-            'Adopted': {label: 'Adotado', className: styles.statusAdopted}
-        };
-
-        return statusMap[animal.animalState as keyof typeof statusMap] || null;
-    };
-
-    const statusInfo = showStatus ? getStatusInfo() : null;
-
 
     return (
         <article className={styles.card} data-testid="animal-card">
@@ -97,13 +79,13 @@ function AnimalCard({animal, showStatus = false}: AnimalCardProps): JSX.Element 
                         data-testid="animal-image"
                     />
                 </Link>
-                {statusInfo && (
-                    <span
-                        className={`${styles.statusBadge} ${statusInfo.className}`}
-                        data-testid="animal-status-badge"
-                    >
-                        {statusInfo.label}
-                         </span>
+                {showStatus && animal.animalState && (
+                    <div className={styles.badgeWrapper}>
+                        <AnimalStatusBadge
+                            status={animal.animalState as AnimalState}
+                             size="sm"
+                        />
+                    </div>
                 )}
             </div>
             <div className={styles.content}>

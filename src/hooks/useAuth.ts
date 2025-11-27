@@ -61,6 +61,7 @@ export function useAuth() {
                 role: userData.role,
                 email: userData.email,
                 shelterId: userData.shelterId,
+                shelterName: userData.shelterName,
                 profile: {
                     name: userData.name,
                     birthDate: userData.birthDate,
