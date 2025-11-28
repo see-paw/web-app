@@ -10,6 +10,11 @@ import Login from "@/pages/Auth/Login/Login";
 import {loginLoader} from "@/routes/loaders/login";
 import CreateAnimal from "@/pages/Animals/CreateAnimal/CreateAnimal";
 import {createAnimalLoader} from "@/routes/loaders/createAnimal";
+import SelectFosterValue from "@/pages/Fosterings/NewFostering/SelectValue/SelectFosterValue";
+import FosterForm from "@/pages/Fosterings/NewFostering/FosteringForm/FosterForm";
+import FosterConfirmation from "@/pages/Fosterings/NewFostering/Confirmation/FosterConfirmation";
+import { newFosteringLoader } from "@/routes/loaders/newFosteringLoader";
+
 
 /**
  * Application router configuration using React Router v7
@@ -25,6 +30,9 @@ const router = createBrowserRouter([
             {path: "animals/new", element: <CreateAnimal/>, loader: createAnimalLoader},
             {path: "animals/:animalId", element: <AnimalDetails/>, loader: animalDetailsLoader},
             {path: "login", element: <Login/>, loader: loginLoader},
+            {path: "animals/:animalId/foster",element: <SelectFosterValue/>,loader: newFosteringLoader},
+            {path: "animals/:animalId/foster/form",element: <FosterForm/>,loader: newFosteringLoader},
+            {path: "animals/:animalId/foster/confirmation",element: <FosterConfirmation/>},
         ]}
 ])
 

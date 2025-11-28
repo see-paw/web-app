@@ -40,4 +40,20 @@
     .layout > :first-child {
         position: static;
     }
+
+    .fosterButton {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 10px 18px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    margin-top: 1rem;
+}
+
+    .fosterButton:hover {
+        opacity: 0.9;
+    }
+
 }
