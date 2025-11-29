@@ -23,7 +23,7 @@ export default function SelectFosterValue() {
   const animal = useLoaderData() as Animal;
   const navigate = useNavigate();
 
-  const predefinedValues = [5, 10, 15, 20];
+  const predefinedValues = [10, 15, 20];
 
   const [selectedValue, setSelectedValue] = useState<number | null>(null);
   const [customValue, setCustomValue] = useState("");
@@ -31,17 +31,17 @@ export default function SelectFosterValue() {
   const handleContinue = () => {
     const value = selectedValue ?? Number(customValue);
 
-    if (!value || value <= 0) return; // basic validation
+    if (!value || value <= 0) return; 
 
     navigate(`/animals/${animal.id}/foster/form?value=${value}`);
   };
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>Foster {animal.name}</h1>
+      <h1 className={styles.title}>Apadrinhar {animal.name}</h1>
 
       <p className={styles.subtitle}>
-        Choose the monthly amount you wish to contribute
+        Escolha a contribuição mensal que desejar: 
       </p>
 
       <div className={styles.options}>
@@ -62,27 +62,49 @@ export default function SelectFosterValue() {
       </div>
 
       <div className={styles.customInputWrapper}>
-        <label className={styles.customLabel}>Other amount</label>
+        <label className={styles.customLabel}>Outra quantia (acima de 10€):</label>
         <input
-          type="number"
+          type="text"
           placeholder="Defina um valor..."
           className={styles.customInput}
           value={customValue}
           onChange={(e) => {
-            setCustomValue(e.target.value);
+            let val = e.target.value;
+
+            // Allow only digits , and .
+            val = val.replace(/[^\d.,]/g, "");
+
+            // Swap , by . 
+            val = val.replace(",", ".");
+
+            // Only one .
+            const parts = val.split(".");
+            if (parts.length > 2) {
+              val = parts.shift() + "." + parts.join("");
+            }
+
+            setCustomValue(val);
             setSelectedValue(null);
           }}
-          min={1}
         />
-      </div>
 
-      <button
-        className={styles.continueButton}
-        onClick={handleContinue}
-        disabled={!(selectedValue || Number(customValue) > 0)}
-      >
-        Continue
-      </button>
-    </div>
+      </div>
+      <div className={styles.buttonsWrapper}>
+          <button
+              className={styles.primaryButton}
+              onClick={() => navigate(-1)}
+          >
+              Voltar
+          </button>
+
+          <button
+              className={styles.primaryButton}
+              disabled={!(selectedValue || Number(customValue) > 0)}
+              onClick={handleContinue}
+          >
+              Continuar
+          </button>
+      </div>
+  </div>
   );
 }

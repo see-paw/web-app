@@ -13,17 +13,16 @@ import { z } from "zod";
  */
 export const fosteringFormSchema = z.object({
   fullName: z.string()
-    .min(2, "Full name must contain at least 2 characters")
-    .max(100, "Full name cannot exceed 100 characters"),
+    .min(2, "O nome completo deve ter no mínimo 2 caracteres"),
 
   nif: z.string()
-    .regex(/^\d{9}$/, "NIF must contain exactly 9 digits"),
+    .regex(/^\d{9}$/, "O NIF deve conter 9 dígitos"),
 
   iban: z.string()
-    .regex(/^PT50\d{21}$/, "IBAN must follow the format PT50 followed by 21 digits"),
+    .regex(/^PT50\d{21}$/, "O IBAN deve seguir o formato PT50 seguido de 21 dígitos"),
 
   cvv: z.string()
-    .regex(/^\d{3}$/, "CVV must contain exactly 3 digits"),
+    .regex(/^\d{3}$/, "O CVV deve conter 3 dígitos")
 });
 
 /**

@@ -11,7 +11,7 @@ import {loginLoader} from "@/routes/loaders/login";
 import CreateAnimal from "@/pages/Animals/CreateAnimal/CreateAnimal";
 import {createAnimalLoader} from "@/routes/loaders/createAnimal";
 import SelectFosterValue from "@/pages/Fosterings/NewFostering/SelectValue/SelectFosterValue";
-import FosterForm from "@/pages/Fosterings/NewFostering/FosteringForm/FosterForm";
+import FosterForm from "@/pages/Fosterings/NewFostering/FosteringForm/FosteringForm.js";
 import FosterConfirmation from "@/pages/Fosterings/NewFostering/Confirmation/FosterConfirmation";
 import { newFosteringLoader } from "@/routes/loaders/newFosteringLoader";
 

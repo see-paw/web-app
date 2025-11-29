@@ -40,20 +40,37 @@
     .layout > :first-child {
         position: static;
     }
-
-    .fosterButton {
-    background-color: var(--primary-color);
-    color: white;
-    padding: 10px 18px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: 600;
-    margin-top: 1rem;
 }
 
-    .fosterButton:hover {
-        opacity: 0.9;
-    }
-
+   .actionButtons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem; /* espaço entre botões */
+  margin-top: 1.5rem;
 }
+
+.primaryButton {
+  background-color: #f43f5e; /* rosa SeePaw */
+  color: white;
+  padding: 0.75rem 1.4rem;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.15s ease;
+  box-shadow: 0 2px 6px rgba(244, 63, 94, 0.3);
+}
+
+.primaryButton:hover {
+  background-color: #e11d48; /* tom mais escuro */
+  transform: translateY(-2px);
+}
+
+.primaryButton:active {
+  transform: translateY(0);
+}
+
+
+
+

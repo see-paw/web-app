@@ -86,21 +86,34 @@ function AnimalDetails() {
         <div className={styles.page}>
             <AnimalHeader name={animal.name} sex={animal.sex} />
 
-            {/* Foster button — only visible if the user is authenticated */}
-            {isAuth && (
-                <button
-                    className={styles.fosterButton}
-                    onClick={() => navigate(`/animals/${animal.id}/foster`)}
-                >
-                    Foster
-                </button>
-            )}
 
-            <div className={styles.layout}>
-                <AnimalImages images={animal.images} />
+          <div className={styles.layout}>
+            <AnimalImages images={animal.images} />
+            <div>
                 <AnimalInfo animal={animal} />
+
+                <div className={styles.actionButtons}>
+                    <button
+                        className={styles.primaryButton}
+                        onClick={() => navigate("/animals")}
+                    >
+                        Voltar ao catálogo
+                    </button>
+                     {/* Foster button — only visible if the user is authenticated */}
+                    {isAuth && (
+                        <button
+                            className={styles.primaryButton}
+                            onClick={() => navigate(`/animals/${animal.id}/foster`)}
+                        >
+                            Apadrinhar
+                        </button>
+                    )}
+                </div>
             </div>
         </div>
+
+    </div>
+        
     );
 }
 
