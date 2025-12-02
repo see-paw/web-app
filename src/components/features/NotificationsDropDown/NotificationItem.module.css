@@ -1,0 +1,84 @@
+.item {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-3);
+    padding: var(--spacing-4);
+    border-bottom: 1px solid var(--color-neutral-200);
+    transition: background-color var(--transition-fast);
+}
+
+.item:last-child {
+    border-bottom: none;
+}
+
+.item:hover {
+    background-color: var(--color-neutral-50);
+}
+
+.unread {
+    background-color: #eff6ff;
+}
+
+.unread:hover {
+    background-color: #dbeafe;
+}
+
+.content {
+    flex: 1;
+    min-width: 0;
+}
+
+.message {
+    margin: 0 0 var(--spacing-1) 0;
+    font-size: var(--font-size-sm);
+    color: var(--color-text-primary);
+    line-height: 1.5;
+    word-wrap: break-word;
+}
+
+.time {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-secondary);
+}
+
+.actions {
+    display: flex;
+    gap: var(--spacing-2);
+    flex-shrink: 0;
+}
+
+.actionButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    background: none;
+    border: 1px solid var(--color-neutral-300);
+    border-radius: var(--radius-base);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    color: var(--color-text-secondary);
+}
+
+.actionButton:hover:not(:disabled) {
+    background-color: var(--color-primary-100);
+    border-color: var(--color-primary-300);
+    color: var(--color-primary-700);
+}
+
+.actionButton:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.deleteButton:hover:not(:disabled) {
+    background-color: var(--color-error-50);
+    border-color: var(--color-error-300);
+    color: var(--color-error-700);
+}
+
+.actionButton svg {
+    width: 14px;
+    height: 14px;
+}
