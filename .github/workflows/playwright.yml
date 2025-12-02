@@ -234,6 +234,7 @@ jobs:
         working-directory: frontend
         env:
           CI: true
+          VITE_API_URL: http://localhost:${{ env.BACKEND_PORT }}
         run: |
           echo "========================================="
           echo "   TESTES E2E - PLAYWRIGHT"
