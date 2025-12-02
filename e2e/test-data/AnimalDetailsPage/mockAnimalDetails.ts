@@ -58,7 +58,8 @@ export const mockAnimalMaria: Animal = {
                 publicId : "IMG_4900_x2rqrq"
             }
         ],
-        shelterId: "8f3c2e7b-9c45-4b0b-a21d-6f4b72a1d812"
+        shelterId: "8f3c2e7b-9c45-4b0b-a21d-6f4b72a1d812",
+        currentSupportValue: 0,
     }
 
 export const mockAnimalLeandro: Animal ={
@@ -103,7 +104,8 @@ export const mockAnimalLeandro: Animal ={
             isPrincipal: false
         }
     ],
-    shelterId: "8f3c2e7b-9c45-4b0b-a21d-6f4b72a1d812"
+    shelterId: "8f3c2e7b-9c45-4b0b-a21d-6f4b72a1d812",
+    currentSupportValue: 0,
 }
 
 
@@ -142,7 +144,8 @@ export const mockAnimalJose: Animal = {
             isPrincipal: false
         }
     ],
-    shelterId: "c1e8a540-2f7d-47e4-b8bb-9a6c13f5e2fd"
+    shelterId: "c1e8a540-2f7d-47e4-b8bb-9a6c13f5e2fd",
+    currentSupportValue: 0,
 }
 
 export const mockAnimalJessica: Animal = {
@@ -173,5 +176,6 @@ export const mockAnimalJessica: Animal = {
             isPrincipal: true
         }
     ],
-    shelterId: "c1e8a540-2f7d-47e4-b8bb-9a6c13f5e2fd"
+    shelterId: "c1e8a540-2f7d-47e4-b8bb-9a6c13f5e2fd",
+    currentSupportValue: 0,
 }

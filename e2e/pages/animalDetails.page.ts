@@ -40,6 +40,15 @@ export class AnimalDetailsPage extends BasePage {
     readonly animalDescription: Locator;
     readonly attributesGrid: Locator;
 
+    // ================================================================
+    // LOCATORS - Fostering Section (progress bar + action button)
+    // ================================================================
+    readonly fosteringButton: Locator;
+    readonly fosteringProgressBar: Locator;
+    readonly fosteringProgressPercentage: Locator;
+    readonly fosteringProgressMessage: Locator;
+
+
     /**
      * Constructor initializes component objects and all page locators.
      * @param page Playwright Page instance
@@ -61,6 +70,16 @@ export class AnimalDetailsPage extends BasePage {
         // AnimalInfo - selectors for text details
         this.animalDescription = page.locator('[data-testid="animal-description"]');
         this.attributesGrid = page.locator('[data-testid="attributes-grid"]');
+
+        // Fostering action button
+        this.fosteringButton = page.locator('[data-testid="fostering-button"]');
+
+        // Fostering progress bar 
+        this.fosteringProgressBar = page.locator('[data-testid="fostering-progress-bar"]');
+        this.fosteringProgressPercentage = page.locator('[data-testid="fostering-progress-percentage"]');
+        this.fosteringProgressMessage = page.locator('[data-testid="fostering-progress-message"]');
+
+
     }
 
     // ================================================================
@@ -268,4 +287,47 @@ export class AnimalDetailsPage extends BasePage {
     async isAttributesGridVisible(): Promise<boolean> {
         return await this.isElementVisible(this.attributesGrid);
     }
+
+    // ================================================================
+    // FOSTERING METHODS
+    // Handles the "Foster" button added to the page
+    // ================================================================
+
+    /**
+     * Clicks the "Foster" (Apadrinhar) button and navigates to
+     * the first step of the fostering flow (select value page).
+     */
+    async clickFosteringButton() {
+        await this.fosteringButton.click();
+    }
+
+    /**
+     * Returns true if the fostering button is enabled and clickable.
+     * Useful for validating auth-based restrictions.
+     */
+    async isFosteringButtonEnabled(): Promise<boolean> {
+        return await this.fosteringButton.isEnabled();
+    }
+
+    // ================================================================
+    // FOSTERING PROGRESS BAR METHODS
+    // Only displayed on the animal detail page
+    // ================================================================
+
+    /** Returns true if the fostering progress bar is visible */
+    async isFosteringProgressBarVisible(): Promise<boolean> {
+        return await this.isElementVisible(this.fosteringProgressBar);
+    }
+
+    /** Returns the percentage shown above the bar (e.g. "20%") */
+    async getFosteringProgressPercentage(): Promise<string> {
+        return await this.getElementText(this.fosteringProgressPercentage);
+    }
+
+    /** Returns the motivational message below the bar */
+    async getFosteringProgressMessage(): Promise<string> {
+        return await this.getElementText(this.fosteringProgressMessage);
+    }
+
+
 }

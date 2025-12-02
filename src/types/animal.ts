@@ -38,5 +38,6 @@ export interface Animal {
     features: string
     cost: number
     shelterId: string
-    images: Image[]
+    images: Image[],
+    currentSupportValue: number;
 }

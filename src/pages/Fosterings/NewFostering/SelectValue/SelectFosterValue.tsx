@@ -24,6 +24,7 @@ export default function SelectFosterValue() {
   const navigate = useNavigate();
 
   const predefinedValues = [10, 15, 20];
+  const MIN_VALUE = 10;
 
   const [selectedValue, setSelectedValue] = useState<number | null>(null);
   const [customValue, setCustomValue] = useState("");
@@ -34,6 +35,12 @@ export default function SelectFosterValue() {
     if (!value || value <= 0) return; 
 
     navigate(`/animals/${animal.id}/foster/form?value=${value}`);
+  };
+
+   // check if the choosen amount is valid (>= 10€)
+  const isValid = () => {
+    const value = selectedValue ?? Number(customValue);
+    return value >= MIN_VALUE;
   };
 
   return (
@@ -47,6 +54,7 @@ export default function SelectFosterValue() {
       <div className={styles.options}>
         {predefinedValues.map((amount) => (
           <button
+           data-testid={`select-value-${amount}`}
             key={amount}
             className={`${styles.amountButton} ${
               selectedValue === amount ? styles.selected : ""
@@ -64,6 +72,7 @@ export default function SelectFosterValue() {
       <div className={styles.customInputWrapper}>
         <label className={styles.customLabel}>Outra quantia (acima de 10€):</label>
         <input
+          data-testid="custom-value-input"
           type="text"
           placeholder="Defina um valor..."
           className={styles.customInput}
@@ -91,6 +100,7 @@ export default function SelectFosterValue() {
       </div>
       <div className={styles.buttonsWrapper}>
           <button
+            data-testid="back-button"
               className={styles.primaryButton}
               onClick={() => navigate(-1)}
           >
@@ -98,8 +108,9 @@ export default function SelectFosterValue() {
           </button>
 
           <button
+              data-testid="continue-button"
               className={styles.primaryButton}
-              disabled={!(selectedValue || Number(customValue) > 0)}
+              disabled={!isValid()}
               onClick={handleContinue}
           >
               Continuar

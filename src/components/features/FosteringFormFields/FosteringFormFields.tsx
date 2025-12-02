@@ -27,12 +27,13 @@ export function FosteringFormFields({ form }: Props) {
       <div className={styles.field}>
         <label>Nome Completo</label>
         <input
+          data-testid="fullName-input"
           type="text"
           {...form.register("fullName")}
           className={styles.input}
         />
         {form.formState.errors.fullName && (
-          <p className={styles.error}>
+          <p data-testid="error-fullName" className={styles.error}>
             {form.formState.errors.fullName.message}
           </p>
         )}
@@ -42,6 +43,7 @@ export function FosteringFormFields({ form }: Props) {
       <div className={styles.field}>
         <label>NIF</label>
         <input
+          data-testid="nif-input"
           type="text"
           maxLength={9}
           {...form.register("nif")}
@@ -53,7 +55,7 @@ export function FosteringFormFields({ form }: Props) {
           }}
         />
         {form.formState.errors.nif && (
-          <p className={styles.error}>{form.formState.errors.nif.message}</p>
+          <p data-testid="error-nif" className={styles.error}>{form.formState.errors.nif.message}</p>
         )}
       </div>
 
@@ -61,6 +63,7 @@ export function FosteringFormFields({ form }: Props) {
       <div className={styles.field}>
         <label>IBAN</label>
         <input
+          data-testid="iban-input"
           type="text"
           maxLength={25}
           {...form.register("iban")}
@@ -78,7 +81,7 @@ export function FosteringFormFields({ form }: Props) {
           }}
         />
         {form.formState.errors.iban && (
-          <p className={styles.error}>{form.formState.errors.iban.message}</p>
+          <p data-testid="error-iban" className={styles.error}>{form.formState.errors.iban.message}</p>
         )}
       </div>
 
@@ -86,6 +89,7 @@ export function FosteringFormFields({ form }: Props) {
       <div className={styles.field}>
         <label>CVV</label>
         <input
+           data-testid="cvv-input"
           type="text"
           maxLength={3}
           {...form.register("cvv")}
@@ -97,7 +101,7 @@ export function FosteringFormFields({ form }: Props) {
           }}
         />
         {form.formState.errors.cvv && (
-          <p className={styles.error}>{form.formState.errors.cvv.message}</p>
+          <p data-testid="error-cvv" className={styles.error}>{form.formState.errors.cvv.message}</p>
         )}
       </div>
     </>

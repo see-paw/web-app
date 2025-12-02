@@ -15,7 +15,7 @@ import { useMutation } from "@tanstack/react-query";
 import { fosteringsApi } from "@/api/fosterings";
 import { queryClient } from "@/lib/queryClient";
 import { parseApiError } from "@/utils/parseApiError";
-import { FosteringFormFields } from "@/components/FosteringFormFields/FosteringFormFields";
+import { FosteringFormFields } from "@/components/features/FosteringFormFields/FosteringFormFields"
 
 
 export default function FosterForm() {
@@ -77,7 +77,7 @@ export default function FosterForm() {
     <div className={styles.container}>
       <h1 className={styles.title}>Insira os seus dados pessoais</h1>
 
-      {apiError && <p className={styles.apiError}>{apiError}</p>}
+      {apiError && <p data-testid="api-error" className={styles.apiError}>{apiError}</p>}
 
       <form onSubmit={form.handleSubmit(onSubmit)} className={styles.form}>
         
@@ -86,6 +86,7 @@ export default function FosterForm() {
         {/* Buttons */}
         <div className={styles.buttonsWrapper}>
           <button
+            data-testid="form-back-button"
             type="button"
             className={styles.primaryButton}
             onClick={() => navigate(-1)}
@@ -94,6 +95,7 @@ export default function FosterForm() {
           </button>
 
           <button
+            data-testid="form-submit-button"
             type="submit"
             className={styles.primaryButton}
             disabled={!form.formState.isValid || mutation.isPending}

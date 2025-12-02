@@ -42,12 +42,13 @@ export default function FosterConfirmation() {
       <p className={styles.subtitle}>Ansiosa/o por te conhecer!</p>
 
       <img
+        data-testid="heart-image" 
         src={heartImg}
         alt="Coração de agradecimento"
         className={styles.heartImage}
       />
 
-      <button className={styles.downloadButton} onClick={handleDownloadPDF}>
+      <button data-testid="download-receipt" className={styles.downloadButton} onClick={handleDownloadPDF}>
         Descarregar Recibo
       </button>
     </div>

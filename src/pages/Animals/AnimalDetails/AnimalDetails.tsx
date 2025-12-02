@@ -7,6 +7,7 @@ import styles from "./AnimalDetails.module.css";
 import AnimalHeader from "@/components/common/AnimalHeader/AnimalHeader";
 import AnimalImages from "@/components/features/AnimalImages/AnimalImages";
 import AnimalInfo from "@/components/features/AnimalInfo/AnimalInfo";
+import { ProgressBar } from "@/components/features/ProgressBar/ProgressBar";
 
 /**
  * AnimalDetails page component.
@@ -79,6 +80,8 @@ function AnimalDetails() {
         return null;
     }
 
+     const missing = Math.max(animal.cost - animal.currentSupportValue, 0);
+
     /**
      * Main Page UI
      */
@@ -92,6 +95,17 @@ function AnimalDetails() {
             <div>
                 <AnimalInfo animal={animal} />
 
+                 {/* Progress Bar */}
+                    <div className={styles.progressSection}>
+                        <ProgressBar
+                            current={animal.currentSupportValue}
+                            max={animal.cost}
+                        />
+                        <p className={styles.progressText} data-testid="fostering-progress-message">
+                            Só faltam {missing}€ para {animal.name} ser um patudo feliz!
+                        </p>
+                    </div>
+
                 <div className={styles.actionButtons}>
                     <button
                         className={styles.primaryButton}
@@ -102,6 +116,7 @@ function AnimalDetails() {
                      {/* Foster button — only visible if the user is authenticated */}
                     {isAuth && (
                         <button
+                            data-testid="fostering-button"
                             className={styles.primaryButton}
                             onClick={() => navigate(`/animals/${animal.id}/foster`)}
                         >

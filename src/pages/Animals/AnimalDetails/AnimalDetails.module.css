@@ -12,13 +12,11 @@
     margin-top: var(--spacing-8);
 }
 
-/* Coluna esquerda - Imagens (sticky) */
 .layout > :first-child {
     position: sticky;
     top: calc(var(--navbar-height) + var(--spacing-4));
 }
 
-/* Responsivo */
 @media (max-width: 1024px) {
     .layout {
         grid-template-columns: 1fr 1fr;
@@ -45,12 +43,12 @@
    .actionButtons {
   display: flex;
   justify-content: flex-end;
-  gap: 1rem; /* espaço entre botões */
+  gap: 1rem; 
   margin-top: 1.5rem;
 }
 
 .primaryButton {
-  background-color: #f43f5e; /* rosa SeePaw */
+  background-color: #f43f5e; 
   color: white;
   padding: 0.75rem 1.4rem;
   border: none;
@@ -63,7 +61,7 @@
 }
 
 .primaryButton:hover {
-  background-color: #e11d48; /* tom mais escuro */
+  background-color: #e11d48; 
   transform: translateY(-2px);
 }
 
