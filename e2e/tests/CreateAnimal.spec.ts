@@ -230,9 +230,9 @@ test.describe('Create Animal - Error Handling', () => {
         await apiMock.clearMocks();
     });
 
-    /*test('should display error message on server error', async ({ pm, page, apiMock, authenticatedAdminCAA }) => {
+    test('should display error message on server error', async ({ pm, page, apiMock, authenticatedAdminCAA }) => {
         test.setTimeout(60000);
-        await apiMock.mockError('**//*api/animals', 500, 'Erro do servidor. Tenta mais tarde.');
+        await apiMock.mockError('**/api/animals', 500, 'Erro do servidor. Tenta mais tarde.');
 
         await pm.navigateToCreateAnimal();
 
@@ -266,7 +266,7 @@ test.describe('Create Animal - Error Handling', () => {
 
         const errorMsg = await createPage.getErrorMessage();
         expect(errorMsg).toContain('servidor');
-    });*/
+    });
 
     test('should display error message on validation error', async ({ pm, page, apiMock, authenticatedAdminCAA }) => {
         test.setTimeout(60000);

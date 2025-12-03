@@ -24,14 +24,14 @@ test.describe('Navbar Component', () => {
             expect(await navbar.isNavbarVisible()).toBe(true);
         });
 
-        /*test('should render navbar on login page', async ({ pm }) => {
+        test('should render navbar on login page', async ({ pm }) => {
             await pm.navigateToLogin();
 
             const navbar = pm.getNavbarComponent();
             await navbar.waitForNavbarToLoad();
 
             expect(await navbar.isNavbarVisible()).toBe(true);
-        });*/
+        });
     });
 
     test.describe('Navigation Links Visibility', () => {
