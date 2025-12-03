@@ -23,7 +23,7 @@ export class NavbarComponent extends BasePage {
         this.notificationsLink = this.navbar.locator('a[href="/notifications"]');
         this.profileLink = this.navbar.locator('a[href="/user/profile"]');
         this.loginLink = this.navbar.locator('a[href="/login"]');
-        this.logoutButton = this.navbar.locator('button[type="button"]');
+        this.logoutButton = this.navbar.locator('button[type="button"]').last();
     }
 
     async waitForNavbarToLoad() {

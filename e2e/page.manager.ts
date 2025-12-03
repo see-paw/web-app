@@ -8,6 +8,8 @@ import {ImageGalleryModalComponent} from "./components/ImageGalleryModal.compone
 import {LoginPage} from "./pages/login.page";
 import {NavbarComponent} from "./components/navbar.component";
 import {CreateAnimalPage} from "./pages/createAnimal.page";
+import { OwnershipRequestsTableComponent } from "./components/ownershipRequestsTable.component";
+import { OwnershipRequestsPage } from "./pages/ownershipRequests";
 
 export class PageManager {
     private readonly animalsPage: AnimalsPage;
@@ -67,6 +69,14 @@ export class PageManager {
     getCreateAnimalPage(): CreateAnimalPage {
         return this.createAnimalPage;
     }
+
+    getOwnershipRequestsTableComponent(): OwnershipRequestsTableComponent {
+        return new OwnershipRequestsTableComponent(this.page);
+    }
+
+    getOwnershipRequestsPage(): OwnershipRequestsPage {
+    return new OwnershipRequestsPage(this.page);
+}
 
     async navigateToAnimals(page: number = 1) {
         await this.page.goto(`/animals?page=${page}`);

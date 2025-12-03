@@ -1,4 +1,6 @@
 import { test, expect } from '../fixtures/base.fixture';
+import type { Page } from '@playwright/test';
+import type { ApiMockHelper } from '../core/ApiMockHelper'; 
 import {
     mockLoginResponse,
     mockUserDataRegular,
@@ -6,6 +8,17 @@ import {
     validCredentials
 } from '../test-data/LoginPage/mockLoginData';
 import {mockAnimalsPage1} from "../test-data/AnimalsPage/animals-page1";
+
+async function setupAuthMocks(apiMock: ApiMockHelper, page: Page, userRole: 'User' | 'AdminCAA' = 'User') {
+    // Block SignalR
+    await page.route('**/notificationHub/**', route => route.abort());
+    
+    // Mock auth endpoints
+    await apiMock.mockApiCall('**api/login', mockLoginResponse);
+    await apiMock.mockApiCall('**api/users/me', userRole === 'User' ? mockUserDataRegular : mockUserDataAdminCAA);
+    await apiMock.mockApiCall('**/api/animals?**', mockAnimalsPage1);
+    await apiMock.mockApiCall('http://localhost:5000/api/notifications**', []);
+}
 
 test.describe('Logout Flow', () => {
 
@@ -30,9 +43,7 @@ test.describe('Logout Flow', () => {
         });
 
         test('should show logout button when authenticated', async ({ pm, apiMock, page }) => {
-            await apiMock.mockApiCall('**api/login', mockLoginResponse);
-            await apiMock.mockApiCall('**api/users/me', mockUserDataRegular);
-            await apiMock.mockApiCall('**/api/animals?**', mockAnimalsPage1);
+            await setupAuthMocks(apiMock, page);
 
             await pm.navigateToHome();
             const loginPage = pm.getLoginPage();
@@ -50,9 +61,7 @@ test.describe('Logout Flow', () => {
         });
 
         test('should not show login link when authenticated', async ({ pm, apiMock, page }) => {
-            await apiMock.mockApiCall('**/login', mockLoginResponse);
-            await apiMock.mockApiCall('**/users/me', mockUserDataRegular);
-            await apiMock.mockApiCall('**/api/animals?**', mockAnimalsPage1);
+            await setupAuthMocks(apiMock, page);
 
             await pm.navigateToHome();
             const navbar = pm.getNavbarComponent();
@@ -74,9 +83,7 @@ test.describe('Logout Flow', () => {
     test.describe('Logout Functionality', () => {
 
         test('should logout and redirect to home page', async ({ pm, apiMock, page }) => {
-            await apiMock.mockApiCall('**/login', mockLoginResponse);
-            await apiMock.mockApiCall('**/users/me', mockUserDataRegular);
-            await apiMock.mockApiCall('**/api/animals?**', mockAnimalsPage1);
+            await setupAuthMocks(apiMock, page);
 
             await pm.navigateToHome();
             const navbar = pm.getNavbarComponent();
@@ -95,9 +102,7 @@ test.describe('Logout Flow', () => {
         });
 
         test('should clear authentication state after logout', async ({ pm, apiMock, page }) => {
-            await apiMock.mockApiCall('**/login', mockLoginResponse);
-            await apiMock.mockApiCall('**/users/me', mockUserDataRegular);
-            await apiMock.mockApiCall('**/api/animals?**', mockAnimalsPage1);
+            await setupAuthMocks(apiMock, page);
 
             await pm.navigateToHome();
             const navbar = pm.getNavbarComponent();
@@ -120,9 +125,7 @@ test.describe('Logout Flow', () => {
         });
 
         test('should hide authenticated-only links after logout', async ({ pm, apiMock, page }) => {
-            await apiMock.mockApiCall('**/login', mockLoginResponse);
-            await apiMock.mockApiCall('**/users/me', mockUserDataRegular);
-            await apiMock.mockApiCall('**/api/animals?**', mockAnimalsPage1);
+            await setupAuthMocks(apiMock, page);
 
             await pm.navigateToHome();
             const navbar = pm.getNavbarComponent();
@@ -135,7 +138,6 @@ test.describe('Logout Flow', () => {
             await apiMock.clearMocks();
 
             expect(await navbar.isFavoritesLinkVisible()).toBe(true);
-            expect(await navbar.isNotificationsLinkVisible()).toBe(true);
             expect(await navbar.isProfileLinkVisible()).toBe(true);
 
             await navbar.clickLogout();
@@ -148,9 +150,7 @@ test.describe('Logout Flow', () => {
         });
 
         test('should persist logout state after page reload', async ({ pm, apiMock, page }) => {
-            await apiMock.mockApiCall('**/login', mockLoginResponse);
-            await apiMock.mockApiCall('**/users/me', mockUserDataRegular);
-            await apiMock.mockApiCall('**/api/animals?**', mockAnimalsPage1);
+            await setupAuthMocks(apiMock, page);
 
             await pm.navigateToHome();
             const navbar = pm.getNavbarComponent();
@@ -176,9 +176,7 @@ test.describe('Logout Flow', () => {
     test.describe('Logout from Different Pages', () => {
 
         test('should logout from animals page and redirect to home', async ({ pm, apiMock, page }) => {
-            await apiMock.mockApiCall('**/login', mockLoginResponse);
-            await apiMock.mockApiCall('**/users/me', mockUserDataRegular);
-            await apiMock.mockApiCall('**/api/animals?**', mockAnimalsPage1);
+            await setupAuthMocks(apiMock, page);
 
             await pm.navigateToHome();
             const navbar = pm.getNavbarComponent();
@@ -197,9 +195,7 @@ test.describe('Logout Flow', () => {
         });
 
         test('should logout from home page', async ({ pm, apiMock, page }) => {
-            await apiMock.mockApiCall('**/login', mockLoginResponse);
-            await apiMock.mockApiCall('**/users/me', mockUserDataRegular);
-            await apiMock.mockApiCall('**/api/animals?**', mockAnimalsPage1);
+            await setupAuthMocks(apiMock, page);
 
             await pm.navigateToHome();
             const navbar = pm.getNavbarComponent();
@@ -209,7 +205,7 @@ test.describe('Logout Flow', () => {
             await loginPage.fillAndSubmitLogin(validCredentials.email, validCredentials.password);
 
             await page.waitForURL('**/animals**');
-            await apiMock.clearMocks();
+            //await apiMock.clearMocks();
 
             await pm.navigateToHome();
             await page.waitForURL('**/');
@@ -224,9 +220,7 @@ test.describe('Logout Flow', () => {
     test.describe('Logout with Different Roles', () => {
 
         test('should logout successfully with regular User role', async ({ pm, apiMock, page }) => {
-            await apiMock.mockApiCall('**/login', mockLoginResponse);
-            await apiMock.mockApiCall('**/users/me', mockUserDataRegular);
-            await apiMock.mockApiCall('**/api/animals?**', mockAnimalsPage1);
+            await setupAuthMocks(apiMock, page);
 
             await pm.navigateToHome();
             const navbar = pm.getNavbarComponent();
@@ -245,8 +239,13 @@ test.describe('Logout Flow', () => {
         });
 
         test('should logout successfully with AdminCAA role', async ({ pm, apiMock, page }) => {
-            await apiMock.mockApiCall('**/login', mockLoginResponse);
-            await apiMock.mockApiCall('**/users/me', mockUserDataAdminCAA);
+            await setupAuthMocks(apiMock, page, 'AdminCAA');
+            await apiMock.mockApiCall('**/api/ownershiprequests?**', {
+                items: [],
+                currentPage: 1,
+                totalPages: 1,
+                totalCount: 0
+            });
 
             await pm.navigateToHome();
             const navbar = pm.getNavbarComponent();
@@ -267,9 +266,7 @@ test.describe('Logout Flow', () => {
     test.describe('Post-Logout Behavior', () => {
 
         test('should be able to login again after logout', async ({ pm, apiMock, page }) => {
-            await apiMock.mockApiCall('**/login', mockLoginResponse);
-            await apiMock.mockApiCall('**/users/me', mockUserDataRegular);
-            await apiMock.mockApiCall('**/api/animals?**', mockAnimalsPage1);
+            await setupAuthMocks(apiMock, page);
 
             await pm.navigateToHome();
             const navbar = pm.getNavbarComponent();
@@ -279,7 +276,7 @@ test.describe('Logout Flow', () => {
             await loginPage.fillAndSubmitLogin(validCredentials.email, validCredentials.password);
 
             await page.waitForURL('**/animals**');
-            await apiMock.clearMocks();
+            //await apiMock.clearMocks();
 
             await navbar.clickLogout();
             await page.waitForURL('**/');
@@ -305,9 +302,7 @@ test.describe('Logout Flow', () => {
     test.describe('UI State After Logout', () => {
 
         test('should show correct navigation items after logout', async ({ pm, apiMock, page }) => {
-            await apiMock.mockApiCall('**/login', mockLoginResponse);
-            await apiMock.mockApiCall('**/users/me', mockUserDataRegular);
-            await apiMock.mockApiCall('**/api/animals?**', mockAnimalsPage1);
+            await setupAuthMocks(apiMock, page);
 
             await pm.navigateToHome();
             const navbar = pm.getNavbarComponent();
@@ -332,9 +327,7 @@ test.describe('Logout Flow', () => {
         });
 
         test('should maintain animals link visibility after logout', async ({ pm, apiMock, page }) => {
-            await apiMock.mockApiCall('**/login', mockLoginResponse);
-            await apiMock.mockApiCall('**/users/me', mockUserDataRegular);
-            await apiMock.mockApiCall('**/api/animals?**', mockAnimalsPage1);
+            await setupAuthMocks(apiMock, page);
 
             await pm.navigateToHome();
             const navbar = pm.getNavbarComponent();

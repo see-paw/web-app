@@ -45,6 +45,7 @@ export function useAuth() {
             const userData = await authApi.getCurrentUserData(internalController.signal);
 
             const isStillAuthenticated = useAuthStore.getState().tokens !== null;
+
             if (!isStillAuthenticated) {
                 return {
                     success: false,
