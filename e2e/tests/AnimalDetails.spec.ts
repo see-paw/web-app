@@ -12,26 +12,29 @@ import {
 //  logic, attribute formatting, and error handling for the Animal Details
 // ======================================================================
 test.describe('Animal Details Page', () => {
-    test.beforeEach(async ({ page }) => {
-    await page.addInitScript(() => {
-        // Zustand persist format
-        window.localStorage.setItem(
-            "seepaw-auth",
-            JSON.stringify({
-                state: {
-                    user: {
-                        id: "test-user",
-                        email: "test@example.com",
-                        role: "User",
-                    },
-                    tokens: {
-                        accessToken: "dummy-access",
-                        refreshToken: "dummy-refresh"
+    test.beforeEach(async ({ page, apiMock }) => {
+        await page.route('**/notificationHub/**', route => route.abort());
+        await apiMock.mockApiCall('http://localhost:5000/api/notifications**', []);
+        
+        await page.addInitScript(() => {
+            // Zustand persist format
+            window.localStorage.setItem(
+                "seepaw-auth",
+                JSON.stringify({
+                    state: {
+                        user: {
+                            id: "test-user",
+                            email: "test@example.com",
+                            role: "User",
+                        },
+                        tokens: {
+                            accessToken: "dummy-access",
+                            refreshToken: "dummy-refresh"
+                        }
                     }
-                }
-            })
-        );
-    });
+                })
+            );
+        });
 });
 
 
@@ -45,6 +48,8 @@ test.describe('Animal Details Page', () => {
     test('should render animal details page with all main elements', async ({ page, pm, apiMock }) => {
         // Arrange: mock backend API response for this test
         await apiMock.mockApiCall('**/api/animals/**', mockAnimalMaria);
+        await page.route('**/notificationHub/**', route => route.abort());
+        await apiMock.mockApiCall('http://localhost:5000/api/notifications**', []);
 
         // Act: navigate to page
         await page.goto(`/animals/${mockAnimalMaria.id}`);
@@ -64,6 +69,8 @@ test.describe('Animal Details Page', () => {
     test('should display correct animal name in header', async ({ page, pm, apiMock }) => {
         // Mock API data
         await apiMock.mockApiCall('**/api/animals/**', mockAnimalMaria);
+        await page.route('**/notificationHub/**', route => route.abort());
+        await apiMock.mockApiCall('http://localhost:5000/api/notifications**', []);
 
         // Navigate to page
         await page.goto(`/animals/${mockAnimalMaria.id}`);
@@ -114,6 +121,8 @@ test.describe('Animal Details Page', () => {
     test('should validate header format using component method', async ({ page, pm, apiMock }) => {
         await apiMock.mockApiCall('**/api/animals/**', mockAnimalMaria);
         await page.goto(`/animals/${mockAnimalMaria.id}`);
+        await page.route('**/notificationHub/**', route => route.abort());
+        await apiMock.mockApiCall('http://localhost:5000/api/notifications**', []);
 
         const animalDetailsPage = pm.getAnimalDetailsPage();
         await animalDetailsPage.waitForPageToLoad();
@@ -134,7 +143,10 @@ test.describe('Animal Details Page', () => {
 
     test.use({ ignoreHTTPSErrors: true });
     test('should display main image correctly', async ({ page, pm, apiMock }) => {
+        await page.route('**/notificationHub/**', route => route.abort());
+        await apiMock.mockApiCall('http://localhost:5000/api/notifications**', []);
         await apiMock.mockApiCall('**/api/animals/**', mockAnimalMaria);
+    
         await page.goto(`/animals/${mockAnimalMaria.id}`);
 
         const animalDetailsPage = pm.getAnimalDetailsPage();
@@ -149,7 +161,10 @@ test.describe('Animal Details Page', () => {
 
     test.use({ ignoreHTTPSErrors: true });
     test('should display thumbnails when animal has multiple images', async ({ page, pm, apiMock }) => {
+        await page.route('**/notificationHub/**', route => route.abort());
+        await apiMock.mockApiCall('http://localhost:5000/api/notifications**', []);
         await apiMock.mockApiCall('**/api/animals/**', mockAnimalLeandro);
+        
         await page.goto(`/animals/${mockAnimalLeandro.id}`);
 
         const animalDetailsPage = pm.getAnimalDetailsPage();
@@ -164,7 +179,10 @@ test.describe('Animal Details Page', () => {
     test.use({ ignoreHTTPSErrors: true });
     test('should display "Ver +X imagens" button when more than 2 thumbnails exist', async ({ page, pm, apiMock }) => {
         // mockAnimalMaria has 5 total images
+        await page.route('**/notificationHub/**', route => route.abort());
+        await apiMock.mockApiCall('http://localhost:5000/api/notifications**', []);
         await apiMock.mockApiCall('**/api/animals/**', mockAnimalMaria);
+
         await page.goto(`/animals/${mockAnimalMaria.id}`);
 
         const animalDetailsPage = pm.getAnimalDetailsPage();
@@ -199,6 +217,9 @@ test.describe('Animal Details Page', () => {
     test.use({ ignoreHTTPSErrors: true });
     test('should open modal when clicking on thumbnail', async ({ page, pm, apiMock }) => {
         await apiMock.mockApiCall('**/api/animals/**', mockAnimalMaria);
+        await page.route('**/notificationHub/**', route => route.abort());
+        await apiMock.mockApiCall('http://localhost:5000/api/notifications**', []);
+
         await page.goto(`/animals/${mockAnimalMaria.id}`);
 
         const animalDetailsPage = pm.getAnimalDetailsPage();
@@ -257,8 +278,10 @@ test.describe('Animal Details Page', () => {
     });
 
     test('should navigate to previous image in modal with circular behavior', async ({ page, pm, apiMock }) => {
-        // Circular behaviour: previous from index 1 jumps to last index
+        await page.route('**/notificationHub/**', route => route.abort());
+        await apiMock.mockApiCall('http://localhost:5000/api/notifications**', []);
         await apiMock.mockApiCall('**/api/animals/**', mockAnimalMaria);
+
         await page.goto(`/animals/${mockAnimalMaria.id}`);
 
         const animalDetailsPage = pm.getAnimalDetailsPage();
@@ -300,6 +323,9 @@ test.describe('Animal Details Page', () => {
 
     test('should close modal when clicking outside (overlay)', async ({ page, pm, apiMock }) => {
         await apiMock.mockApiCall('**/api/animals/**', mockAnimalMaria);
+        await page.route('**/notificationHub/**', route => route.abort());
+        await apiMock.mockApiCall('http://localhost:5000/api/notifications**', []);
+
         await page.goto(`/animals/$mockAnimalMaria.id}`);
 
         const animalDetailsPage = pm.getAnimalDetailsPage();
@@ -438,6 +464,9 @@ test.describe('Animal Details Page', () => {
     test.use({ ignoreHTTPSErrors: true });
     test('should display features attribute when present', async ({ page, pm, apiMock }) => {
         await apiMock.mockApiCall('**/api/animals/**', mockAnimalMaria);
+        await page.route('**/notificationHub/**', route => route.abort());
+        await apiMock.mockApiCall('http://localhost:5000/api/notifications**', []);
+
         await page.goto(`/animals/${mockAnimalMaria.id}`);
 
         const animalDetailsPage = pm.getAnimalDetailsPage();

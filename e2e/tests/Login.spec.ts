@@ -8,6 +8,17 @@ import {
     shortPasswordCredentials,
     wrongCredentials
 } from '../test-data/LoginPage/mockLoginData';
+import type { Page } from '@playwright/test';
+import type { ApiMockHelper } from '../core/ApiMockHelper';
+import { mockAnimalsPage1 } from '../test-data/AnimalsPage/animals-page1';
+
+async function setupAuthMocks(apiMock: ApiMockHelper, page: Page, userRole: 'User' | 'AdminCAA' = 'User') {
+    await page.route('**/notificationHub/**', route => route.abort());
+    await apiMock.mockApiCall('**api/login', mockLoginResponse);
+    await apiMock.mockApiCall('**api/users/me', userRole === 'User' ? mockUserDataRegular : mockUserDataAdminCAA);
+    await apiMock.mockApiCall('**/api/animals?**', mockAnimalsPage1);
+    await apiMock.mockApiCall('http://localhost:5000/api/notifications**', []);
+}
 
 test.describe('Login Page', () => {
 
@@ -98,8 +109,7 @@ test.describe('Login Page', () => {
     test.describe('Successful Login', () => {
 
         test('should login successfully with valid credentials (User role)', async ({ pm, apiMock, page }) => {
-            await apiMock.mockApiCall('**/login', mockLoginResponse);
-            await apiMock.mockApiCall('**/users/me', mockUserDataRegular);
+            await setupAuthMocks(apiMock, page);
 
             const loginPage = pm.getLoginPage();
             const animalsPage = pm.getAnimalsPage();
@@ -113,8 +123,14 @@ test.describe('Login Page', () => {
         });
 
         test('should redirect AdminCAA to /admin after successful login', async ({ pm, apiMock, page }) => {
-            await apiMock.mockApiCall('**/login', mockLoginResponse);
-            await apiMock.mockApiCall('**/users/me', mockUserDataAdminCAA);
+            await setupAuthMocks(apiMock, page, 'AdminCAA');
+
+            await apiMock.mockApiCall('**/api/ownershiprequests?**', {
+                items: [],
+                currentPage: 1,
+                totalPages: 1,
+                totalCount: 0
+            });
 
             const loginPage = pm.getLoginPage();
             await loginPage.waitForPageToLoad();
@@ -126,9 +142,12 @@ test.describe('Login Page', () => {
             expect(page.url()).toContain('/admin');
         });
 
-        test('should display success toast on successful login', async ({ pm, apiMock}) => {
+        test('should display success toast on successful login', async ({ pm, apiMock, page}) => {
+            await page.route('**/notificationHub/**', route => route.abort());
+            await apiMock.mockApiCall('http://localhost:5000/api/notifications**', []); 
             await apiMock.mockApiCall('**/login', mockLoginResponse);
             await apiMock.mockApiCall('**/users/me', mockUserDataRegular);
+            await apiMock.mockApiCall('**/api/animals?**', mockAnimalsPage1);
 
             const loginPage = pm.getLoginPage();
             await loginPage.waitForPageToLoad();
@@ -265,8 +284,14 @@ test.describe('Login Page', () => {
         });
 
         test('should re-enable button after login completes', async ({ pm, apiMock, page }) => {
-            await apiMock.mockApiCall('**/login', mockLoginResponse);
-            await apiMock.mockApiCall('**/users/me', mockUserDataRegular);
+            await setupAuthMocks(apiMock, page);
+
+            await apiMock.mockApiCall('**/api/ownershiprequests?**', {
+                items: [],
+                currentPage: 1,
+                totalPages: 1,
+                totalCount: 0
+            });
 
             const loginPage = pm.getLoginPage();
             await loginPage.waitForPageToLoad();
@@ -334,8 +359,14 @@ test.describe('Login Page', () => {
     test.describe('User Flow', () => {
 
         test('should complete full login flow end-to-end', async ({ pm, apiMock, page }) => {
-            await apiMock.mockApiCall('**/login', mockLoginResponse);
-            await apiMock.mockApiCall('**/users/me', mockUserDataRegular);
+            await setupAuthMocks(apiMock, page);
+
+            await apiMock.mockApiCall('**/api/ownershiprequests?**', {
+                items: [],
+                currentPage: 1,
+                totalPages: 1,
+                totalCount: 0
+            });
 
             const loginPage = pm.getLoginPage();
             await loginPage.waitForPageToLoad();
@@ -355,6 +386,10 @@ test.describe('Login Page', () => {
         });
 
         test('should handle retry after failed login', async ({ pm, apiMock, page }) => {
+            await page.route('**/notificationHub/**', route => route.abort());
+            await apiMock.mockApiCall('http://localhost:5000/api/notifications**', []);
+            await apiMock.mockApiCall('**/api/animals?**', mockAnimalsPage1);
+
             let attemptCount = 0;
 
             await page.route('**/login', async (route) => {

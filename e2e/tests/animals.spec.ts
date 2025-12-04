@@ -74,7 +74,14 @@ test.describe('Animals Page - Animal Display & Data', () => {
         expect(displayedAge).toContain(firstAnimal.age.toString());
     });
 
-    test('should display "Raça desconhecida" when breed is null', async ({ pm, apiIntercept }) => {
+    test('should display "Raça desconhecida" when breed is null', async ({ pm, apiIntercept, page }) => {
+        await page.route('**/notificationHub/**', route => route.abort());
+        await page.route('http://localhost:5000/api/notifications**', route => route.fulfill({
+            status: 200,
+            contentType: 'application/json',
+            body: JSON.stringify([])
+        }));
+
         await apiIntercept.interceptAndModify<PagedList<Animal>>(
             '**/api/animals?**',
             (response) => {
@@ -97,8 +104,10 @@ test.describe('Animals Page - Animal Display & Data', () => {
         expect(firstBreed).toContain('Raça desconhecida');
     });
 
-    test('should handle singular vs plural age correctly', async ({ pm, apiMock }) => {
+    test('should handle singular vs plural age correctly', async ({ pm, apiMock, page }) => {
         await apiMock.mockApiCall('**/api/animals?**', mockAnimalsPage1);
+        await page.route('**/notificationHub/**', route => route.abort());
+        await apiMock.mockApiCall('http://localhost:5000/api/notifications**', []);
 
         await pm.navigateToAnimals(1);
 
@@ -135,6 +144,8 @@ test.describe('Animals Page - Animal Display & Data', () => {
 
     test('should navigate to animal details when clicking card', async ({ pm, apiMock, page }) => {
         await apiMock.mockApiCall('**/api/animals?**', mockAnimalsPage1);
+        await page.route('**/notificationHub/**', route => route.abort());
+        await apiMock.mockApiCall('http://localhost:5000/api/notifications**', []);
 
         await pm.navigateToAnimals(1);
 
@@ -172,8 +183,10 @@ test.describe('Animals Page - Pagination', () => {
         totalCount: 18
     };
 
-    test('should display pagination when multiple pages exist', async ({ pm, apiMock }) => {
+    test('should display pagination when multiple pages exist', async ({ pm, apiMock, page }) => {
         await apiMock.mockApiCall('**/api/animals?pageNumber=1', mockPage1);
+        await page.route('**/notificationHub/**', route => route.abort());
+        await apiMock.mockApiCall('http://localhost:5000/api/notifications**', []);
 
         await pm.navigateToAnimals(1);
 
@@ -185,8 +198,10 @@ test.describe('Animals Page - Pagination', () => {
         expect(isPaginationVisible).toBe(true);
     });
 
-    test('should hide pagination when only one page exists', async ({ pm, apiMock }) => {
+    test('should hide pagination when only one page exists', async ({ pm, apiMock, page }) => {
         await apiMock.mockApiCall('**/api/animals?**', mockAnimalsPage1);
+        await page.route('**/notificationHub/**', route => route.abort());
+        await apiMock.mockApiCall('http://localhost:5000/api/notifications**', []);
 
         await pm.navigateToAnimals(1);
 
@@ -330,6 +345,8 @@ test.describe('Animals Page - Filters', () => {
 
     test('should filter by animal name', async ({ pm, apiMock, page }) => {
         await apiMock.mockApiCall('**/api/animals?pageNumber=1', mockAnimalsPage1);
+        await page.route('**/notificationHub/**', route => route.abort());
+        await apiMock.mockApiCall('http://localhost:5000/api/notifications**', []);
 
         const filteredData = {
             ...mockAnimalsPage1,
@@ -362,6 +379,8 @@ test.describe('Animals Page - Filters', () => {
 
     test('should filter by species', async ({ pm, apiMock, page }) => {
         await apiMock.mockApiCall('**/api/animals?pageNumber=1', mockAnimalsPage1);
+        await page.route('**/notificationHub/**', route => route.abort());
+        await apiMock.mockApiCall('http://localhost:5000/api/notifications**', []);
 
         const dogAnimals = {
             ...mockAnimalsPage1,
@@ -388,6 +407,8 @@ test.describe('Animals Page - Filters', () => {
 
     test('should filter by multiple criteria', async ({ pm, apiMock, page }) => {
         await apiMock.mockApiCall('**/api/animals?pageNumber=1', mockAnimalsPage1);
+        await page.route('**/notificationHub/**', route => route.abort());
+        await apiMock.mockApiCall('http://localhost:5000/api/notifications**', []);
 
         const filteredData = {
             ...mockAnimalsPage1,
@@ -416,6 +437,8 @@ test.describe('Animals Page - Filters', () => {
 
     test('should clear all filters when clicking clear button', async ({ pm, apiMock, page }) => {
         await apiMock.mockApiCall('**/api/animals?**', mockAnimalsPage1);
+        await page.route('**/notificationHub/**', route => route.abort());
+        await apiMock.mockApiCall('http://localhost:5000/api/notifications**', []);
 
         // Start with filters applied
         await page.goto('/animals?page=1&species=Dog&size=Large&name=Rex');
@@ -469,6 +492,8 @@ test.describe('Animals Page - Filters', () => {
 
     test('should show "filtrado" indicator when filters are active', async ({ pm, apiMock, page }) => {
         await apiMock.mockApiCall('**/api/animals?pageNumber=1&Species=Dog', mockAnimalsPage1);
+        await page.route('**/notificationHub/**', route => route.abort());
+        await apiMock.mockApiCall('http://localhost:5000/api/notifications**', []);
 
         await page.goto('/animals?page=1&species=Dog');
 
@@ -484,8 +509,10 @@ test.describe('Animals Page - Filters', () => {
 
 test.describe('Animals Page - Empty States', () => {
 
-    test('should display empty state when no animals exist', async ({ pm, apiMock }) => {
+    test('should display empty state when no animals exist', async ({ pm, apiMock, page }) => {
         await apiMock.mockApiCall('**/api/animals?**', mockAnimalsEmpty);
+        await page.route('**/notificationHub/**', route => route.abort());
+        await apiMock.mockApiCall('http://localhost:5000/api/notifications**', []);
 
         await pm.navigateToAnimals(1);
 
@@ -500,8 +527,20 @@ test.describe('Animals Page - Empty States', () => {
 
     test('should display empty state when filters return no results', async ({ pm, apiMock, page }) => {
         test.setTimeout(60000)
+
+        // 🔥 ADICIONA LISTENER PARA VER O URL REAL
+        page.on('request', req => {
+            if (req.url().includes('/api/animals')) {
+                console.log('📡 REQUEST URL:', req.url());
+            }
+        });
+
+
+        await page.route('**/notificationHub/**', route => route.abort());
+        await apiMock.mockApiCall('http://localhost:5000/api/notifications**', []);
         await apiMock.mockApiCall('**/api/animals?pageNumber=1', mockAnimalsPage1);
-        await apiMock.mockApiCall('**/api/animals?pageNumber=1&Species=Bird', mockAnimalsEmpty);
+        //await apiMock.mockApiCall('**/api/animals?pageNumber=1&Species=Bird', mockAnimalsEmpty);
+        await apiMock.mockApiCall('**/api/animals?pageNumber=1&Breed=Akita', mockAnimalsEmpty);
 
         await pm.navigateToAnimals(1);
 
@@ -520,6 +559,8 @@ test.describe('Animals Page - Empty States', () => {
 
     test('should still show filter form in empty state', async ({ pm, apiMock, page }) => {
         await apiMock.mockApiCall('**/api/animals?**', mockAnimalsEmpty);
+        await page.route('**/notificationHub/**', route => route.abort());
+        await apiMock.mockApiCall('http://localhost:5000/api/notifications**', []);
 
         await pm.navigateToAnimals(1);
 
@@ -531,8 +572,10 @@ test.describe('Animals Page - Empty States', () => {
 
 test.describe('Animals Page - Error Handling', () => {
 
-    test('should display error page on 500 server error', async ({ pm, apiMock }) => {
+    test('should display error page on 500 server error', async ({ pm, apiMock, page }) => {
         await apiMock.mockError('**/api/animals?**', 500, 'Internal Server Error');
+        await page.route('**/notificationHub/**', route => route.abort());
+        await apiMock.mockApiCall('http://localhost:5000/api/notifications**', []);
 
         await pm.navigateToAnimals(1);
 
@@ -696,7 +739,9 @@ test.describe('Animals Page - Performance & UX', () => {
         expect(count).toBeGreaterThan(0);
     });
 
-    test('should load page within acceptable time', async ({ pm, apiMock }) => {
+    test('should load page within acceptable time', async ({ pm, apiMock, page }) => {
+        await page.route('**/notificationHub/**', route => route.abort());
+        await apiMock.mockApiCall('http://localhost:5000/api/notifications**', []);
         await apiMock.mockApiCall('**/api/animals?**', mockAnimalsPage1);
 
         const startTime = Date.now();

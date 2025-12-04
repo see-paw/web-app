@@ -10,6 +10,8 @@ import Login from "@/pages/Auth/Login/Login";
 import {loginLoader} from "@/routes/loaders/login";
 import CreateAnimal from "@/pages/Animals/CreateAnimal/CreateAnimal";
 import {createAnimalLoader} from "@/routes/loaders/createAnimal";
+import {ownershipRequestsLoader} from "@/routes/loaders/ownershipRequests";
+import OwnershipRequests from "@/pages/AdminCAA/OwnershipRequests/OwnershipRequests";
 import SelectFosterValue from "@/pages/Fosterings/NewFostering/SelectValue/SelectFosterValue";
 import FosterForm from "@/pages/Fosterings/NewFostering/FosteringForm/FosteringForm.js";
 import FosterConfirmation from "@/pages/Fosterings/NewFostering/Confirmation/FosterConfirmation";
@@ -29,6 +31,7 @@ const router = createBrowserRouter([
             {path: "animals", element: <Animals/>, loader: animalsLoader},
             {path: "animals/new", element: <CreateAnimal/>, loader: createAnimalLoader},
             {path: "animals/:animalId", element: <AnimalDetails/>, loader: animalDetailsLoader},
+            {path: "admin/ownership-requests", element: <OwnershipRequests/>, loader: ownershipRequestsLoader},
             {path: "login", element: <Login/>, loader: loginLoader},
             {path: "animals/:animalId/foster",element: <SelectFosterValue/>,loader: newFosteringLoader},
             {path: "animals/:animalId/foster/form",element: <FosterForm/>,loader: newFosteringLoader},

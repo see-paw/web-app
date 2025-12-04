@@ -47,7 +47,7 @@ function Login() {
             const currentUser = useAuthStore.getState().user;
             
             if (currentUser?.role === "AdminCAA") {
-                navigate("/admin");
+                navigate("/admin/ownership-requests");
             } else {
                 navigate("/animals");
             }

@@ -29,6 +29,7 @@ export interface NavItem {
  */
 export interface NavbarProps {
     logo?: { img: string; alt: string };
+    notificationsDropdown?: ReactNode;
     items?: NavItem[];
 }
 
@@ -41,7 +42,7 @@ export interface NavbarProps {
  * @param {Array} [props.items] - Optional array of navigation items with icons and routes
  * @returns {JSX.Element} A navigation bar element
  */
-export const Navbar = ({logo, items}: NavbarProps) => {
+export const Navbar = ({logo, notificationsDropdown, items}: NavbarProps) => {
     const navigate = useNavigate();
     const logout = useAuthStore(s => s.logout);
 
@@ -66,9 +67,14 @@ export const Navbar = ({logo, items}: NavbarProps) => {
                 </div>
             )}
 
-            {items && items.length > 0 && (
+            {(notificationsDropdown || (items && items.length > 0)) && (
                 <ul className={styles.navItems}>
-                    {items.map((item) => (
+                    {notificationsDropdown && (
+                        <li className={styles.navItem}>
+                            {notificationsDropdown}
+                        </li>
+                    )}
+                    {items && items.map((item) => (
                         <li key={item.id} className={styles.navItem}>
                             {item.isLogout ? (
                                 <button

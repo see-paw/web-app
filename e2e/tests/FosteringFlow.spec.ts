@@ -35,6 +35,11 @@ async function setAuthenticatedUser(page: Page) {
 test.describe("Fostering Flow (Select → Form → Confirmation)", () => {
   test.use({ ignoreHTTPSErrors: true });
 
+  test.beforeEach(async ({ page, apiMock }) => {
+    await page.route('**/notificationHub/**', route => route.abort());
+    await apiMock.mockApiCall('http://localhost:5000/api/notifications**', []);
+  });
+
   // ---------------------------------------------------------------------------
   // 1) SELECT FOSTER VALUE PAGE
   // ---------------------------------------------------------------------------

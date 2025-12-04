@@ -8,6 +8,8 @@ import {ImageGalleryModalComponent} from "./components/ImageGalleryModal.compone
 import {LoginPage} from "./pages/login.page";
 import {NavbarComponent} from "./components/navbar.component";
 import {CreateAnimalPage} from "./pages/createAnimal.page";
+import { OwnershipRequestsTableComponent } from "./components/ownershipRequestsTable.component";
+import { OwnershipRequestsPage } from "./pages/ownershipRequests";
 import { SelectFosterValuePage } from "./pages/selectFosterValue.page";
 import { FosteringFormPage } from "./pages/fosteringForm.page";
 import { FosterConfirmationPage } from "./pages/fosterConfirmation.page";
@@ -90,6 +92,14 @@ export class PageManager {
     getFosterConfirmationPage(): FosterConfirmationPage {
         return this.fosterConfirmationPage;
     }
+
+    getOwnershipRequestsTableComponent(): OwnershipRequestsTableComponent {
+        return new OwnershipRequestsTableComponent(this.page);
+    }
+
+    getOwnershipRequestsPage(): OwnershipRequestsPage {
+    return new OwnershipRequestsPage(this.page);
+}
 
     async navigateToAnimals(page: number = 1) {
         await this.page.goto(`/animals?page=${page}`);

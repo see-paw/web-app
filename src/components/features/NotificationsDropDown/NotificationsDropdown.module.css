@@ -1,0 +1,110 @@
+.container {
+    position: relative;
+}
+
+.bellButton {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    border-radius: var(--radius-base);
+    transition: background-color var(--transition-fast);
+}
+
+.bellButton:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+.bellIcon {
+    width: 24px;
+    height: 24px;
+    color: #333333;
+}
+
+.badge {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    background-color: #ef4444;
+    color: white;
+    font-size: 11px;
+    font-weight: var(--font-weight-bold);
+    padding: 2px 6px;
+    border-radius: 10px;
+    min-width: 18px;
+    text-align: center;
+    line-height: 1.2;
+}
+
+.dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    width: 380px;
+    max-height: 500px;
+    background-color: white;
+    border-radius: var(--radius-lg);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    z-index: 2000;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.dropdownHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--spacing-4);
+    border-bottom: 1px solid var(--color-neutral-200);
+}
+
+.dropdownHeader h3 {
+    margin: 0;
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+}
+
+.count {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+}
+
+.dropdownContent {
+    overflow-y: auto;
+    max-height: 400px;
+}
+
+.emptyState {
+    padding: var(--spacing-8) var(--spacing-4);
+    text-align: center;
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
+}
+
+@media (max-width: 768px) {
+    .dropdown {
+        width: 320px;
+        max-height: 400px;
+    }
+
+    .dropdownContent {
+        max-height: 320px;
+    }
+}
+
+@media (max-width: 480px) {
+    .dropdown {
+        position: fixed;
+        top: 80px;
+        right: 10px;
+        left: 10px;
+        width: auto;
+    }
+}
