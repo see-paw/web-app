@@ -1,0 +1,46 @@
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  text-align: center;
+}
+
+.title {
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: #333333;
+  margin-bottom: 1.5rem;
+}
+
+.paw {
+  font-size: 2.2rem;
+  margin-right: 0.5rem;
+}
+
+.paragraph {
+  font-size: 1.1rem;
+  color: #555555;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.slogan {
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: #333333;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+  font-style: italic;
+}
+
+.illustration {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.illustration img {
+  width: 270px;
+  opacity: 0.95;
+  border-radius: 16px;
+}

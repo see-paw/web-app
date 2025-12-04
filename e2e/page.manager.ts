@@ -10,6 +10,10 @@ import {NavbarComponent} from "./components/navbar.component";
 import {CreateAnimalPage} from "./pages/createAnimal.page";
 import { OwnershipRequestsTableComponent } from "./components/ownershipRequestsTable.component";
 import { OwnershipRequestsPage } from "./pages/ownershipRequests";
+import { SelectFosterValuePage } from "./pages/selectFosterValue.page";
+import { FosteringFormPage } from "./pages/fosteringForm.page";
+import { FosterConfirmationPage } from "./pages/fosterConfirmation.page";
+
 
 export class PageManager {
     private readonly animalsPage: AnimalsPage;
@@ -21,6 +25,10 @@ export class PageManager {
     private readonly loginPage: LoginPage;
     private readonly navbarComponent: NavbarComponent;
     private readonly createAnimalPage: CreateAnimalPage;
+    private readonly selectFosterValuePage: SelectFosterValuePage;
+    private readonly fosteringFormPage: FosteringFormPage;
+    private readonly fosterConfirmationPage: FosterConfirmationPage;
+
 
     constructor(private page: Page) {
         this.animalsPage = new AnimalsPage(page);
@@ -32,6 +40,10 @@ export class PageManager {
         this.loginPage = new LoginPage(page);
         this.navbarComponent = new NavbarComponent(page);
         this.createAnimalPage = new CreateAnimalPage(page);
+        this.selectFosterValuePage = new SelectFosterValuePage(page);
+        this.fosteringFormPage = new FosteringFormPage(page);
+        this.fosterConfirmationPage = new FosterConfirmationPage(page);
+
     }
 
     getAnimalsPage(): AnimalsPage {
@@ -69,6 +81,17 @@ export class PageManager {
     getCreateAnimalPage(): CreateAnimalPage {
         return this.createAnimalPage;
     }
+    getSelectFosterValuePage(): SelectFosterValuePage {
+    return this.selectFosterValuePage;
+}
+
+    getFosteringFormPage(): FosteringFormPage {
+        return this.fosteringFormPage;
+    }
+
+    getFosterConfirmationPage(): FosterConfirmationPage {
+        return this.fosterConfirmationPage;
+    }
 
     getOwnershipRequestsTableComponent(): OwnershipRequestsTableComponent {
         return new OwnershipRequestsTableComponent(this.page);
@@ -97,4 +120,17 @@ export class PageManager {
     async navigateToLogin() {
         await this.page.goto('/login');
     }
+
+    async navigateToFosterSelectValue(animalId: string): Promise<void> {
+    await this.page.goto(`/animals/${animalId}/foster`);
+    }
+
+    async navigateToFosteringForm(animalId: string): Promise<void> {
+        await this.page.goto(`/animals/${animalId}/foster/form`);
+    }
+
+    async navigateToFosteringConfirmation(animalId: string): Promise<void> {
+        await this.page.goto(`/animals/${animalId}/foster/confirmation`);
+    }
+
 }

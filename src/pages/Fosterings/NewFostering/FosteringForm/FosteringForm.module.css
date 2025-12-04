@@ -1,0 +1,86 @@
+/* Container */
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+/* Title */
+.title {
+  text-align: center;
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+}
+
+/* API Error box */
+.apiError {
+  background: #ffe1e1;
+  color: #c20000;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+/* Form wrapper */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Field wrapper */
+.field {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Inputs */
+.input {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+/* Error text */
+.error {
+  color: #c20000;
+  font-size: 0.9rem;
+  margin-top: 5px;
+}
+
+/* --- Principal buttons (Voltar + Continuar) --- */
+/* Button wrapper */
+.buttonsWrapper {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 2.5rem;
+}
+
+.primaryButton {
+    background-color: #f43f5e; 
+    color: white;
+    padding: 0.75rem 1.6rem;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.15s ease;
+    box-shadow: 0 2px 6px rgba(244, 63, 94, 0.3);
+}
+
+.primaryButton:hover {
+    background-color: #e11d48;
+    transform: translateY(-2px);
+}
+
+.primaryButton:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+

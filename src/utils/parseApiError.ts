@@ -66,6 +66,12 @@ export function parseApiError(error: unknown): ApiError {
                 message: data?.message || "Recurso não encontrado",
                 statusCode: 404
             };
+        case 409:
+            return {
+                type: ApiErrorType.CONFLICT,
+                message: data?.message || data || "Conflito com estado atual", 
+                statusCode: 409
+            };
         case 500:
         case 502:
         case 503:

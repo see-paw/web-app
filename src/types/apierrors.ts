@@ -11,6 +11,7 @@ export const ApiErrorType = {
     TIMEOUT: "TIMEOUT",
     CANCELLED: "CANCELLED",
     UNKNOWN: "UNKNOWN",
+    CONFLICT: "CONFLICT",
 } as const;
 
 /**

@@ -12,6 +12,32 @@ import {
 //  logic, attribute formatting, and error handling for the Animal Details
 // ======================================================================
 test.describe('Animal Details Page', () => {
+    test.beforeEach(async ({ page, apiMock }) => {
+        await page.route('**/notificationHub/**', route => route.abort());
+        await apiMock.mockApiCall('http://localhost:5000/api/notifications**', []);
+        
+        await page.addInitScript(() => {
+            // Zustand persist format
+            window.localStorage.setItem(
+                "seepaw-auth",
+                JSON.stringify({
+                    state: {
+                        user: {
+                            id: "test-user",
+                            email: "test@example.com",
+                            role: "User",
+                        },
+                        tokens: {
+                            accessToken: "dummy-access",
+                            refreshToken: "dummy-refresh"
+                        }
+                    }
+                })
+            );
+        });
+});
+
+
 
     // ========================================
     // BASIC RENDERING TESTS
@@ -492,5 +518,82 @@ test.describe('Animal Details Page', () => {
         // Page should still show a generic error
         const errorMessage = page.locator('text=/error|erro/i');
         await expect(errorMessage).toBeVisible({ timeout: 10000 });
+    });
+
+    // ========================================
+    // FOSTERING PROGRESS BAR TESTS
+    // ========================================
+
+    test.use({ ignoreHTTPSErrors: true });
+    test('should display fostering progress bar when animal has cost and currentSupportValue', async ({ page, pm, apiMock }) => {
+
+        const updated = { ...mockAnimalMaria, currentSupportValue: 10 };
+        await apiMock.mockApiCall('**/api/animals/**', updated);
+
+        await page.goto(`/animals/${mockAnimalMaria.id}`);
+
+        const animalDetailsPage = pm.getAnimalDetailsPage();
+        await animalDetailsPage.waitForPageToLoad();
+
+        expect(await animalDetailsPage.isFosteringProgressBarVisible()).toBe(true);
+    });
+
+    test.use({ ignoreHTTPSErrors: true });
+    test('should display correct fostering percentage', async ({ page, pm, apiMock }) => {
+
+        const updated = { ...mockAnimalMaria, currentSupportValue: 6 }; // 6 / 30 = 20%
+        await apiMock.mockApiCall('**/api/animals/**', updated);
+
+        await page.goto(`/animals/${mockAnimalMaria.id}`);
+
+        const animalDetailsPage = pm.getAnimalDetailsPage();
+        await animalDetailsPage.waitForPageToLoad();
+
+        const percentage = await animalDetailsPage.getFosteringProgressPercentage();
+        expect(percentage).toBe("20%"); // exact formatting
+    });
+
+    test.use({ ignoreHTTPSErrors: true });
+    test('should display fostering progress message', async ({ page, pm, apiMock }) => {
+
+        const updated = { ...mockAnimalMaria, currentSupportValue: 10 }; // missing = 20€
+        await apiMock.mockApiCall('**/api/animals/**', updated);
+
+        await page.goto(`/animals/${mockAnimalMaria.id}`);
+
+        const animalDetailsPage = pm.getAnimalDetailsPage();
+        await animalDetailsPage.waitForPageToLoad();
+
+        const msg = await animalDetailsPage.getFosteringProgressMessage();
+        expect(msg).toContain("Só faltam 20€");
+    });
+
+    // ========================================
+    // FOSTER BUTTON TESTS
+    // ========================================
+
+    test.use({ ignoreHTTPSErrors: true });
+    test('should display foster button when user is authenticated', async ({ page, pm, apiMock }) => {
+        await apiMock.mockApiCall('**/api/animals/**', mockAnimalMaria);
+
+        await page.goto(`/animals/${mockAnimalMaria.id}`);
+
+        const animalDetailsPage = pm.getAnimalDetailsPage();
+        await animalDetailsPage.waitForPageToLoad();
+
+        expect(await animalDetailsPage.isFosteringButtonEnabled()).toBe(true);
+    });
+
+    test.use({ ignoreHTTPSErrors: true });
+    test('should navigate to fostering flow when clicking the foster button', async ({ page, pm, apiMock }) => {
+        await apiMock.mockApiCall('**/api/animals/**', mockAnimalMaria);
+
+        await page.goto(`/animals/${mockAnimalMaria.id}`);
+
+        const animalDetailsPage = pm.getAnimalDetailsPage();
+        await animalDetailsPage.waitForPageToLoad();
+
+        await animalDetailsPage.clickFosteringButton();
+        await expect(page).toHaveURL(`/animals/${mockAnimalMaria.id}/foster`);
     });
 });
