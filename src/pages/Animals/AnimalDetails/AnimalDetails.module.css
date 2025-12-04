@@ -12,13 +12,11 @@
     margin-top: var(--spacing-8);
 }
 
-/* Coluna esquerda - Imagens (sticky) */
 .layout > :first-child {
     position: sticky;
     top: calc(var(--navbar-height) + var(--spacing-4));
 }
 
-/* Responsivo */
 @media (max-width: 1024px) {
     .layout {
         grid-template-columns: 1fr 1fr;
@@ -41,3 +39,36 @@
         position: static;
     }
 }
+
+   .actionButtons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem; 
+  margin-top: 1.5rem;
+}
+
+.primaryButton {
+  background-color: #f43f5e; 
+  color: white;
+  padding: 0.75rem 1.4rem;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.15s ease;
+  box-shadow: 0 2px 6px rgba(244, 63, 94, 0.3);
+}
+
+.primaryButton:hover {
+  background-color: #e11d48; 
+  transform: translateY(-2px);
+}
+
+.primaryButton:active {
+  transform: translateY(0);
+}
+
+
+
+

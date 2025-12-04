@@ -1,92 +1,135 @@
-﻿import {useParams} from "react-router-dom";
-import {useQuery} from "@tanstack/react-query";
-import {animalsApi} from "@/api/animals";
+﻿import { useParams, useNavigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { animalsApi } from "@/api/animals";
+import { useIsAuth } from "@/hooks/useIsAuth";
 
 import styles from "./AnimalDetails.module.css";
 import AnimalHeader from "@/components/common/AnimalHeader/AnimalHeader";
 import AnimalImages from "@/components/features/AnimalImages/AnimalImages";
 import AnimalInfo from "@/components/features/AnimalInfo/AnimalInfo";
+import { ProgressBar } from "@/components/features/ProgressBar/ProgressBar";
 
 /**
  * AnimalDetails page component.
  *
  * @component
- * @returns {JSX.Element | null} The full animal details page or fallback UI (loading/error)
  *
  * @description
- * This page displays detailed information about a specific animal, including:
- *  - Header with the animal name and correct article (o/a)
- *  - Image gallery (main image, thumbnails, modal)
- *  - Descriptive attributes (species, breed, sex, size, colour, age, sterilization, features)
+ * Displays full information about a specific animal, including:
+ * - Header with the correct article (o/a)
+ * - Photo gallery
+ * - Biological and descriptive attributes
  *
- * Data is fetched using **React Query**, providing:
- *  - Request deduplication
- *  - Caching
- *  - Loading & error state management
- *  - AbortSignal support for request cancellation
+ * Fetches data using **React Query**, providing:
+ * - Caching and deduplication
+ * - Abortable requests using `signal`
+ * - Built-in loading and error handling
  *
- * The page:
- *  - Uses `useParams()` to retrieve the dynamic `animalId` from the URL
- *  - Queries `animalsApi.getAnimalDetails()` only when `animalId` exists
- *  - Shows loading and error states with test-friendly `data-testid` markers
+ * Includes the **Foster** button, which only appears when:
+ * - The user is authenticated (`useIsAuth()`)
+ * - The backend will later validate role = "User"
  *
- * @example
- * ```tsx
- * // In React Router config:
- * <Route path="/animals/:animalId" element={<AnimalDetails />} />
- * ```
+ * @returns {JSX.Element | null}
  */
 function AnimalDetails() {
-    /** Retrieve the animalId from the URL (e.g., /animals/123) */
-    const {animalId} = useParams();
+    /** Read the dynamic :animalId from the route (e.g., /animals/123) */
+    const { animalId } = useParams();
+
+    /** Check if a user is authenticated so we can conditionally show the Foster button */
+    const isAuth = useIsAuth();
+
+    /** Used to navigate to the fostering flow */
+    const navigate = useNavigate();
 
     /**
-     * Fetch the animal details from the API.
+     * Fetch detailed animal information from the API.
      *
-     * - queryKey ensures caching per animalId
-     * - queryFn uses AbortSignal to support cancellation
-     * - enabled prevents API calls when animalId is undefined
-     * - staleTime reduces refetch frequency during short revisits
+     * React Query:
+     * - caches the result under ["animal", animalId]
+     * - prevents the query if animalId is undefined
+     * - uses abortable fetch via request signal
      */
-    const { data: animal, isLoading, isError, error } = useQuery({
-        queryKey:["animal", animalId],
-        queryFn:({signal}) => animalsApi.getAnimalDetails({
-            id:animalId!, // guaranteed non-null because enabled prevents undefined calls
-            signal: signal,
-        }),
-        enabled: !!animalId, // queryFn is called only when exists animalId
-        staleTime:5000
+    const {
+        data: animal,
+        isLoading,
+        isError,
+        error
+    } = useQuery({
+        queryKey: ["animal", animalId],
+        queryFn: ({ signal }) =>
+            animalsApi.getAnimalDetails({
+                id: animalId!,
+                signal,
+            }),
+        enabled: !!animalId, // prevents accidental undefined calls
+        staleTime: 5000,
     });
 
-
-    /** Error State */
+    /** Error state */
     if (isError) {
         return <p data-testid="error-message">{error.message}</p>;
     }
 
-    /** Loading State */
+    /** Loading state */
     if (isLoading) {
-        return <p data-testid="loading-message">A carregar...</p>;
+        return <p data-testid="loading-message">Loading...</p>;
     }
 
-    /** Safety fallback, should not occur because React Query prevents null unless error */
+    /** Safety fallback — should never occur because of React Query */
     if (!animal) {
         return null;
     }
 
-    /** Main Page UI */
+     const missing = Math.max(animal.cost - animal.currentSupportValue, 0);
+
+    /**
+     * Main Page UI
+     */
     return (
         <div className={styles.page}>
             <AnimalHeader name={animal.name} sex={animal.sex} />
 
-            <div className={styles.layout} >
-                {<AnimalImages images={animal.images} />}
+
+          <div className={styles.layout}>
+            <AnimalImages images={animal.images} />
+            <div>
                 <AnimalInfo animal={animal} />
+
+                 {/* Progress Bar */}
+                    <div className={styles.progressSection}>
+                        <ProgressBar
+                            current={animal.currentSupportValue}
+                            max={animal.cost}
+                        />
+                        <p className={styles.progressText} data-testid="fostering-progress-message">
+                            Só faltam {missing}€ para {animal.name} ser um patudo feliz!
+                        </p>
+                    </div>
+
+                <div className={styles.actionButtons}>
+                    <button
+                        className={styles.primaryButton}
+                        onClick={() => navigate("/animals")}
+                    >
+                        Voltar ao catálogo
+                    </button>
+                     {/* Foster button — only visible if the user is authenticated */}
+                    {isAuth && (
+                        <button
+                            data-testid="fostering-button"
+                            className={styles.primaryButton}
+                            onClick={() => navigate(`/animals/${animal.id}/foster`)}
+                        >
+                            Apadrinhar
+                        </button>
+                    )}
+                </div>
             </div>
         </div>
+
+    </div>
+        
     );
-
-
 }
 
 export default AnimalDetails;
