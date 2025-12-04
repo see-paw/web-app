@@ -1,0 +1,160 @@
+/* Overlay de fundo escuro */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--color-background-overlay);
+    backdrop-filter: blur(4px);
+    z-index: var(--z-index-modal);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-4);
+    animation: fadeIn var(--transition-fast);
+}
+
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Container do modal */
+.modal {
+    position: relative;
+    width: 100%;
+    max-width: 1200px;
+    max-height: 90vh;
+    background: var(--color-background-primary);
+    border-radius: var(--radius-2xl);
+    box-shadow: var(--shadow-xl);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: slideUp var(--transition-base);
+}
+
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Wrapper da imagem */
+.imageWrapper {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-12);
+}
+
+.image {
+    max-width: 100%;
+    max-height: 80vh;
+    object-fit: contain;
+    border-radius: var(--radius-lg);
+}
+
+/* Botão de fechar */
+.closeButton {
+    position: absolute;
+    top: var(--spacing-4);
+    right: var(--spacing-4);
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-full);
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(8px);
+    box-shadow: var(--shadow-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--font-size-2xl);
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    z-index:  200002;
+    border: 2px solid transparent;
+}
+
+.closeButton:hover {
+    background: var(--color-primary-500);
+    color: var(--color-text-inverse);
+    transform: rotate(90deg) scale(1.1);
+    border-color: var(--color-primary-600);
+}
+
+/* Botões de navegação (anterior/próximo) */
+.navButton {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 56px;
+    height: 56px;
+    border-radius: var(--radius-full);
+    background: var(--color-background-primary);
+    box-shadow: var(--shadow-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--font-size-4xl);
+    color: var(--color-primary-500);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    z-index: 10;
+}
+
+.navButton:hover {
+    background: var(--color-primary-500);
+    color: var(--color-text-inverse);
+    transform: translateY(-50%) scale(1.1);
+}
+
+/* Contador de imagens */
+.counter {
+    position: absolute;
+    bottom: var(--spacing-4);
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--color-background-primary);
+    padding: var(--spacing-2) var(--spacing-4);
+    border-radius: var(--radius-full);
+    box-shadow: var(--shadow-md);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-secondary);
+    z-index: 10;
+}
+
+/* Mobile responsivo */
+@media (max-width: 768px) {
+    .imageWrapper {
+        padding: var(--spacing-8);
+    }
+
+    .navButton {
+        width: 48px;
+        height: 48px;
+        font-size: var(--font-size-3xl);
+    }
+
+    .closeButton {
+        width: 36px;
+        height: 36px;
+        font-size: var(--font-size-xl);
+    }
+}

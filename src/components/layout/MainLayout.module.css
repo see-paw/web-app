@@ -1,0 +1,40 @@
+.layout {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.backgroundWrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background-image: url('../../assets/background1.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+.contentWrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    z-index: 1;
+}
+
+.mainContent {
+    flex: 1;
+    padding: var(--spacing-4);
+    margin-top: var(--navbar-height);
+}
+
+@media (max-width: 768px) {
+    .mainContent {
+        padding: var(--spacing-2);
+    }
+}

@@ -1,0 +1,136 @@
+import {AnimalsPage} from "./pages/animals.page";
+import {Page} from "@playwright/test";
+import PaginationComponent from "./components/PaginationComponent";
+import {ErrorPage} from "./pages/error.page";
+import {AnimalDetailsPage} from "./pages/animalDetails.page";
+import {AnimalHeaderComponent} from "./components/AnimalHeader.component";
+import {ImageGalleryModalComponent} from "./components/ImageGalleryModal.component";
+import {LoginPage} from "./pages/login.page";
+import {NavbarComponent} from "./components/navbar.component";
+import {CreateAnimalPage} from "./pages/createAnimal.page";
+import { OwnershipRequestsTableComponent } from "./components/ownershipRequestsTable.component";
+import { OwnershipRequestsPage } from "./pages/ownershipRequests";
+import { SelectFosterValuePage } from "./pages/selectFosterValue.page";
+import { FosteringFormPage } from "./pages/fosteringForm.page";
+import { FosterConfirmationPage } from "./pages/fosterConfirmation.page";
+
+
+export class PageManager {
+    private readonly animalsPage: AnimalsPage;
+    private readonly errorPage: ErrorPage;
+    private readonly paginationComponent: PaginationComponent;
+    private readonly animalDetailsPage: AnimalDetailsPage;
+    private readonly imageGalleryModalComponent: ImageGalleryModalComponent;
+    private readonly animalHeaderComponent: AnimalHeaderComponent;
+    private readonly loginPage: LoginPage;
+    private readonly navbarComponent: NavbarComponent;
+    private readonly createAnimalPage: CreateAnimalPage;
+    private readonly selectFosterValuePage: SelectFosterValuePage;
+    private readonly fosteringFormPage: FosteringFormPage;
+    private readonly fosterConfirmationPage: FosterConfirmationPage;
+
+
+    constructor(private page: Page) {
+        this.animalsPage = new AnimalsPage(page);
+        this.errorPage = new ErrorPage(page);
+        this.paginationComponent = new PaginationComponent(page);
+        this.animalDetailsPage = new AnimalDetailsPage(page);
+        this.imageGalleryModalComponent = new ImageGalleryModalComponent(page);
+        this.animalHeaderComponent = new AnimalHeaderComponent(page);
+        this.loginPage = new LoginPage(page);
+        this.navbarComponent = new NavbarComponent(page);
+        this.createAnimalPage = new CreateAnimalPage(page);
+        this.selectFosterValuePage = new SelectFosterValuePage(page);
+        this.fosteringFormPage = new FosteringFormPage(page);
+        this.fosterConfirmationPage = new FosterConfirmationPage(page);
+
+    }
+
+    getAnimalsPage(): AnimalsPage {
+        return this.animalsPage;
+    }
+
+    getAnimalDetailsPage(): AnimalDetailsPage {
+        return this.animalDetailsPage;
+    }
+
+    getPaginationComponent(): PaginationComponent {
+        return this.paginationComponent;
+    }
+
+    getErrorPage() : ErrorPage {
+        return this.errorPage;
+    }
+
+    getImageGalleryModalComponent(): ImageGalleryModalComponent {
+        return this.imageGalleryModalComponent;
+    }
+
+    getAnimalHeaderComponent(): AnimalHeaderComponent {
+        return this.animalHeaderComponent;
+    }
+
+    getLoginPage(): LoginPage {
+        return this.loginPage;
+    }
+
+    getNavbarComponent(): NavbarComponent {
+        return this.navbarComponent;
+    }
+
+    getCreateAnimalPage(): CreateAnimalPage {
+        return this.createAnimalPage;
+    }
+    getSelectFosterValuePage(): SelectFosterValuePage {
+    return this.selectFosterValuePage;
+}
+
+    getFosteringFormPage(): FosteringFormPage {
+        return this.fosteringFormPage;
+    }
+
+    getFosterConfirmationPage(): FosterConfirmationPage {
+        return this.fosterConfirmationPage;
+    }
+
+    getOwnershipRequestsTableComponent(): OwnershipRequestsTableComponent {
+        return new OwnershipRequestsTableComponent(this.page);
+    }
+
+    getOwnershipRequestsPage(): OwnershipRequestsPage {
+    return new OwnershipRequestsPage(this.page);
+}
+
+    async navigateToAnimals(page: number = 1) {
+        await this.page.goto(`/animals?page=${page}`);
+    }
+
+    async navigateToAnimalDetails(animalId: string): Promise<void> {
+        await this.page.goto(`/animals/${animalId}`);
+    }
+
+    async navigateToCreateAnimal(): Promise<void> {
+        await this.page.goto('/animals/new');
+    }
+
+    async navigateToHome() {
+        await this.page.goto('/');
+    }
+
+    async navigateToLogin() {
+        await this.page.goto('/login');
+    }
+
+    async navigateToFosterSelectValue(animalId: string): Promise<void> {
+    await this.page.goto(`/animals/${animalId}/foster`);
+    }
+
+    async navigateToFosteringForm(animalId: string): Promise<void> {
+        await this.page.goto(`/animals/${animalId}/foster/form`);
+    }
+
+    async navigateToFosteringConfirmation(animalId: string): Promise<void> {
+        await this.page.goto(`/animals/${animalId}/foster/confirmation`);
+    }
+
+}

@@ -1,0 +1,19 @@
+.field {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+.input {
+  margin-top: .4rem;
+  padding: .75rem 1rem;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+}
+
+.error {
+  color: #d9534f;
+  font-size: 13px;
+  margin-top: 4px;
+}
