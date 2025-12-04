@@ -41,7 +41,7 @@ function NotificationsDropdown() {
      * Subscribe to real-time notifications
      */
     useEffect(() => {
-        const cleanup = onNotification?.((notification) => {
+        const cleanup = onNotification?.(() => {
             queryClient.invalidateQueries({ queryKey: ["notifications"] });
         });
         return cleanup;

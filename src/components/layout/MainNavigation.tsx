@@ -1,7 +1,7 @@
 import {Navbar} from "@/components";
 import seepaw from "/src/assets/seepaw.png"
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faArrowRightFromBracket, faBell, faCirclePlus, faClipboardList, faHeart, faPaw, faUser} from "@fortawesome/free-solid-svg-icons";
+import {faArrowRightFromBracket, faCirclePlus, faClipboardList, faHeart, faPaw, faUser} from "@fortawesome/free-solid-svg-icons";
 import {v4 as uuidv4} from 'uuid';
 import {useAuthStore} from "@/stores/auth.store";
 import {UserRole} from "@/types/user";

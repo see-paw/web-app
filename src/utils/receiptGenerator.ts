@@ -47,7 +47,7 @@ export function generateMockReceipts(
     const dayOfMonth = approvalDate.getDate();
     
     // Start from approval month/year
-    let currentDate = new Date(approvalDate);
+    const currentDate = new Date(approvalDate);
     currentDate.setDate(dayOfMonth);
     currentDate.setHours(0, 0, 0, 0);
     
