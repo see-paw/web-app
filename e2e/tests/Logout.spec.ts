@@ -1,23 +1,4 @@
 import { test, expect } from '../fixtures/base.fixture';
-// import type { Page } from '@playwright/test';
-// import type { ApiMockHelper } from '../core/ApiMockHelper'; 
-// import {
-//     mockLoginResponse,
-//     mockUserDataRegular,
-//     mockUserDataAdminCAA
-// } from '../test-data/LoginPage/mockLoginData';
-// import {mockAnimalsPage1} from "../test-data/AnimalsPage/animals-page1";
-
-// async function setupAuthMocks(apiMock: ApiMockHelper, page: Page, userRole: 'User' | 'AdminCAA' = 'User') {
-//     // Block SignalR
-//     await page.route('**/notificationHub/**', route => route.abort());
-    
-//     // Mock auth endpoints
-//     await apiMock.mockApiCall('**api/login', mockLoginResponse);
-//     await apiMock.mockApiCall('**api/users/me', userRole === 'User' ? mockUserDataRegular : mockUserDataAdminCAA);
-//     await apiMock.mockApiCall('**/api/animals?**', mockAnimalsPage1);
-//     await apiMock.mockApiCall('**/api/notifications**', []);
-// }
 
 test.describe('Logout Flow', () => {
 
@@ -85,6 +66,7 @@ test.describe('Logout Flow', () => {
             expect(await navbar.isNotificationsLinkVisible()).toBe(false);
             expect(await navbar.isProfileLinkVisible()).toBe(false);
         });
+    });
 
     test.describe('Logout from Different Pages', () => {
 
