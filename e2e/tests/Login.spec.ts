@@ -17,7 +17,7 @@ async function setupAuthMocks(apiMock: ApiMockHelper, page: Page, userRole: 'Use
     await apiMock.mockApiCall('**api/login', mockLoginResponse);
     await apiMock.mockApiCall('**api/users/me', userRole === 'User' ? mockUserDataRegular : mockUserDataAdminCAA);
     await apiMock.mockApiCall('**/api/animals?**', mockAnimalsPage1);
-    await apiMock.mockApiCall('http://localhost:5000/api/notifications**', []);
+    await apiMock.mockApiCall('**/api/notifications**', []);
 }
 
 test.describe('Login Page', () => {
@@ -144,7 +144,7 @@ test.describe('Login Page', () => {
 
         test('should display success toast on successful login', async ({ pm, apiMock, page}) => {
             await page.route('**/notificationHub/**', route => route.abort());
-            await apiMock.mockApiCall('http://localhost:5000/api/notifications**', []); 
+            await apiMock.mockApiCall('**/api/notifications**', []); 
             await apiMock.mockApiCall('**/login', mockLoginResponse);
             await apiMock.mockApiCall('**/users/me', mockUserDataRegular);
             await apiMock.mockApiCall('**/api/animals?**', mockAnimalsPage1);
@@ -387,7 +387,7 @@ test.describe('Login Page', () => {
 
         test('should handle retry after failed login', async ({ pm, apiMock, page }) => {
             await page.route('**/notificationHub/**', route => route.abort());
-            await apiMock.mockApiCall('http://localhost:5000/api/notifications**', []);
+            await apiMock.mockApiCall('**/api/notifications**', []);
             await apiMock.mockApiCall('**/api/animals?**', mockAnimalsPage1);
 
             let attemptCount = 0;
